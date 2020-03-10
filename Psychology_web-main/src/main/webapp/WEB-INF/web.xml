@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+<display-name>psychology_web</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:spring/spring-*.xml</param-value>
+        <!-- 这里的classpath* 可加载其他打成jar包的项目中的配置文件，若不加‘*’，只能扫描到当前项目的配置文件，无法加载其他jar包中的配置-->
+    </context-param>
+    
+    <!-- 监听器：
+    	创建Spring框架的IOC容器
+    	将IOC容器对象存放到application域里
+    	怎么获得IOC容器：ApplicationContext ioc = WebApplicationContextUtils.getWebApplicationContext(application);
+    	
+    	ServletContextListener监听器接口：
+    		若监听到ServletContext（application域）创建（服务器启动），就创建IOC容器（XmlWebApplicationContext）在单元测试创建ClassPathXmlApplicationContext
+    		若监听到ServletContext（application域）销毁（服务器停止，或卸载项目），就销毁IOC容器
+     -->
+    
+    <!-- 监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 字符编码过滤器 :
+    	只负责解决POST请求乱码问题
+    -->
+    <filter>
+        <filter-name>encoding</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value><!-- 如果为true，则响应的编码也为encoding的值 -->
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/*</url-pattern>
+        <!-- <dispatcher>FORWARD</dispatcher>对服务器内部转发也进行过滤的设置
+        <dispatcher>REQUEST</dispatcher>默认只对客户端请求进行过滤 -->
+    </filter-mapping>
+
+	<!--支持RESTful风格，将POST请求转换为PUT或DELETE请求
+		会读取隐含参数：“_method”
+	  -->
+	<filter>  
+	    <filter-name>HiddenHttpMethodFilter</filter-name>  
+	    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>  
+	</filter>
+	<filter-mapping>  
+	    <filter-name>HiddenHttpMethodFilter</filter-name>  
+	    <servlet-name>springmvc</servlet-name>  
+	</filter-mapping> 
+    
+    <!-- 过滤器执行顺序，该处为servlet-name ,故该servlet什么时候执行，这个过滤器就什么时候执行
+    	当url-pattern先精确匹配，再扩展匹配，最后模糊匹配
+    	如果这个过滤器的配置规则相同，则根据filter-mapping的先后顺序去执行-->
+
+    
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class><!--tomcat容器组件，调用默认的构造器反射创建 -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/springmvc-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <!--在服务器启动加载该web.xml文件时创建该servlet对象
+        	>=0的值,值越小创建servlet优先级越高
+          -->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>*.htm</url-pattern> <!-- 主要用于进行页面跳转，.htm WEB-INF下的的页面不能直接访问，需要经过控制器跳转到相应页面-->
+        <url-pattern>*.do</url-pattern> <!-- 主要用于业务逻辑处理，.do 通过控制器，走service，dao 流程回来之后再跳转页面-->
+        
+        <!--精确匹配（/user/save）  /路径匹配(/user/*或/*) / 扩展匹配(*.htm) / 默认匹配（/）-->
+        
+    </servlet-mapping>
+    
+    <!-- 会话超时时间 -->
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+    
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
