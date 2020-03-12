@@ -9,7 +9,9 @@
 <body>
 <h1>来到首页</h1>
 <%-- <jsp:forward page="WEB-INF/jsp/article/index.jsp"></jsp:forward> --%>
+<%-- <jsp:forward page="article_index.jsp"></jsp:forward> --%>
 <a href="${pageContext.request.contextPath}/test.do">test</a>
+<a href="${pageContext.request.contextPath}/Article.do">Article</a>
 <form action="${pageContext.request.contextPath }/regist.do">
 		<table border="1">
 			<tr>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xhu.softwareengineering.potal.dao.ArticleMapper">
+
+<resultMap type="PsychoArticle" id="BaseResultMap">
+    <id column="psycho_article_id" property="articleId"/>
+    <result column="psycho_article_title" property="articleTitle" />
+    <result column="psycho_article_img" property="articleImg"/>
+    <result column="psycho_article_pubtime" property="pubTime"/>
+    <result column="psycho_article_pubuserid" property="pubuserId"/>
+    <result column="psycho_article_author" property="author" />
+    <result column="psycho_article_source" property="source"/>
+    <result column="psycho_article_originaltitle" property="originalTitle"/>
+    <result column="psycho_article_comments_num" property="commentsNum"/>
+    <result column="psycho_article_reads_num" property="readsNum"/>
+    <result column="psycho_article_likes_num" property="likesNum"/>
+    <result column="psycho_article_content" property="content"/>
+    <collection property="psychoCategory" ofType="PsychoCategory" resultMap="CategoryMap"></collection>
+</resultMap>
+
+<resultMap type="PsychoCategory" id="CategoryMap">
+	<id column="psycho_category_id" property="categoryId"/>
+    <result column="psycho_category_name" property="categoryName" />
+    <result column="psycho_category_parentid" property="parentId"/>
+    <result column="psycho_category_description" property="description"/>
+</resultMap>
+    
+    <select id="selectAllArticles" resultMap="BaseResultMap">
+        select pa.psycho_article_id,pa.psycho_article_title,pa.psycho_article_content,pc.psycho_category_name 
+        from psycho_article pa,psycho_category pc,article_category ac
+        where pa.psycho_article_id = ac.article_id and ac.category_id = pc.psycho_category_id
+    </select>
+    
+    <select id="selectArticlesByCategoryId" resultMap="BaseResultMap">
+        <!-- select psycho_article_id,psycho_article_title,psycho_article_content
+        from psycho_article pa,article_category ac
+        where pa.psycho_article_id = ac.article_id and ac.article_id = #{id} -->
+        select pa.psycho_article_id,pa.psycho_article_title,pa.psycho_article_content,pc.psycho_category_name 
+        from psycho_article pa,psycho_category pc,article_category ac
+        where pa.psycho_article_id = ac.article_id and ac.category_id = pc.psycho_category_id and pc.psycho_category_id = #{id}
+    </select>
+
+    <!--
+    <insert id="insertUser">
+        insert into t_user (
+            name,userpswd,sex,email,loginacct
+        ) values (
+            #{name},#{userpswd},#{sex},#{email},#{loginacct}
+        )
+        <selectKey keyProperty="id" resultType="int">
+            select @@identity as id
+        </selectKey>
+    </insert>
+    
+    <update id="updateUser">
+        update t_user
+        set name = #{name}, sex = #{sex}, email = #{email}, loginacct = #{loginacct}
+        where id = #{id}
+    </update>
+    <delete id="deleteUserRole">
+        delete from t_user_role where userid = #{userid} and roleid = #{roleid}
+    </delete>
+    -->
+</mapper>

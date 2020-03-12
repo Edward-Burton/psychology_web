@@ -13,13 +13,15 @@ import cn.xhu.softwareengineering.manager.service.TestService;
 @Service
 public class TestServiceImpl implements TestService {
 
+	static int i=0;
 	@Autowired
 	private TestDao testDao;
 	
 	@Override
 	public void insert() {
 		Map map = new HashMap();
-		map.put("name", "tester");
+		map.put("name", "tester"+i);
+		i++;
 		System.out.println("testServiceImpl");
 		testDao.insert(map);
 

@@ -14,16 +14,16 @@ public class PsychoArticle {
 	private int readsNum;
 	private int likesNum;
 	private String content;
+	private PsychoCategory psychoCategory;
 	
 
 	public PsychoArticle() {
 		super();
 	}
 
-
 	public PsychoArticle(int articleId, String articleTitle, String articleImg, String pubTime, int pubuserId,
 			String author, String source, String originalTitle, int commentsNum, int readsNum, int likesNum,
-			String content) {
+			String content, PsychoCategory psychoCategory) {
 		super();
 		this.articleId = articleId;
 		this.articleTitle = articleTitle;
@@ -37,7 +37,10 @@ public class PsychoArticle {
 		this.readsNum = readsNum;
 		this.likesNum = likesNum;
 		this.content = content;
+		this.psychoCategory = psychoCategory;
 	}
+
+
 
 
 	public int getArticleId() {
@@ -158,6 +161,15 @@ public class PsychoArticle {
 	public void setContent(String content) {
 		this.content = content;
 	}
+
+	public PsychoCategory getPsychoCategory() {
+		return psychoCategory;
+	}
+
+	public void setPsychoCategory(PsychoCategory psychoCategory) {
+		this.psychoCategory = psychoCategory;
+	}
+	
 	
 	
 }

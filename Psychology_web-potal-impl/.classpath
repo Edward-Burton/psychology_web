@@ -35,16 +35,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Program Files/Apache/maven/respository/org/springframework/spring-test/4.2.5.RELEASE/spring-test-4.2.5.RELEASE.jar" sourcepath="D:/Program Files/Apache/maven/respository/org/springframework/spring-test/4.2.5.RELEASE/spring-test-4.2.5.RELEASE-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.archivename" value="spring-test-4.2.5.RELEASE.jar"/>
-			<attribute name="maven.groupId" value="org.springframework"/>
-			<attribute name="maven.artifactId" value="spring-test"/>
-			<attribute name="maven.version" value="4.2.5.RELEASE"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="/Psychology_web-manager-api"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="target/classes"/>
