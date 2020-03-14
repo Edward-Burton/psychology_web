@@ -3,65 +3,128 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="cn.xhu.softwareengineering.potal.dao.ArticleMapper">
+<mapper
+	namespace="cn.xhu.softwareengineering.potal.dao.ArticleMapper">
 
-<resultMap type="PsychoArticle" id="BaseResultMap">
-    <id column="psycho_article_id" property="articleId"/>
-    <result column="psycho_article_title" property="articleTitle" />
-    <result column="psycho_article_img" property="articleImg"/>
-    <result column="psycho_article_pubtime" property="pubTime"/>
-    <result column="psycho_article_pubuserid" property="pubuserId"/>
-    <result column="psycho_article_author" property="author" />
-    <result column="psycho_article_source" property="source"/>
-    <result column="psycho_article_originaltitle" property="originalTitle"/>
-    <result column="psycho_article_comments_num" property="commentsNum"/>
-    <result column="psycho_article_reads_num" property="readsNum"/>
-    <result column="psycho_article_likes_num" property="likesNum"/>
-    <result column="psycho_article_content" property="content"/>
-    <collection property="psychoCategory" ofType="PsychoCategory" resultMap="CategoryMap"></collection>
-</resultMap>
+	<resultMap type="PsychoArticle" id="BaseResultMap">
+		<id column="psycho_article_id" property="articleId" />
+		<result column="psycho_article_title" property="articleTitle" />
+		<result column="psycho_article_img" property="articleImg" />
+		<result column="psycho_article_pubtime" property="pubTime" />
+		<result column="psycho_article_author" property="author" />
+		<result column="psycho_article_source" property="source" />
+		<result column="psycho_article_originaltitle" property="originalTitle" />
+		<result column="psycho_article_comments_num" property="commentsNum" />
+		<result column="psycho_article_reads_num" property="readsNum" />
+		<result column="psycho_article_likes_num" property="likesNum" />
+		<result column="psycho_article_content" property="content" />
+		<association property="articleUser" javaType="PsychoUser" column="psycho_article_id" select="selectUserbyArticleId"/>
+		<!-- <association property="psychoCategory" javaType="PsychoCategory" resultMap="CategoryMap"/> -->
+		<association property="psychoCategory" javaType="PsychoCategory" column="psycho_article_id" select="selectCategorybyArticleId"/>
+		<collection property="articleLabels" ofType="PsychoLabel" column="psycho_article_id" select="selectLabelsbyArticleId"/>
+		<!-- <collection property="articleComments" ofType="ArticleComments" column="psycho_article_id" select="selectCommentsbyArticleId"/> -->
+		<collection property="articleComments" ofType="ArticleComments" >
+			<id property="article_comment_id" column="article_comment_id"/>
+			<result property="comment_article_id" column="comment_article_id"/>
+			<result property="comment_user_id" column="comment_user_id"/>
+			<result property="article_comment_pultime" column="article_comment_pultime"/>
+			<result property="article_comment_pulcontent" column="article_comment_pulcontent"/>
+			<result property="article_comment_likes_num" column="article_comment_likes_num"/>
+			<result property="article_comment_parentid" column="article_comment_parentid"/>
+		</collection>
+	</resultMap>
 
-<resultMap type="PsychoCategory" id="CategoryMap">
-	<id column="psycho_category_id" property="categoryId"/>
-    <result column="psycho_category_name" property="categoryName" />
-    <result column="psycho_category_parentid" property="parentId"/>
-    <result column="psycho_category_description" property="description"/>
-</resultMap>
-    
-    <select id="selectAllArticles" resultMap="BaseResultMap">
-        select pa.psycho_article_id,pa.psycho_article_title,pa.psycho_article_content,pc.psycho_category_name 
-        from psycho_article pa,psycho_category pc,article_category ac
-        where pa.psycho_article_id = ac.article_id and ac.category_id = pc.psycho_category_id
-    </select>
-    
-    <select id="selectArticlesByCategoryId" resultMap="BaseResultMap">
-        <!-- select psycho_article_id,psycho_article_title,psycho_article_content
-        from psycho_article pa,article_category ac
-        where pa.psycho_article_id = ac.article_id and ac.article_id = #{id} -->
-        select pa.psycho_article_id,pa.psycho_article_title,pa.psycho_article_content,pc.psycho_category_name 
-        from psycho_article pa,psycho_category pc,article_category ac
-        where pa.psycho_article_id = ac.article_id and ac.category_id = pc.psycho_category_id and pc.psycho_category_id = #{id}
-    </select>
+	<!-- <resultMap type="PsychoCategory" id="CategoryMap">
+		<id column="psycho_category_id" property="psycho_category_id" />
+		<result column="psycho_category_name" property="psycho_category_name" />
+		<result column="psycho_category_parentid" property="psycho_category_parentid" />
+		<result column="psycho_category_description"
+			property="psycho_category_description" />
+	</resultMap> -->
+	
+	<resultMap type="PsychoUser" id="BaseArticleUser">
+		<id column="psychouser_id" property="psychouser_id" />
+		<result column="psychouser_nickname" property="psychouser_nickname" />
+		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />
+	</resultMap>
+	
+	<!-- 获取文章标签列表 -->
+	<select id="selectLabelsbyArticleId" resultType="PsychoLabel">
+		select psycho_label_id,psycho_label_name,psycho_label_parentid,psycho_label_description,psycho_label_alias
+		from psycho_label,article_label
+		where label_id=psycho_label_id and psychoarticle_id =#{psycho_article_id}
+	</select>
+	
+	<!-- 获取文章作者 -->
+	<select id="selectUserbyArticleId" resultType="PsychoUser">
+		select pu.psychouser_id,pu.psychouser_nickname,psychouser_head_portrait
+		from psycho_user pu,psycho_article pa
+		where pa.psycho_article_id =#{psycho_article_id} and pu.psychouser_id = pa.psycho_article_pubuserid
+	</select>
+	<!-- 获取文章心理学分类 -->
+	<select id="selectCategorybyArticleId" resultType="PsychoCategory">
+		select pc.*
+		from psycho_article pa,psycho_category pc,article_category ac
+		where pa.psycho_article_id =#{psycho_article_id} and pa.psycho_article_id = ac.article_id and ac.category_id = pc.psycho_category_id
+	</select>
+	
+	<!-- 获得文章评论 :在collection中使用select属性，
+	则在调用查询方法返回都为BaseResultMap时，每次调用查询都会返回该查询结果，文章评论只需在文章详情页显示评论-->
+	<!-- <select id="selectCommentsbyArticleId" resultType="ArticleComments">
+		select article_comments.*
+		from psycho_article,article_comments
+		where psycho_article.psycho_article_id = #{psycho_article_id} and article_comments.comment_article_id = psycho_article.psycho_article_id
+	</select> -->
+	
+	<!-- 获取所有文章，包括文章心理学分类，当文章未分类，无法查出 -->
+	<!-- <select id="selectAllArticles" resultMap="BaseResultMap">
+		select
+		pa.psycho_article_id,pa.psycho_article_title,pa.psycho_article_img,psycho_article_pubtime,pa.psycho_article_content,pc.psycho_category_name
+		from psycho_article pa,psycho_category pc,article_category ac
+		where pa.psycho_article_id = ac.article_id and ac.category_id =
+		pc.psycho_category_id
+	</select> -->
+	
+	<!-- 获取所有文章的概览信息，包括文章首图，标题，描述，作者，时间，阅读数，心理学分类，当文章未分类，
+	可以查出，查出的文章对象的心理学分类属性为空，
+	获取时需要判断是否为空，再做近一页面响应 -->
+	<select id="selectAllArticles" resultMap="BaseResultMap">
+		<!-- select
+		psycho_article_id,psycho_article_title,psycho_article_img,psycho_article_pubtime,psycho_article_content
+		from psycho_article -->
+		select * from psycho_article
+	</select>
+	
+	<!-- 通过文章ID获得文章详细信息 -->
+	<select id="selectArticleById" resultMap="BaseResultMap">
+		select pa.*,ac.*
+		from psycho_article pa,article_comments ac
+		where pa.psycho_article_id = #{id} and pa.psycho_article_id = ac.comment_article_id
+	</select>
 
-    <!--
-    <insert id="insertUser">
-        insert into t_user (
-            name,userpswd,sex,email,loginacct
-        ) values (
-            #{name},#{userpswd},#{sex},#{email},#{loginacct}
-        )
-        <selectKey keyProperty="id" resultType="int">
-            select @@identity as id
-        </selectKey>
-    </insert>
-    
-    <update id="updateUser">
-        update t_user
-        set name = #{name}, sex = #{sex}, email = #{email}, loginacct = #{loginacct}
-        where id = #{id}
-    </update>
-    <delete id="deleteUserRole">
-        delete from t_user_role where userid = #{userid} and roleid = #{roleid}
-    </delete>
-    -->
+    <!-- 通过心理学分类查出文章 -->
+	<select id="selectArticlesByCategoryId"
+		resultMap="BaseResultMap">
+		select
+		pa.psycho_article_id,pa.psycho_article_title,pa.psycho_article_content,pc.psycho_category_name
+		from psycho_article pa,psycho_category pc,article_category ac
+		where pa.psycho_article_id = ac.article_id and ac.category_id =
+		pc.psycho_category_id and pc.psycho_category_id = #{id}
+	</select>
+
+	<insert id="insertArticleComment" parameterType="ArticleComments" useGeneratedKeys="true" keyProperty="article_comment_id"> 
+		insert into article_comments 
+		(comment_article_id, comment_user_id,article_comment_pultime,article_comment_pulcontent,article_comment_likes_num,article_comment_parentid) 
+		values ( #{comment_article_id},#{comment_user_id},#{article_comment_pultime},#{article_comment_pulcontent},#{article_comment_likes_num},#{article_comment_parentid} ) 
+		<!-- <selectKey keyProperty="id" resultType="int"> select @@identity as id </selectKey> -->
+	 </insert> 
+	<!-- <insert id="insertUser"> insert into t_user ( name,userpswd,sex,email,loginacct 
+		) values ( #{name},#{userpswd},#{sex},#{email},#{loginacct} ) 
+	<selectKey keyProperty="id" resultType="int"> select @@identity as id </selectKey>
+	 </insert>  -->
+		
+	<update id="updateUser"> update t_user set name = #{name}, sex = #{sex}, 
+		email = #{email}, loginacct = #{loginacct} where id = #{id} </update> 
+	<delete id="deleteUserRole"> delete from t_user_role where userid = #{userid} and 
+		roleid = #{roleid} </delete>
 </mapper>

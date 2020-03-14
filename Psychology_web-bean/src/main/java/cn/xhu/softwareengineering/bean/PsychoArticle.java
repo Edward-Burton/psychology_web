@@ -1,12 +1,14 @@
 package cn.xhu.softwareengineering.bean;
 
+import java.util.List;
+
 public class PsychoArticle {
 	
 	private int articleId;
 	private String articleTitle;
 	private String articleImg;
 	private String pubTime;
-	private int pubuserId;
+	private PsychoUser articleUser;
 	private String author;
 	private String source;
 	private String originalTitle;
@@ -15,21 +17,25 @@ public class PsychoArticle {
 	private int likesNum;
 	private String content;
 	private PsychoCategory psychoCategory;
+	private List<PsychoLabel> articleLabels;
+	private List<ArticleComments> articleComments;
 	
 
 	public PsychoArticle() {
 		super();
 	}
 
-	public PsychoArticle(int articleId, String articleTitle, String articleImg, String pubTime, int pubuserId,
+
+	public PsychoArticle(int articleId, String articleTitle, String articleImg, String pubTime, PsychoUser articleUser,
 			String author, String source, String originalTitle, int commentsNum, int readsNum, int likesNum,
-			String content, PsychoCategory psychoCategory) {
+			String content, PsychoCategory psychoCategory, List<PsychoLabel> articleLabels,
+			List<ArticleComments> articleComments) {
 		super();
 		this.articleId = articleId;
 		this.articleTitle = articleTitle;
 		this.articleImg = articleImg;
 		this.pubTime = pubTime;
-		this.pubuserId = pubuserId;
+		this.articleUser = articleUser;
 		this.author = author;
 		this.source = source;
 		this.originalTitle = originalTitle;
@@ -38,8 +44,9 @@ public class PsychoArticle {
 		this.likesNum = likesNum;
 		this.content = content;
 		this.psychoCategory = psychoCategory;
+		this.articleLabels = articleLabels;
+		this.articleComments = articleComments;
 	}
-
 
 
 
@@ -83,13 +90,14 @@ public class PsychoArticle {
 	}
 
 
-	public int getPubuserId() {
-		return pubuserId;
+
+	public PsychoUser getArticleUser() {
+		return articleUser;
 	}
 
 
-	public void setPubuserId(int pubuserId) {
-		this.pubuserId = pubuserId;
+	public void setArticleUser(PsychoUser articleUser) {
+		this.articleUser = articleUser;
 	}
 
 
@@ -168,6 +176,26 @@ public class PsychoArticle {
 
 	public void setPsychoCategory(PsychoCategory psychoCategory) {
 		this.psychoCategory = psychoCategory;
+	}
+
+
+	public List<PsychoLabel> getArticleLabels() {
+		return articleLabels;
+	}
+
+
+	public void setArticleLabels(List<PsychoLabel> articleLabels) {
+		this.articleLabels = articleLabels;
+	}
+
+
+	public List<ArticleComments> getArticleComments() {
+		return articleComments;
+	}
+
+
+	public void setArticleComments(List<ArticleComments> articleComments) {
+		this.articleComments = articleComments;
 	}
 	
 	

@@ -2,65 +2,67 @@ package cn.xhu.softwareengineering.bean;
 
 public class PsychoCategory {
 
-	private int categoryId;
-	private String categoryName;
-	private int parentId;
-	private String description;
-	private String categoryAlias;
+	private int psycho_category_id;
+	private String psycho_category_name;
+	private int psycho_category_parentid;
+	private String psycho_category_description;
+	private String psycho_category_alias;
 	
 	public PsychoCategory() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PsychoCategory(int categoryId, String categoryName, int parentId, String description, String categoryAlias) {
+	public PsychoCategory(int psycho_category_id, String psycho_category_name, int psycho_category_parentid,
+			String psycho_category_description, String psycho_category_alias) {
 		super();
-		this.categoryId = categoryId;
-		this.categoryName = categoryName;
-		this.parentId = parentId;
-		this.description = description;
-		this.categoryAlias = categoryAlias;
+		this.psycho_category_id = psycho_category_id;
+		this.psycho_category_name = psycho_category_name;
+		this.psycho_category_parentid = psycho_category_parentid;
+		this.psycho_category_description = psycho_category_description;
+		this.psycho_category_alias = psycho_category_alias;
 	}
 
-	public int getCategoryId() {
-		return categoryId;
+	public int getPsycho_category_id() {
+		return psycho_category_id;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setPsycho_category_id(int psycho_category_id) {
+		this.psycho_category_id = psycho_category_id;
 	}
 
-	public String getCategoryName() {
-		return categoryName;
+	public String getPsycho_category_name() {
+		return psycho_category_name;
 	}
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setPsycho_category_name(String psycho_category_name) {
+		this.psycho_category_name = psycho_category_name;
 	}
 
-	public int getParentId() {
-		return parentId;
+	public int getPsycho_category_parentid() {
+		return psycho_category_parentid;
 	}
 
-	public void setParentId(int parentId) {
-		this.parentId = parentId;
+	public void setPsycho_category_parentid(int psycho_category_parentid) {
+		this.psycho_category_parentid = psycho_category_parentid;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getPsycho_category_description() {
+		return psycho_category_description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setPsycho_category_description(String psycho_category_description) {
+		this.psycho_category_description = psycho_category_description;
 	}
 
-	public String getCategoryAlias() {
-		return categoryAlias;
+	public String getPsycho_category_alias() {
+		return psycho_category_alias;
 	}
 
-	public void setCategoryAlias(String categoryAlias) {
-		this.categoryAlias = categoryAlias;
+	public void setPsycho_category_alias(String psycho_category_alias) {
+		this.psycho_category_alias = psycho_category_alias;
 	}
+
 	
 	
 	

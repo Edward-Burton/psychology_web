@@ -1,107 +1,108 @@
 package cn.xhu.softwareengineering.bean;
 
 public class PsychoUser {
-	private int userId;
-	private String userNickname;
-	private String userPassword;
-	private String userGender;
-	private String userTitle;
-	private String userIntro;
-	private String headPortrait;
-	private String phoneNumber;
-	private String userMail;
+	private int psychouser_id;
+	private String psychouser_nickname;
+	private String psychouser_password;
+	private String psychouser_gender;
+	private String psychouser_title;
+	private String psychouser_intro;
+	private String psychouser_head_portrait;
+	private String psychouser_phone_number;
+	private String psychouser_mail;
 	
 	public PsychoUser() {
 		super();
 
 	}
 
-	public PsychoUser(int userId, String userNickname, String userPassword, String userGender, String userTitle,
-			String userIntro, String headPortrait, String phoneNumber, String userMail) {
+	public PsychoUser(int psychouser_id, String psychouser_nickname, String psychouser_password,
+			String psychouser_gender, String psychouser_title, String psychouser_intro, String psychouser_head_portrait,
+			String psychouser_phone_number, String psychouser_mail) {
 		super();
-		this.userId = userId;
-		this.userNickname = userNickname;
-		this.userPassword = userPassword;
-		this.userGender = userGender;
-		this.userTitle = userTitle;
-		this.userIntro = userIntro;
-		this.headPortrait = headPortrait;
-		this.phoneNumber = phoneNumber;
-		this.userMail = userMail;
+		this.psychouser_id = psychouser_id;
+		this.psychouser_nickname = psychouser_nickname;
+		this.psychouser_password = psychouser_password;
+		this.psychouser_gender = psychouser_gender;
+		this.psychouser_title = psychouser_title;
+		this.psychouser_intro = psychouser_intro;
+		this.psychouser_head_portrait = psychouser_head_portrait;
+		this.psychouser_phone_number = psychouser_phone_number;
+		this.psychouser_mail = psychouser_mail;
 	}
 
-	public int getUserId() {
-		return userId;
+	public int getPsychouser_id() {
+		return psychouser_id;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setPsychouser_id(int psychouser_id) {
+		this.psychouser_id = psychouser_id;
 	}
 
-	public String getUserNickname() {
-		return userNickname;
+	public String getPsychouser_nickname() {
+		return psychouser_nickname;
 	}
 
-	public void setUserNickname(String userNickname) {
-		this.userNickname = userNickname;
+	public void setPsychouser_nickname(String psychouser_nickname) {
+		this.psychouser_nickname = psychouser_nickname;
 	}
 
-	public String getUserPassword() {
-		return userPassword;
+	public String getPsychouser_password() {
+		return psychouser_password;
 	}
 
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
+	public void setPsychouser_password(String psychouser_password) {
+		this.psychouser_password = psychouser_password;
 	}
 
-	public String getUserGender() {
-		return userGender;
+	public String getPsychouser_gender() {
+		return psychouser_gender;
 	}
 
-	public void setUserGender(String userGender) {
-		this.userGender = userGender;
+	public void setPsychouser_gender(String psychouser_gender) {
+		this.psychouser_gender = psychouser_gender;
 	}
 
-	public String getUserTitle() {
-		return userTitle;
+	public String getPsychouser_title() {
+		return psychouser_title;
 	}
 
-	public void setUserTitle(String userTitle) {
-		this.userTitle = userTitle;
+	public void setPsychouser_title(String psychouser_title) {
+		this.psychouser_title = psychouser_title;
 	}
 
-	public String getUserIntro() {
-		return userIntro;
+	public String getPsychouser_intro() {
+		return psychouser_intro;
 	}
 
-	public void setUserIntro(String userIntro) {
-		this.userIntro = userIntro;
+	public void setPsychouser_intro(String psychouser_intro) {
+		this.psychouser_intro = psychouser_intro;
 	}
 
-	public String getHeadPortrait() {
-		return headPortrait;
+	public String getPsychouser_head_portrait() {
+		return psychouser_head_portrait;
 	}
 
-	public void setHeadPortrait(String headPortrait) {
-		this.headPortrait = headPortrait;
+	public void setPsychouser_head_portrait(String psychouser_head_portrait) {
+		this.psychouser_head_portrait = psychouser_head_portrait;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPsychouser_phone_number() {
+		return psychouser_phone_number;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPsychouser_phone_number(String psychouser_phone_number) {
+		this.psychouser_phone_number = psychouser_phone_number;
 	}
 
-	public String getUserMail() {
-		return userMail;
+	public String getPsychouser_mail() {
+		return psychouser_mail;
 	}
 
-	public void setUserMail(String userMail) {
-		this.userMail = userMail;
+	public void setPsychouser_mail(String psychouser_mail) {
+		this.psychouser_mail = psychouser_mail;
 	}
-	
+
 	
 	
 }
