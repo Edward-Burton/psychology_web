@@ -139,7 +139,7 @@
 				<artifactId>shiro-spring</artifactId>
 				<version>1.2.4</version>
 			</dependency>
-			
+
 			<!-- 添加apache公共包 -->
 			<dependency>
 				<groupId>commons-codec</groupId>
@@ -151,7 +151,7 @@
 				<artifactId>commons-lang</artifactId>
 				<version>2.5</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
@@ -162,43 +162,43 @@
 				<artifactId>commons-logging</artifactId>
 				<version>1.1.1</version>
 			</dependency>
-			
-			
+
+
 			<!-- 添加Lucene检索支持 -->
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-core</artifactId>
 				<version>5.3.1</version>
 			</dependency>
-				
+
 			<!-- 分词 -->
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-analyzers-common</artifactId>
 				<version>5.3.1</version>
 			</dependency>
-			
+
 			<!-- 对中文的分词 -->
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-analyzers-smartcn</artifactId>
 				<version>5.3.1</version>
 			</dependency>
-			
+
 			<!-- 支持自定义格式的输出 -->
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-queryparser</artifactId>
 				<version>5.3.1</version>
 			</dependency>
-			
+
 			<!-- 支持高亮 -->
 			<dependency>
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-highlighter</artifactId>
 				<version>5.3.1</version>
 			</dependency>
-			
+
 			<!-- 添加jsoup支持 -->
 			<dependency>
 				<groupId>org.jsoup</groupId>
@@ -213,7 +213,7 @@
 				<artifactId>ezmorph</artifactId>
 				<version>1.0.6</version>
 			</dependency>
-			
+
 			<!-- Ehcache二级缓存 -->
 			<dependency>
 				<groupId>net.sf.ehcache</groupId>
@@ -258,7 +258,7 @@
 				<version>1.0.19</version>
 			</dependency>
 
-           <!-- 添加ueditor富文本编辑器支持 -->
+			<!-- 添加ueditor富文本编辑器支持 -->
 			<dependency>
 				<groupId>commons-fileupload</groupId>
 				<artifactId>commons-fileupload</artifactId>

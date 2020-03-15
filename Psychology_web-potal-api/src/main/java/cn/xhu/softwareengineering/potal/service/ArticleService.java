@@ -7,4 +7,5 @@ import cn.xhu.softwareengineering.bean.PsychoArticle;
 public interface ArticleService {
 	
 	List<PsychoArticle> showAllArticle();
+	int addArticle(PsychoArticle psychoArticle);
 }

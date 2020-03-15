@@ -16,4 +16,6 @@ public interface ArticleMapper {
 	PsychoArticle selectArticleById(@Param("id")int articleId);
 	
 	int insertArticleComment(ArticleComments articleComment);
+	
+	int addArticle(PsychoArticle psychoArticle);
 }

@@ -1,13 +1,17 @@
 package cn.xhu.softwareengineering.bean;
 
+import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PsychoArticle {
 	
 	private int articleId;
 	private String articleTitle;
 	private String articleImg;
-	private String pubTime;
+	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+	private Date pubTime;
 	private PsychoUser articleUser;
 	private String author;
 	private String source;
@@ -26,7 +30,7 @@ public class PsychoArticle {
 	}
 
 
-	public PsychoArticle(int articleId, String articleTitle, String articleImg, String pubTime, PsychoUser articleUser,
+	public PsychoArticle(int articleId, String articleTitle, String articleImg, Date pubTime, PsychoUser articleUser,
 			String author, String source, String originalTitle, int commentsNum, int readsNum, int likesNum,
 			String content, PsychoCategory psychoCategory, List<PsychoLabel> articleLabels,
 			List<ArticleComments> articleComments) {
@@ -80,15 +84,22 @@ public class PsychoArticle {
 	}
 
 
-	public String getPubTime() {
+	/*
+	 * public String getPubTime() { return pubTime; }
+	 * 
+	 * 
+	 * public void setPubTime(String pubTime) { this.pubTime = pubTime; }
+	 */
+	
+
+	public Date getPubTime() {
 		return pubTime;
 	}
 
 
-	public void setPubTime(String pubTime) {
+	public void setPubTime(Date pubTime) {
 		this.pubTime = pubTime;
 	}
-
 
 
 	public PsychoUser getArticleUser() {

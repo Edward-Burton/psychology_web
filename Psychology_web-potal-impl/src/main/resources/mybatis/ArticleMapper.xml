@@ -111,20 +111,27 @@
 		where pa.psycho_article_id = ac.article_id and ac.category_id =
 		pc.psycho_category_id and pc.psycho_category_id = #{id}
 	</select>
-
+    <!-- 添加评论 -->
 	<insert id="insertArticleComment" parameterType="ArticleComments" useGeneratedKeys="true" keyProperty="article_comment_id"> 
 		insert into article_comments 
 		(comment_article_id, comment_user_id,article_comment_pultime,article_comment_pulcontent,article_comment_likes_num,article_comment_parentid) 
 		values ( #{comment_article_id},#{comment_user_id},#{article_comment_pultime},#{article_comment_pulcontent},#{article_comment_likes_num},#{article_comment_parentid} ) 
 		<!-- <selectKey keyProperty="id" resultType="int"> select @@identity as id </selectKey> -->
 	 </insert> 
+	 
+	 <insert id="addArticle" parameterType="PsychoArticle"> 
+	 insert psycho_article 
+	 (psycho_article_title,psycho_article_pubtime,psycho_article_img,psycho_article_pubuserid,psycho_article_content)
+	 values ( #{articleTitle},#{pubTime},#{articleImg},#{articleUser.psychouser_id},#{content} ) 
+	<selectKey keyProperty="articleId" resultType="int"> select @@identity </selectKey>
+	 </insert>
 	<!-- <insert id="insertUser"> insert into t_user ( name,userpswd,sex,email,loginacct 
 		) values ( #{name},#{userpswd},#{sex},#{email},#{loginacct} ) 
 	<selectKey keyProperty="id" resultType="int"> select @@identity as id </selectKey>
 	 </insert>  -->
 		
-	<update id="updateUser"> update t_user set name = #{name}, sex = #{sex}, 
+	<!-- <update id="updateUser"> update t_user set name = #{name}, sex = #{sex}, 
 		email = #{email}, loginacct = #{loginacct} where id = #{id} </update> 
 	<delete id="deleteUserRole"> delete from t_user_role where userid = #{userid} and 
-		roleid = #{roleid} </delete>
+		roleid = #{roleid} </delete> -->
 </mapper>

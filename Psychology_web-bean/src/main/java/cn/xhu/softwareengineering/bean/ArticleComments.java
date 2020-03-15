@@ -1,10 +1,13 @@
 package cn.xhu.softwareengineering.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ArticleComments {
 
 	private int article_comment_id;
 	private int comment_article_id;
 	private int comment_user_id;
+	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 	private String article_comment_pultime;
 	private String article_comment_pulcontent;
 	private int article_comment_likes_num;

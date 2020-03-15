@@ -11,7 +11,9 @@
 <%-- <jsp:forward page="WEB-INF/jsp/article/index.jsp"></jsp:forward> --%>
 <%-- <jsp:forward page="article_index.jsp"></jsp:forward> --%>
 <a href="${pageContext.request.contextPath}/test.do">test</a>
-<a href="${pageContext.request.contextPath}/Article.do">Article</a>
+<a href="${pageContext.request.contextPath}/Article.do">showArticle</a>
+<%-- <jsp:forward page="/jsp/addarticle.jsp"></jsp:forward> --%>
+<a href="${APP_PATH }/addArticle.htm">addArticle</a>
 <form action="${pageContext.request.contextPath }/regist.do">
 		<table border="1">
 			<tr>

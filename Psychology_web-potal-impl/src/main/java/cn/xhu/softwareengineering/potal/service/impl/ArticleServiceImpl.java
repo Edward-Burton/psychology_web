@@ -1,6 +1,8 @@
 package cn.xhu.softwareengineering.potal.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,11 @@ public class ArticleServiceImpl implements ArticleService {
 				
 				//获得文章发布用户简单信息
 				System.out.println(pa.getArticleUser().getPsychouser_nickname());
-				System.out.println(pa.getPubTime());
+				System.out.println("文章发布时间:");
+				//获取后台传来的时间并转换为长整形数据
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				 sdf.setTimeZone(TimeZone.getTimeZone("GMT")); 
+				System.out.println(sdf.format(pa.getPubTime()));
 				
 				//获得文章标签
 				List<PsychoLabel> listlabels = pa.getArticleLabels();
@@ -79,6 +85,16 @@ public class ArticleServiceImpl implements ArticleService {
 		System.out.println("评论自增ID ： "+commentId);
 		
 		return listArticle;
+	}
+
+	@Override
+	public int addArticle(PsychoArticle psychoArticle) {
+		
+		int n = articleMapper.addArticle(psychoArticle);
+		int id = psychoArticle.getArticleId();
+		System.out.println("影响行数 : "+n);
+		System.out.println("文章自增ID ： "+id);
+		return n;
 	}
 
 }
