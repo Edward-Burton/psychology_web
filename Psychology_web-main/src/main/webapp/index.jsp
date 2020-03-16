@@ -1,33 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+    pageEncoding="UTF-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
-<title>这个首页</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%-- <meta http-equiv="Refresh" content="0;URL=${APP_PATH }/index.htm"> --%> 
+
+<title>Insert title here</title>
 </head>
 <body>
-<h1>来到首页</h1>
-<%-- <jsp:forward page="WEB-INF/jsp/article/index.jsp"></jsp:forward> --%>
-<%-- <jsp:forward page="article_index.jsp"></jsp:forward> --%>
-<a href="${pageContext.request.contextPath}/test.do">test</a>
-<a href="${pageContext.request.contextPath}/Article.do">showArticle</a>
-<%-- <jsp:forward page="/jsp/addarticle.jsp"></jsp:forward> --%>
-<a href="${APP_PATH }/addArticle.htm">addArticle</a>
-<form action="${pageContext.request.contextPath }/regist.do">
-		<table border="1">
-			<tr>
-				<td>用户名</td>
-				<td><input type="text" name="username"></td>
-			</tr>
-			<tr>
-				<td>密码</td>
-				<td><input type="text" name="password"></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="注册"></td>
-			</tr>
-		</table>
-	</form>
+
+
+<jsp:forward page="/index.htm"></jsp:forward>
 </body>
 </html>

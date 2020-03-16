@@ -44,7 +44,7 @@
 	
 	<resultMap type="PsychoUser" id="BaseArticleUser">
 		<id column="psychouser_id" property="psychouser_id" />
-		<result column="psychouser_nickname" property="psychouser_nickname" />
+		<result column="psychouser_name" property="psychouser_name" />
 		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />
 	</resultMap>
 	
@@ -57,7 +57,7 @@
 	
 	<!-- 获取文章作者 -->
 	<select id="selectUserbyArticleId" resultType="PsychoUser">
-		select pu.psychouser_id,pu.psychouser_nickname,psychouser_head_portrait
+		select pu.psychouser_id,pu.psychouser_name,psychouser_head_portrait
 		from psycho_user pu,psycho_article pa
 		where pa.psycho_article_id =#{psycho_article_id} and pu.psychouser_id = pa.psycho_article_pubuserid
 	</select>

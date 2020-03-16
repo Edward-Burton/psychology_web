@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
 				}
 				
 				//获得文章发布用户简单信息
-				System.out.println(pa.getArticleUser().getPsychouser_nickname());
+				System.out.println(pa.getArticleUser().getPsychouser_name());
 				System.out.println("文章发布时间:");
 				//获取后台传来的时间并转换为长整形数据
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

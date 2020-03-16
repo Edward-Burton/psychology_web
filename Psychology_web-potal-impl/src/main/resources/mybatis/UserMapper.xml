@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xhu.softwareengineering.potal.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="PsychoUser">
+		<id column="psychouser_id" property="psychouser_id" jdbcType="INTEGER" />
+		<result column="psychouser_acct" property="psychouser_acct" jdbcType="VARCHAR" />
+		<result column="psychouser_password" property="psychouser_password" jdbcType="CHAR" />
+		<result column="psychouser_name" property="psychouser_name" jdbcType="VARCHAR" />
+		<result column="psychouser_mail" property="psychouser_mail" jdbcType="VARCHAR" />
+		<result column="psychouser_createtime" property="psychouser_createtime" jdbcType="CHAR" />
+	</resultMap>
+	
+	<select id="queryUserlogin" parameterType="map" resultMap="BaseResultMap">
+		select psychouser_id, psychouser_acct, psychouser_password,
+		psychouser_name, psychouser_mail, psychouser_createtime
+		from psycho_user where psychouser_acct=#{psychouser_acct} and psychouser_password=#{psychouser_password}
+	</select>
+</mapper>
