@@ -1,74 +1,127 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keys" content="">
-    <meta name="author" content="">
-	<link rel="stylesheet" href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
-	<link rel="stylesheet" href="${APP_PATH }/css/login.css">
-	<style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keys" content="">
+<meta name="author" content="">
+<link rel="stylesheet"
+	href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
+<link rel="stylesheet" href="${APP_PATH }/css/login.css">
+<style>
+</style>
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<div>
+					<a class="navbar-brand" href="index.html" style="font-size: 32px;">心理学网站登录页面</a>
+				</div>
+			</div>
+		</div>
+	</nav>
 
-	</style>
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <div><a class="navbar-brand" href="index.html" style="font-size:32px;">心理学网站登录页面</a></div>
-        </div>
-      </div>
-    </nav>
+	<div class="container">
 
-    <div class="container">
-		
-      <form id="loginForm" action="${APP_PATH }/doLogin.do" method="POST" class="form-signin" role="form">
-      	
-        <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 用户登录</h2>
-		  <div class="form-group has-success has-feedback">
-			<input type="text" class="form-control" id="psychouser_acct" name="psychouser_acct" value="testuser" placeholder="请输入登录账号" autofocus>
-			<span class="glyphicon glyphicon-user form-control-feedback"></span>
-		  </div>
-		  <div class="form-group has-success has-feedback">
-			<input type="password" class="form-control" id="psychouser_password" name="psychouser_password"  value="123456" placeholder="请输入登录密码" style="margin-top:10px;">
-			<span class="glyphicon glyphicon-lock form-control-feedback"></span>
-		  </div>
-		  <div class="form-group has-success has-feedback">
-			<select id="ftype" class="form-control" name="type">
-                <option value="member" selected>会员</option>
-                <option value="user">管理</option>
-            </select>
-		  </div>
-        <div class="checkbox">
-          <label>
-            	<input id="rememberme" type="checkbox" value="1"> 记住我2周
-          </label>
-          <br>
-          <label>
-            忘记密码
-          </label>
-          <label style="float:right">
-            <a href="reg.html">我要注册</a>
-          </label>
-        </div>
-        <a class="btn btn-lg btn-success btn-block" onclick="dologin()" > 登录</a>
-        ${exception.message }
-      </form>
-    </div>
-    <script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-    <script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="${APP_PATH }/jquery/layer/layer.js"></script>
-    <script>
+		<form id="loginForm" action="${APP_PATH }/doLogin.do" method="POST"
+			class="form-signin" role="form">
+
+			<h2 class="form-signin-heading">
+				<i class="glyphicon glyphicon-log-in"></i> 用户登录
+			</h2>
+			<div class="form-group has-success has-feedback">
+				<input type="text" class="form-control" id="psychouser_acct"
+					name="psychouser_acct" value="testuser" placeholder="请输入登录账号"
+					autofocus> <span
+					class="glyphicon glyphicon-user form-control-feedback"></span>
+			</div>
+			<div class="form-group has-success has-feedback">
+				<input type="password" class="form-control" id="psychouser_password"
+					name="psychouser_password" value="123456" placeholder="请输入登录密码"
+					style="margin-top: 10px;"> <span
+					class="glyphicon glyphicon-lock form-control-feedback"></span>
+			</div>
+			<div class="form-group has-success has-feedback">
+				<select id="ftype" class="form-control" name="type">
+					<option value="member" selected>会员</option>
+					<option value="user">管理</option>
+				</select>
+			</div>
+			<div class="checkbox">
+				<label> <input id="rememberme" type="checkbox" value="1">
+					记住我2周
+				</label> <br> <label> 忘记密码 </label> <label style="float: right">
+					<a href="reg.html">我要注册</a>
+				</label>
+			</div>
+			<a class="btn btn-lg btn-success btn-block" onclick="dologin()">
+				登录</a> ${exception.message }
+		</form>
+	</div>
+	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
+	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${APP_PATH }/jquery/layer/layer.js"></script>
+	<script>
     function dologin() {
     	
-    	/* var psychouser_acct = $("#psychouser_acct");
+    	/* var psychouser_acct = $("#psychouser_acct").val(); */
+    	var psychouser_acct = $("#psychouser_acct");
     	var psychouser_password = $("#psychouser_password");
+    	
+    	//javascript中对于表单数据而言不能用null进行判断,如果文本框什么都不输入,获取的值是"",Java中可以用null去判断
+
+    	if(($.trim(psychouser_acct.val()) == "")){
+    		/* alert("用户账户不能为空，请重新输入！"); */
+    		psychouser_acct.val("");
+    		psychouser_acct.focus();
+    		layer.msg("用户账号不能为空,请重新输入!", {time:1000, icon:5, shift:6}, function(){
+    			psychouser_acct.val("");
+        		psychouser_acct.focus();
+        		//return false ;  //不能结束if,只是结束msg函数.
+    		});    		
+    		return false;
+    	}
+    	
+    	var loadingIndex = -1 ;
+    	
+    	$.ajax({
+    		type:"POST",
+    		data:{
+    			psychouser_acct:psychouser_acct.val(),
+    			"psychouser_password":psychouser_password.val()
+    		},
+    		url:"${APP_PATH}/doLogin.do",
+    		beforeSend:function(){
+    			//表单数据校验
+				loadingIndex = layer.msg('处理中', {icon: 16});
+    			return true;
+    		},
+    		success:function(result){ //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
+    			layer.close(loadingIndex);
+    			if(result.success){
+    				window.location.href="${APP_PATH}/main.htm";
+        			/* alert("success"); */
+    			}else{
+    				/* alert("failed"); */
+    				layer.msg(result.message, {time:1000, icon:5, shift:6});
+
+    			}
+    		},
+    		//error代码只有在controller处理方法抛出异常或则有拦截器处理时抛异常(如服务器代码问题，类型转换问题)就执行该函数，不执行success函数
+    		error:function(){
+    			/* alert("error"); */
+    			layer.msg("登陆失败！", {time:1000, icon:5, shift:6});
+    		}
+    	});
+    	
+    	/* 
     	//var ftype = $("#ftype");
     	
     	
@@ -123,9 +176,8 @@
     	}); */
     	
     	
-    	
-    	
-    	$("#loginForm").submit();
+    	/* 同步请求
+    	$("#loginForm").submit(); */
         /* var type = $(":selected").val();
         if ( type == "user" ) {
             window.location.href = "main.html";
@@ -134,5 +186,5 @@
         } */
     }
     </script>
-  </body>
+</body>
 </html>

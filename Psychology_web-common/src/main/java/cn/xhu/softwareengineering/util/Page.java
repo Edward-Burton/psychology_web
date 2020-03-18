@@ -39,11 +39,11 @@ public class Page<T> {
 		this.pagesize = pagesize;
 	}
 
-	public List getData() {
+	public List<T> getData() {
 		return data;
 	}
 
-	public void setData(List data) {
+	public void setData(List<T> data) {
 		this.data = data;
 	}
 
@@ -63,7 +63,7 @@ public class Page<T> {
 	private void setTotalno(Integer totalno) {
 		this.totalno = totalno;
 	}
-
+    //取开始索引
 	public Integer getStartIndex() {
 		return (this.pageno - 1) * pagesize;
 	}

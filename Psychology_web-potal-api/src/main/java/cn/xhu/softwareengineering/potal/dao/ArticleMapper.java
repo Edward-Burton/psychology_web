@@ -18,4 +18,8 @@ public interface ArticleMapper {
 	int insertArticleComment(ArticleComments articleComment);
 	
 	int addArticle(PsychoArticle psychoArticle);
+
+	List<PsychoArticle> queryList(@Param("startIndex")Integer startIndex, @Param("pagesize")Integer pagesize);
+
+	Integer queryCount();
 }

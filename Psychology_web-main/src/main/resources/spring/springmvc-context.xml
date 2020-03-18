@@ -22,6 +22,7 @@
 	             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">   
 	                <property name="supportedMediaTypes">
 	                      <list>
+	                      <!-- response.setContentType("text/html;charset=UTF-8"); 设置响应类型-->
 	                          <value>application/json;charset=UTF-8</value>
 	                     </list>   
 	                </property>   

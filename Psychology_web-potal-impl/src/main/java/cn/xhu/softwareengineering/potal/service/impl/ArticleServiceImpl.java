@@ -12,15 +12,36 @@ import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoLabel;
 import cn.xhu.softwareengineering.potal.dao.ArticleMapper;
 import cn.xhu.softwareengineering.potal.service.ArticleService;
+import cn.xhu.softwareengineering.util.Page;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
 	private ArticleMapper articleMapper;
+	
+	@Override
+	public Page<PsychoArticle> queryArticlePage(Integer pageno, Integer pagesize) {
+		Page<PsychoArticle> page = new Page<PsychoArticle>(pageno,pagesize);
+		Integer startIndex = page.getStartIndex();
+		List<PsychoArticle> listArticle = articleMapper.queryList(startIndex,pagesize);
+		
+		page.setData(listArticle);
+		
+		Integer totalsize =  articleMapper.queryCount();
+		
+		page.setTotalsize(totalsize);
+		
+		System.out.println("service:");
+		System.out.println("Totalno:"+page.getTotalno());
+		System.out.println("pagesize:"+page.getPagesize());
+		System.out.println("pageno:"+page.getPageno());
+		
+		return page;
+	}
 
 	@Override
-	public List<PsychoArticle> showAllArticle() {
+	public List<PsychoArticle> queryArticlePage() {
 		System.out.println("service");
 
 		//获得全部文章概览信息
@@ -74,15 +95,14 @@ public class ArticleServiceImpl implements ArticleService {
 		
 		
 		//文章下添加评论信息
-		ArticleComments ac = new ArticleComments();
-		ac.setComment_article_id(2);
-		ac.setArticle_comment_pultime("2020-03-13 22:48:34");
-		ac.setComment_user_id(2);
-		ac.setArticle_comment_pulcontent("有点意思");
-		int count = articleMapper.insertArticleComment(ac);
-		System.out.println("影响行数 : "+count);
-		int commentId = ac.getArticle_comment_id();
-		System.out.println("评论自增ID ： "+commentId);
+		/*
+		 * ArticleComments ac = new ArticleComments(); ac.setComment_article_id(2);
+		 * ac.setArticle_comment_pultime("2020-03-13 22:48:34");
+		 * ac.setComment_user_id(2); ac.setArticle_comment_pulcontent("有点意思"); int count
+		 * = articleMapper.insertArticleComment(ac);
+		 * System.out.println("影响行数 : "+count); int commentId =
+		 * ac.getArticle_comment_id(); System.out.println("评论自增ID ： "+commentId);
+		 */
 		
 		return listArticle;
 	}
@@ -96,5 +116,7 @@ public class ArticleServiceImpl implements ArticleService {
 		System.out.println("文章自增ID ： "+id);
 		return n;
 	}
+
+	
 
 }
