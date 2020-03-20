@@ -10,7 +10,7 @@ public class PsychoArticle {
 	private int articleId;
 	private String articleTitle;
 	private String articleImg;
-	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd HH:mm:ss")
 	private Date pubTime;
 	private PsychoUser articleUser;
 	private String author;

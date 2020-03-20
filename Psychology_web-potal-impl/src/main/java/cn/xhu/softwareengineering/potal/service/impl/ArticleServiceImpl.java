@@ -2,6 +2,7 @@ package cn.xhu.softwareengineering.potal.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import cn.xhu.softwareengineering.bean.ArticleComments;
 import cn.xhu.softwareengineering.bean.PsychoArticle;
+import cn.xhu.softwareengineering.bean.PsychoCategory;
 import cn.xhu.softwareengineering.bean.PsychoLabel;
 import cn.xhu.softwareengineering.potal.dao.ArticleMapper;
 import cn.xhu.softwareengineering.potal.service.ArticleService;
@@ -20,25 +22,42 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	private ArticleMapper articleMapper;
 	
+	
 	@Override
-	public Page<PsychoArticle> queryArticlePage(Integer pageno, Integer pagesize) {
-		Page<PsychoArticle> page = new Page<PsychoArticle>(pageno,pagesize);
+	public Page<PsychoArticle> queryArticlePage(Map<String ,Object> paramMap) {
+		Page<PsychoArticle> page = new Page<PsychoArticle>((Integer)paramMap.get("pageno"),(Integer)paramMap.get("pagesize"));
 		Integer startIndex = page.getStartIndex();
-		List<PsychoArticle> listArticle = articleMapper.queryList(startIndex,pagesize);
+		paramMap.put("startIndex", startIndex);
+		List<PsychoArticle> listArticle = articleMapper.queryList(paramMap);
 		
 		page.setData(listArticle);
 		
-		Integer totalsize =  articleMapper.queryCount();
+		Integer totalsize =  articleMapper.queryCount(paramMap);
 		
 		page.setTotalsize(totalsize);
 		
 		System.out.println("service:");
-		System.out.println("Totalno:"+page.getTotalno());
-		System.out.println("pagesize:"+page.getPagesize());
-		System.out.println("pageno:"+page.getPageno());
 		
 		return page;
 	}
+	
+	/*
+	 * @Override public Page<PsychoArticle> queryArticlePage(Integer pageno, Integer
+	 * pagesize) { Page<PsychoArticle> page = new
+	 * Page<PsychoArticle>(pageno,pagesize); Integer startIndex =
+	 * page.getStartIndex(); List<PsychoArticle> listArticle =
+	 * articleMapper.queryList(startIndex,pagesize);
+	 * 
+	 * page.setData(listArticle);
+	 * 
+	 * Integer totalsize = articleMapper.queryCount();
+	 * 
+	 * page.setTotalsize(totalsize);
+	 * 
+	 * System.out.println("service:");
+	 * 
+	 * return page; }
+	 */
 
 	@Override
 	public List<PsychoArticle> queryArticlePage() {
@@ -115,6 +134,16 @@ public class ArticleServiceImpl implements ArticleService {
 		System.out.println("影响行数 : "+n);
 		System.out.println("文章自增ID ： "+id);
 		return n;
+	}
+
+	@Override
+	public PsychoArticle getArticleById(Integer id) {
+		return articleMapper.selectArticleById(id);
+	}
+
+	@Override
+	public List<PsychoCategory> queryCategory(Map<String,Object> paramMap) {
+		return articleMapper.queryCategory(paramMap);
 	}
 
 	

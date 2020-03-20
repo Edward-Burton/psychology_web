@@ -3,6 +3,7 @@ package cn.xhu.softwareengineering.potal.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +16,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.xhu.softwareengineering.bean.PsychoArticle;
+import cn.xhu.softwareengineering.bean.PsychoCategory;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.potal.service.ArticleService;
+import cn.xhu.softwareengineering.util.AjaxResult;
+import cn.xhu.softwareengineering.util.Const;
 import cn.xhu.softwareengineering.util.Page;
+import cn.xhu.softwareengineering.util.StringUtil;
 
 @Controller
 @RequestMapping("/article")
@@ -31,29 +37,130 @@ public class ArticleController {
 	private ArticleService articleService;
 
 	@RequestMapping("/index")
-	public String queryArticlePage(@RequestParam(value="pageno",required=false,defaultValue="1")Integer pageno, 
-			@RequestParam(value="pagesize",required=false,defaultValue="2")Integer pagesize, Map map) {
-
-		System.out.println("页面传参pageno:"+pageno);
-		System.out.println("页面传参pagesize:"+pagesize);
-		Page<PsychoArticle> page = articleService.queryArticlePage(pageno, pagesize);
-		map.put("page", page);
-		//model.addAttribute("page", page);
-		List<PsychoArticle> list = page.getData();
-		System.out.println("controller:"+list.get(0).getArticleTitle());
-		System.out.println("Totalno:"+page.getTotalno());
-		System.out.println("pagesize:"+page.getPagesize());
-		System.out.println("pageno:"+page.getPageno());
-		/*
-		 * List<PsychoArticle> list = articleService.queryArticlePage();
-		 * model.addAttribute("articlelist", list); System.out.println(((PsychoArticle)
-		 * list.get(1)).getArticleTitle());
-		 */
-
+	public String toIndex(Map<String, Object> map) {
+		List<PsychoCategory> categoryList= articleService.queryCategory(new HashMap<String,Object>());
+		for(PsychoCategory pc:categoryList) {
+			System.out.println("分类: " + pc.getPsycho_category_name());
+		}
+		map.put("category", categoryList);
 		return "article/index";
 	}
+	
+	@RequestMapping("/toArticle")
+	public String toArticle(Integer id,Map<String, PsychoArticle> map) {
+		
+		PsychoArticle pa = articleService.getArticleById(id);
+		map.put("pa",pa);
+		
+		return "article/articledetail";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/doCategory")
+	public Object doCategory(int parentid) {
+		System.out.println("parentid: " + parentid);
+		AjaxResult result = new AjaxResult();
+		List<PsychoCategory> categoryList;
+		try {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("parentid", parentid);
+			categoryList = articleService.queryCategory(paramMap);
 
-	@RequestMapping("/addArticle.htm")
+			result.setData(categoryList);
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			result.setSuccess(false);
+			e.printStackTrace();
+			result.setMessage("查询数据失败！");
+		}
+
+		return result;// 将result对象序列化为JSON字符串，以流的形式返回。
+	}
+
+	// 3.条件查询
+	@ResponseBody
+	@RequestMapping("/doIndex")
+	public Object doIndex(@RequestParam(value = "pageno", required = false, defaultValue = "1") Integer pageno,
+
+			@RequestParam(value = "pagesize", required = false, defaultValue = "2") Integer pagesize,
+			String queryText,Integer categoryId) {
+		System.out.println("queryText: " + queryText);
+		AjaxResult result = new AjaxResult();
+		Page<PsychoArticle> page;
+		try {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("pageno", pageno);
+			paramMap.put("pagesize", pagesize);
+
+			if (StringUtil.isNotEmpty(queryText)) {
+
+				if (queryText.contains("%")) {
+					queryText = queryText.replaceAll("%", "\\\\%");
+					//此处需要四个斜杠，两个斜线作转义用，转义后得到两个斜线
+				    //replaceAll底层是一个正则表达式，正则表达式中的斜线也需要进行转义，故最后只剩一个真正意义的斜线
+					//此处记得将替换后的值再赋值给queryText
+				}
+
+				paramMap.put("queryText", queryText);
+				
+			}
+			if(categoryId!=null) {
+				paramMap.put("categoryId", categoryId);
+			}
+			
+			page = articleService.queryArticlePage(paramMap);
+
+			List<PsychoArticle> ls = page.getData();
+			/* System.out.println("时间："+ls.get(0).getPubTime()); */
+			result.setPage(page);
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			result.setSuccess(false);
+			e.printStackTrace();
+			result.setMessage("查询数据失败！");
+		}
+
+		return result;// 将result对象序列化为JSON字符串，以流的形式返回。
+	}
+
+	// 2.异步请求需要加上@ResponseBody,
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/index") public Object queryArticlePage(@RequestParam(value
+	 * = "pageno", required = false, defaultValue = "1") Integer pageno,
+	 * 
+	 * @RequestParam(value = "pagesize", required = false, defaultValue = "2")
+	 * Integer pagesize) {
+	 * 
+	 * AjaxResult result = new AjaxResult(); try { Page<PsychoArticle> page =
+	 * articleService.queryArticlePage(pageno, pagesize); List<PsychoArticle> ls =
+	 * page.getData(); System.out.println(ls.get(0).getArticleTitle());
+	 * result.setPage(page); result.setSuccess(true); } catch (Exception e) {
+	 * result.setSuccess(false); e.printStackTrace(); result.setMessage("查询数据失败！");
+	 * }
+	 * 
+	 * return result;//将result对象序列化为JSON字符串，以流的形式返回。 }
+	 */
+
+	// 1.同步请求
+	/*
+	 * @RequestMapping("/index") public String queryArticlePage(@RequestParam(value
+	 * = "pageno", required = false, defaultValue = "1") Integer pageno,
+	 * 
+	 * @RequestParam(value = "pagesize", required = false, defaultValue = "2")
+	 * Integer pagesize, Map map) {
+	 * 
+	 * Page<PsychoArticle> page = articleService.queryArticlePage(pageno, pagesize);
+	 * map.put("page", page); // model.addAttribute("page", page);
+	 * 
+	 * return "article/index"; }
+	 */
+
+	@RequestMapping("/toAddArticle")
 	public String addArticle(PsychoArticle pa, Model model) {
 		model.addAttribute("psychoArticle", pa);
 
@@ -61,8 +168,8 @@ public class ArticleController {
 
 	}
 
-	// @RequestBody
-	@RequestMapping("/addArticle.do")
+	/* @ResponseBody */
+	@RequestMapping("/doAddArticle")
 	public String addArticle(PsychoArticle pa, HttpSession session, HttpServletRequest request) {
 
 		MultipartHttpServletRequest mreq = (MultipartHttpServletRequest) request;
@@ -99,27 +206,24 @@ public class ArticleController {
 			sqlPath = path + File.separator + fileName;
 		} else {
 			request.setAttribute("uploadFileError", "*上传图片格式不正确");
-			return "addarticle";
+			return "article/addarticle";
 		}
-
-		/*
-		 * pa.setCreatedBy((User)session.getAttribute(Constants.USER_SESSION)).getId());
-		 */
+		pa.setArticleUser((PsychoUser)session.getAttribute(Const.LOGIN_USER));
 		PsychoUser pu = new PsychoUser();
 		pu.setPsychouser_id(2);
 		pa.setArticleUser(pu);
 		pa.setPubTime(new Date());
 		pa.setArticleImg(sqlPath);
 		System.out.println(pa.getArticleImg());
-		System.out.println(pa.toString());
+		System.out.println(pa.getPubTime());
 
 		if (articleService.addArticle(pa) > 0) {
 			request.setAttribute("uploadFileError", "添加成功");
-			return "addarticle";
+			return "article/index";
 		}
 
 		// model.addAttribute("msag", "添加成功");
-		return "addarticle";
+		return "article/addarticle";
 
 	}
 

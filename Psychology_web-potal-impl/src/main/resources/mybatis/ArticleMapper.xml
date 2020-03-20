@@ -68,6 +68,8 @@
 		where pa.psycho_article_id =#{psycho_article_id} and pa.psycho_article_id = ac.article_id and ac.category_id = pc.psycho_category_id
 	</select>
 	
+	
+	
 	<!-- 获得文章评论 :在collection中使用select属性，
 	则在调用查询方法返回都为BaseResultMap时，每次调用查询都会返回该查询结果，文章评论只需在文章详情页显示评论-->
 	<!-- <select id="selectCommentsbyArticleId" resultType="ArticleComments">
@@ -95,25 +97,54 @@
 		select * from psycho_article
 	</select>
 	
+	<!-- <select id="queryList" resultMap="BaseResultMap">
+		select
+		psycho_article_id,psycho_article_title,psycho_article_img,psycho_article_pubtime,psycho_article_content
+		from psycho_article
+		select * from psycho_article limit #{startIndex},#{pagesize}
+	</select>
+	
+	<select id="queryCount" resultType="Integer">
+		select
+		psycho_article_id,psycho_article_title,psycho_article_img,psycho_article_pubtime,psycho_article_content
+		from psycho_article
+		select count(*) from psycho_article
+	</select> -->
+	
 	<select id="queryList" resultMap="BaseResultMap">
 		<!-- select
 		psycho_article_id,psycho_article_title,psycho_article_img,psycho_article_pubtime,psycho_article_content
 		from psycho_article -->
-		select * from psycho_article limit #{startIndex},#{pagesize}
+		select * from psycho_article LEFT JOIN article_category ON psycho_article_id=article_id
+		<where>
+		<!-- <if test="queryText!=null">psycho_article_title like '%${queryText}%'</if> 会出现sql注入-->
+		<!-- 实现拼串 -->
+		<if test="categoryId!=null">article_category.category_id=#{categoryId}</if>
+		<if test="queryText!=null">and psycho_article_title like concat("%",#{queryText},"%")</if>
+		</where>
+		order by psycho_article_pubtime desc
+		limit #{startIndex},#{pagesize}
 	</select>
 	
 	<select id="queryCount" resultType="Integer">
 		<!-- select
 		psycho_article_id,psycho_article_title,psycho_article_img,psycho_article_pubtime,psycho_article_content
 		from psycho_article -->
-		select count(*) from psycho_article
+		select COUNT(*) from psycho_article LEFT JOIN article_category ON psycho_article_id=article_id
+		<where>
+		<!-- <if test="queryText!=null">psycho_article_title like '%${queryText}%'</if>  用$会出现sql注入的问题-->
+		<if test="categoryId!=null">article_category.category_id=#{categoryId}</if>
+		<if test="queryText!=null">psycho_article_title like concat("%",#{queryText},"%")</if>
+		</where>
+		
 	</select>
 	
 	<!-- 通过文章ID获得文章详细信息 -->
 	<select id="selectArticleById" resultMap="BaseResultMap">
-		select pa.*,ac.*
+		<!-- select pa.*,ac.*
 		from psycho_article pa,article_comments ac
-		where pa.psycho_article_id = #{id} and pa.psycho_article_id = ac.comment_article_id
+		where pa.psycho_article_id = #{id} and pa.psycho_article_id = ac.comment_article_id -->
+		select pa.* from psycho_article pa WHERE pa.psycho_article_id = #{id}
 	</select>
 
     <!-- 通过心理学分类查出文章 -->
@@ -133,6 +164,7 @@
 		<!-- <selectKey keyProperty="id" resultType="int"> select @@identity as id </selectKey> -->
 	 </insert> 
 	 
+	 <!-- 添加文章 -->
 	 <insert id="addArticle" parameterType="PsychoArticle"> 
 	 insert psycho_article 
 	 (psycho_article_title,psycho_article_pubtime,psycho_article_img,psycho_article_pubuserid,psycho_article_content)
@@ -148,4 +180,14 @@
 		email = #{email}, loginacct = #{loginacct} where id = #{id} </update> 
 	<delete id="deleteUserRole"> delete from t_user_role where userid = #{userid} and 
 		roleid = #{roleid} </delete> -->
+		
+		<!-- 获取心理学分类 -->
+	<select id="queryCategory" resultType="PsychoCategory">
+		select * from psycho_category
+		<where>
+		<if test="parentid !=null">psycho_category_parentid = #{parentid}</if>
+		<if test="parentid == null">psycho_category_parentid IS NULL </if>
+		</where>
+	</select>
+		
 </mapper>

@@ -79,11 +79,18 @@
 
     	if(($.trim(psychouser_acct.val()) == "")){
     		/* alert("用户账户不能为空，请重新输入！"); */
-    		psychouser_acct.val("");
-    		psychouser_acct.focus();
     		layer.msg("用户账号不能为空,请重新输入!", {time:1000, icon:5, shift:6}, function(){
     			psychouser_acct.val("");
         		psychouser_acct.focus();
+        		//return false ;  //不能结束if,只是结束msg函数.
+    		});    		
+    		return false;
+    	}
+    	
+    	if(($.trim(psychouser_password.val()) == "")){
+    		layer.msg("用户密码不能为空,请重新输入!", {time:1000, icon:5, shift:6}, function(){
+    			psychouser_password.val("");
+    			psychouser_password.focus();
         		//return false ;  //不能结束if,只是结束msg函数.
     		});    		
     		return false;

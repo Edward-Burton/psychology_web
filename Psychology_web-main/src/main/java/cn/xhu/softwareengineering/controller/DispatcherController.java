@@ -39,7 +39,7 @@ public class DispatcherController {
 
 	@RequestMapping("/main")
 	public String main() {
-		return "article_index";
+		return "index";
 	}
 	
 	@RequestMapping("/logout")

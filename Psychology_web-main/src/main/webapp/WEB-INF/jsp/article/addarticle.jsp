@@ -10,19 +10,14 @@
 
 	<form id="articleForm" method="post" enctype="multipart/form-data"
 		action="">
-		<label>文章标题：</label><input type="text" name="articleTitle"
+		<label>文章标题：</label> <input type="text" name="articleTitle"
 			id="articleTitle"><br> <label>文章内容：</label><input
-			type="text" name="content" id="content"><br> 
-			<label>上传图片：</label>
-			<input type="file" name="indexImg" id="indexImg"><br>
-		<img src="" id="preview" style="width: 20rem;height: 15rem;">
-		<input type="submit" id="addBtn"> 
-		<input type="hidden"
+			type="text" name="content" id="content"><br> <label>上传图片：</label>
+		<input type="file" name="indexImg" id="indexImg"><br> <img
+			src="" id="preview" style="width: 20rem; height: 15rem;"> <input
+			type="submit" id="addBtn"> <input type="hidden"
 			id="errorinfo" value="${uploadFileEroor}">
 	</form>
-	<div>
-		<h1>添加状态：${uploadFileEroor}</h1>
-	</div>
 
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
 	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
@@ -82,19 +77,39 @@
 		$("#addBtn")
 				.click(
 						function() {
-							/* 
-							var form = new FormData(document.getElementById("tf"));
 							
+							var articleTitle = $("articleTitle");
+							var content = $("content");
+							/* 
+							if(($.trim(articleTitle.val()) == "")){
+					    		layer.msg("文章标题不能为空!", {time:1000, icon:5}, function(){
+					    			articleTitle.val("");
+					    			articleTitle.focus();
+					        		//return false ;  //不能结束if,只是结束msg函数.
+					    		});    		
+					    		return false;
+					    	}
+							
+							if(($.trim(content.val()) == "")){
+					    		layer.msg("文章内容不能为空!", {time:1000, icon:5}, function(){
+					    			content.val("");
+					    			content.focus();
+					        		//return false ;  //不能结束if,只是结束msg函数.
+					    		});    		
+					    		return false;
+					    	}  */
+							
+							/* 
 							$.ajax({
 								type : "POST",
 								data : form,
-								url : "${pageContext.request.contextPath }/addArticle.do",
+								url : "${APP_PATH}/article/doAddArticle.do",
 								beforeSend : function() {            			
 									return true ;
 								},
 								success : function(result){
 									if(result.success){
-										window.location.href="${pageContext.request.contextPath }/jsp/addarticle.jsp";
+										window.location.href="${APP_PATH}/article/toIndex.htm";
 									}else{
 										layer.msg("保存用户失败", {time:1000, icon:5, shift:6}); 
 									}
@@ -102,7 +117,8 @@
 								error : function(){
 									layer.msg("保存失败", {time:1000, icon:5, shift:6}); 
 								}
-							}); */
+							});  */
+							
 
 							/* var options = {
 								url : "${APP_PATH}/addArticle.do",
@@ -133,7 +149,7 @@
 							$("#articleForm").ajaxSubmit(options); //异步提交
 							return; */
 
-							$("#articleForm").attr("action","${APP_PATH}/addArticle.do");
+							$("#articleForm").attr("action","${APP_PATH}/article/doAddArticle.do");
 							$("#articleForm").submit();  
 						});
 	</script>
