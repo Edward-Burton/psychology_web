@@ -83,7 +83,6 @@ public class ArticleController {
 	@ResponseBody
 	@RequestMapping("/doIndex")
 	public Object doIndex(@RequestParam(value = "pageno", required = false, defaultValue = "1") Integer pageno,
-
 			@RequestParam(value = "pagesize", required = false, defaultValue = "2") Integer pagesize,
 			String queryText,Integer categoryId) {
 		System.out.println("queryText: " + queryText);

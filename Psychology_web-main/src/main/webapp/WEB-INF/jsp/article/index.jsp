@@ -35,22 +35,25 @@
 
 
 	<div class="category_tree">
+		<a  href="#"
+			onclick="querybycategoryId()">全部
+		</a>
 		<ul class="list-group">
-		<c:forEach items="${category}" var="c" varStatus="status">
-					<li class="list-group-item tree-closed">
-				<span><a href="#" onclick="queryCategorys(${c.psycho_category_id})">${c.psycho_category_name} </a><!-- <span class="badge"
+			<c:forEach items="${category}" var="c" varStatus="status">
+				<li class="list-group-item tree-closed"><span><a
+						href="#" onclick="queryCategorys(${c.psycho_category_id})">${c.psycho_category_name}
+					</a> <!-- <span class="badge"
 					style="float: right">3</span> --></span>
 
-				<ul class="category-list" style="margin-top: 10px; display: none;">
-					<!-- <li style="height: 30px;"><a href="#">全部</a></li> -->
-				<!--<li style="height: 30px;"><a href="#">子分类1</a></li>
+					<ul class="category-list" style="margin-top: 10px; display: none;">
+						<!-- <li style="height: 30px;"><a href="#">全部</a></li> -->
+						<!--<li style="height: 30px;"><a href="#">子分类1</a></li>
 					<li style="height: 30px;"><a href="#">子分类2</a></li>
 					<li style="height: 30px;"><a href="#">子分类3</a></li>
 					<li style="height: 30px;"><a href="#">子分类4</a></li> -->
-				</ul>
-			</li>
-					
-                </c:forEach>
+					</ul></li>
+
+			</c:forEach>
 			<!-- <li><span>文章分类 <span class="badge" style="float: right">3</span></span></li>
 			<li class="list-group-item tree-closed">
 				<span><i>头</i></span> <span>文章分类 <span class="badge"
@@ -81,7 +84,7 @@
 		<div class="form-group has-feedback">
 			<div class="input-group">
 				<div class="input-group-addon">查询条件</div>
-				<input id="queryText" class="form-control has-success" type="text"
+				<input id="queryText"  class="form-control has-success" type="text"
 					placeholder="请输入查询条件">
 			</div>
 		</div>
@@ -171,6 +174,20 @@
 						$("ul", this).show("fast");
 					}
 				}
+				
+				var href = window.location.href;
+				var host = window.location.host;
+				var index = href.indexOf(host);
+				var path = href.substring(index + host.length)
+
+				var contextPath = "${APP_PATH}";
+				var pathAddress = path.substring(contextPath.length);
+				//alert(pathAddress);
+				var alink = $(".psycho-nav a[href*='" + pathAddress + "']");
+
+				alink.css("color", "purple")
+
+				
 			});
 			queryPageArticle(1);
 			showMenu();
@@ -287,11 +304,11 @@
 															+ '\'">'
 															+ pa.articleTitle
 															+ '</a></td>';
+													content += '<td><img src="'
+															+ pa.articleImg
+															+ '"/></td>';
 													content += '<td>'
 															+ pa.pubTime
-															+ '</td>';
-													content += '<td>'
-															+ pa.articleImg
 															+ '</td>';
 													content += '<td>';
 													/* content += '    <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';

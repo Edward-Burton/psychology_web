@@ -38,9 +38,12 @@
 			<a href="${APP_PATH }/test.do">test</a> <a
 				href="${APP_PATH }/article/index.htm">文章阅读</a>
 			<%-- <jsp:forward page="/jsp/addarticle.jsp"></jsp:forward> --%>
-
+			<a href="${APP_PATH }/question/index.htm">问答</a>
 			<a href="${APP_PATH }/login.htm">登录</a> <a
 				href="${APP_PATH }/register.htm">注册</a>
+						<a href="${APP_PATH }/radio/check.htm">vuetest</a> 
+						<a href="http://localhost:8083/#/test">FM</a> 
+						<audio src="http://m701.music.126.net/20200322234704/778236cf72af3b16e446c2d81c9c72b6/jdymusic/obj/w5zDlMODwrDDiGjCn8Ky/1762665303/57a4/a3e6/b810/260885c3affc9d84fe155501db1d2a22.mp3" autoplay="autoplay" controls="controls"></audio>
 		</div>
 	</div>
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
