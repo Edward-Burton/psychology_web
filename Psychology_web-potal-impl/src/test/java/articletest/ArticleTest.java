@@ -17,7 +17,7 @@ public class ArticleTest {
 	
 	@Test
 	public void test() {
-		articleService.showAllArticle();
+		articleService.queryArticlePage();
 	}
 
 }

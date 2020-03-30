@@ -16,7 +16,7 @@ public class ArticleTester {
 	@Test
 	public void test() {
 		ArticleService  articleService = ioc.getBean(ArticleServiceImpl.class);
-		List<PsychoArticle> list=articleService.showAllArticle();
+		List<PsychoArticle> list=articleService.queryArticlePage();
 		System.out.println(list.size());
 		
 	}

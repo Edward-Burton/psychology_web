@@ -111,7 +111,7 @@ public class ArticleController {
 			
 			page = articleService.queryArticlePage(paramMap);
 
-			List<PsychoArticle> ls = page.getData();
+			//List<PsychoArticle> ls = page.getData();
 			/* System.out.println("时间："+ls.get(0).getPubTime()); */
 			result.setPage(page);
 			result.setSuccess(true);

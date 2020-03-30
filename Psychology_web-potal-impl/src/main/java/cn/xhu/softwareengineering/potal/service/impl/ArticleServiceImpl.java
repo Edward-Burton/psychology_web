@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
 		
 		page.setTotalsize(totalsize);
 		
-		System.out.println("service:");
+		System.out.println("article-service!!!");
 		
 		return page;
 	}

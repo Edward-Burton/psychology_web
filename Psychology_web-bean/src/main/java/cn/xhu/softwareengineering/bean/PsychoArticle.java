@@ -84,14 +84,6 @@ public class PsychoArticle {
 	}
 
 
-	/*
-	 * public String getPubTime() { return pubTime; }
-	 * 
-	 * 
-	 * public void setPubTime(String pubTime) { this.pubTime = pubTime; }
-	 */
-	
-
 	public Date getPubTime() {
 		return pubTime;
 	}

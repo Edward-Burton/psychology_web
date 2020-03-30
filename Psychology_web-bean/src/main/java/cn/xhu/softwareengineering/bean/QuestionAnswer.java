@@ -2,12 +2,15 @@ package cn.xhu.softwareengineering.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class QuestionAnswer {
 
 	private int question_answer_id;
 	private int question_id;
 	private int answerer_id;
 	private String question_answer_content;
+	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd HH:mm:ss")
 	private Date question_answer_pultime;
 	private int question_answer_likes_num;
 	

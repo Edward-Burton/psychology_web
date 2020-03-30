@@ -234,7 +234,7 @@
 						});
 					}
 				},
-				erro : function() {
+				error : function() {
 					layer.msg("加载数据失败", {
 						time : 1000,
 						icon : 5,

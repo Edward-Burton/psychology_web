@@ -48,12 +48,12 @@
 					style="margin-top: 10px;"> <span
 					class="glyphicon glyphicon-lock form-control-feedback"></span>
 			</div>
-			<div class="form-group has-success has-feedback">
+			<!-- <div class="form-group has-success has-feedback">
 				<select id="ftype" class="form-control" name="type">
 					<option value="member" selected>会员</option>
 					<option value="user">管理</option>
 				</select>
-			</div>
+			</div> -->
 			<div class="checkbox">
 				<label> <input id="rememberme" type="checkbox" value="1">
 					记住我2周

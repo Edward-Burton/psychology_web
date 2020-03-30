@@ -5,8 +5,34 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert article</title>
+<link href="${APP_PATH }/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css"
+	rel="stylesheet">
 </head>
 <body>
+
+<div class="form-group">
+		<label class="col-md-3 control-label">详情 <span
+			class="required"> * </span>
+		</label>
+		<div class="col-md-7" id="contextText">
+			<div class="form-group" align="center" id="nochecke">
+				<!--  <textarea id="editor" hidden="true" autofocus>
+	     </textarea> -->
+				<!-- <textarea id="editor" placeholder="Balabala" autofocus></textarea> -->
+				<form method="post">
+					<textarea id="summernote" name="editordata"></textarea>
+					<button onclick="doCommit()">提交</button>
+					<button onclick="doReset()">重置</button>
+				</form>
+			</div>
+		</div>
+		<div style="display: none">
+			<input type="hidden" id="content" name="content" value='提交'>
+		</div>
+	</div>
 
 	<form id="articleForm" method="post" enctype="multipart/form-data"
 		action="">
@@ -22,7 +48,60 @@
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
 	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
 	<script src="${APP_PATH }/jquery/jquery-form/jquery-form.min.js"></script>
+	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 	<script type="text/javascript">
+	function doCommit(){
+		var content = $('#summernote').summernote('code');
+		alert(content); 
+		
+		var innnerhtml = $("comtent").val();
+		$("#summernote").val(innerhtml);
+		
+		$.ajax({
+    		type:"POST",
+    		data:{
+    			"content":content,
+    			"psychouser_password":psychouser_password.val()
+    		},
+    		url:"${APP_PATH}/doLogin.do",
+    		beforeSend:function(){
+    			//表单数据校验
+				loadingIndex = layer.msg('处理中', {icon: 16});
+    			return true;
+    		},
+    		success:function(result){ //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
+    			layer.close(loadingIndex);
+    			if(result.success){
+    				window.location.href="${APP_PATH}/main.htm";
+        			/* alert("success"); */
+    			}else{
+    				/* alert("failed"); */
+    				layer.msg(result.message, {time:1000, icon:5, shift:6});
+
+    			}
+    		},
+    		//error代码只有在controller处理方法抛出异常或则有拦截器处理时抛异常(如服务器代码问题，类型转换问题)就执行该函数，不执行success函数
+    		error:function(){
+    			/* alert("error"); */
+    			layer.msg("登陆失败！", {time:1000, icon:5, shift:6});
+    		}
+    	});
+	}
+	
+	
+	function doReset(){
+		$('#summernote').summernote('reset')
+	}
+		$(function() {
+			$('#summernote').summernote({
+		        placeholder: 'Hello Bootstrap 4',
+		        tabsize: 2,
+		        height: 100,
+		        focus:true
+		      });
+		});
 		/* var articleImg = null;
 		 var errorInfo = null;
 		 $(function(){

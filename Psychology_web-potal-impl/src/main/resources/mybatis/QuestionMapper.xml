@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="cn.xhu.softwareengineering.potal.dao.QuestionMapper">
+
+	<insert id="insertQuestion" parameterType="UserQuestions">
+		insert into user_questions
+		(user_question_title,user_question_content,user_question_pultime,question_master_id)
+		values(#{user_question_title},#{user_question_content},#{user_question_pultime},#{question_master_id})
+		<selectKey keyProperty="user_question_id" resultType="int"> select
+			@@identity </selectKey>
+	</insert>
+	
+	<select id="getQuestionsByUserId" resultType="UserQuestions">
+	select * from user_questions where question_master_id=#{id}
+	</select>
+	
+	<select id="queryQuestionPage" resultType="UserQuestions">
+	select * from user_questions order by user_question_pultime desc limit #{startIndex},#{pagesize}
+	</select>
+	
+	<select id="queryQuestionCount" resultType="Integer">
+	select count(*) from user_questions
+	</select>
+	
+	<select id="queryQuestionById" resultType="UserQuestions">
+	select * from user_questions where user_question_id=#{questionId}
+	</select>
+	
+	<select id="queryAnswerCount" resultType="Integer">
+	select count(*) from question_answers where question_id=#{questionId}
+	</select>
+	
+	<select id="queryQuestionAnswerPage" resultType="QuestionAnswer">
+	select * from question_answers where question_id=#{questionId} order by question_answer_pultime desc limit #{startIndex},#{pagesize}
+	</select>
+	
+	
+
+</mapper>
