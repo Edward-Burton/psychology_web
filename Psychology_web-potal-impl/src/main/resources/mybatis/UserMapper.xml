@@ -3,19 +3,88 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="cn.xhu.softwareengineering.potal.dao.UserMapper">
+<mapper
+	namespace="cn.xhu.softwareengineering.potal.dao.UserMapper">
 	<resultMap id="BaseResultMap" type="PsychoUser">
-		<id column="psychouser_id" property="psychouser_id" jdbcType="INTEGER" />
-		<result column="psychouser_acct" property="psychouser_acct" jdbcType="VARCHAR" />
-		<result column="psychouser_password" property="psychouser_password" jdbcType="CHAR" />
-		<result column="psychouser_name" property="psychouser_name" jdbcType="VARCHAR" />
-		<result column="psychouser_mail" property="psychouser_mail" jdbcType="VARCHAR" />
-		<result column="psychouser_createtime" property="psychouser_createtime" jdbcType="CHAR" />
+		<id column="psychouser_id" property="psychouser_id"
+			jdbcType="INTEGER" />
+		<result column="psychouser_acct" property="psychouser_acct"
+			jdbcType="VARCHAR" />
+		<result column="psychouser_password"
+			property="psychouser_password" jdbcType="CHAR" />
+		<result column="psychouser_name" property="psychouser_name"
+			jdbcType="VARCHAR" />
+		<result column="psychouser_mail" property="psychouser_mail"
+			jdbcType="VARCHAR" />
+		<result column="psychouser_createtime"
+			property="psychouser_createtime" jdbcType="CHAR" />
 	</resultMap>
-	
-	<select id="queryUserlogin" parameterType="map" resultMap="BaseResultMap">
+
+	<select id="queryUserlogin" parameterType="map"
+		resultMap="BaseResultMap">
 		select psychouser_id, psychouser_acct, psychouser_password,
 		psychouser_name, psychouser_mail, psychouser_createtime
-		from psycho_user where psychouser_acct=#{psychouser_acct} and psychouser_password=#{psychouser_password}
+		from
+		psycho_user where psychouser_acct=#{psychouser_acct} and
+		psychouser_password=#{psychouser_password}
 	</select>
+	
+	<select id="queryUserLikeComment" parameterType="map" resultType="Integer">
+		select like_to_id from user_like where like_type=#{typeid} and like_from_user_id=#{userid} and like_main_id=#{mainid} and like_main_type=#{maintype}
+	</select>
+	
+	<select id="queryLikesNum" parameterType="map"
+		resultType="Integer">
+		select count(*) from user_like where like_type=#{typeid} and like_to_id=#{toid}
+	</select>
+	
+	<select id="queryIsCollect" parameterType="map"
+		resultType="Integer">
+		select count(*) from user_collection where user_collectioin_to_id=#{toid} and user_collection_from_user_id=#{userid} and user_collection_type=#{typeid}
+	</select>
+	
+	<!-- <insert id="insertUser"> insert into t_user ( name,userpswd,sex,email,loginacct 
+		) values ( #{name},#{userpswd},#{sex},#{email},#{loginacct} ) <selectKey 
+		keyProperty="id" resultType="int"> select @@identity as id </selectKey> </insert> -->
+
+	<!-- <update id="updateUser"> update t_user set name = #{name}, sex = #{sex}, 
+		email = #{email}, loginacct = #{loginacct} where id = #{id} </update> <delete 
+		id="deleteUserRole"> delete from t_user_role where userid = #{userid} and 
+		roleid = #{roleid} </delete> -->
+
+	<insert id="addLike">
+	     insert into user_like
+	     <choose>
+	     <when test="maintype==null">
+		(like_type,like_to_id,like_from_user_id)values(#{typeid},#{toid},#{userid})
+	     </when>
+		<otherwise>
+		(like_type,like_to_id,like_from_user_id,like_main_id,like_main_type)values(#{typeid},#{toid},#{userid},#{mainid},#{maintype})
+		</otherwise>
+	     </choose>
+	</insert>
+	
+	<delete id="cancelLike">
+		delete from user_like where 
+		<choose>
+	     <when test="mainid==null">
+		like_type=#{typeid} and like_from_user_id=#{userid} and like_to_id=#{toid}
+	     </when>
+		<otherwise>
+		like_type=#{typeid} and like_from_user_id=#{userid} and like_to_id=#{toid} and like_main_id=#{mainid} and like_main_type=#{maintype}
+		</otherwise>
+	     </choose>
+	</delete>
+	
+	<insert id="addCollect">
+	     insert into user_collection
+	     (user_collection_type,user_collectioin_to_id,user_collection_from_user_id)values(#{typeid},#{toid},#{userid})
+		
+	</insert>
+	
+	<delete id="cancelCollect">
+	delete from user_collection where user_collection_type=#{typeid} and user_collection_from_user_id=#{userid} and user_collectioin_to_id=#{toid}
+	</delete>
+	
+
 </mapper>

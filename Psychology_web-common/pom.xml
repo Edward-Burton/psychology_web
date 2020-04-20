@@ -110,6 +110,11 @@
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
+		
+		<dependency>
+				<groupId>org.thymeleaf</groupId>
+				<artifactId>thymeleaf-spring5</artifactId>
+			</dependency>
 
 		<!-- ********其他****************************** -->
 

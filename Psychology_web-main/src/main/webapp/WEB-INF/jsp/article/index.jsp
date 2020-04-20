@@ -4,259 +4,551 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>阅读模块</title>
-<link rel="stylesheet"
-	href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
-<link rel="stylesheet" href="${APP_PATH }/css/main.css">
+<meta charset="utf-8">
+<title></title>
+<style>
+body {
+	background-color: #f3f4f5;
+	color: #000000
+}
+
+html * {
+	outline: 0;
+	zoom: 1;
+}
+
+a {
+	text-decoration: none;
+}
+
+.main-container {
+	width: 1180px;
+	height: 100%;
+	margin: 0 auto;
+	display: flex;
+	padding-top: 20px;
+	align-items: flex-start;
+}
+
+.main-left-container {
+	width: 800px;
+}
+
+.left-main {
+	border-radius: 10px;
+	padding: 30px;
+}
+
+.white-bg {
+	background: #fff;
+}
+
+.tag-m .first-tag {
+	display: flex;
+	justify-content: space-between;
+	padding: 18px 0 0;
+	margin: 0;
+}
+
+.tag-m li {
+	list-style: none;
+	display: inline-block;
+}
+
+.tag-m .first-tag li.selected a, .tag-m .first-tag li a:hover {
+	color: #0b8bff;
+}
+
+.tag-m li a {
+	font-family: PingFangSC-Regular;
+	font-size: 16px;
+	color: #666;
+	line-height: 18px;
+	text-decoration: none;
+}
+
+.tag-m #secondTagM {
+	margin-top: 18px;
+}
+
+.tag-m .second-tag {
+	background-color: #f3f4f5;
+	border-radius: 4px;
+}
+
+.tag-m .second-tag ul {
+	display: block;
+	padding: 5px 10px 15px 0;
+	list-style-type: none;
+	font-size: 0;
+}
+
+.tag-m .second-tag li {
+	margin-left: 30px;
+	margin-top: 10px;
+}
+
+.tag-m .second-tag li a {
+	color: #999;
+	font-size: 14px;
+}
+
+.tag-m .second-tag li.selected a, .tag-m .second-tag li a:hover {
+	color: #0b8bff;
+}
+
+#articleListM .item {
+	margin-top: 52px;
+	display: flex;
+	position: relative;
+	font-size: 0;
+}
+
+#articleListM .item img {
+	height: 98px;
+	width: 98px;
+	max-width: 98px;
+}
+
+a img, fieldset {
+	border: 0;
+}
+
+#articleListM .item .right {
+	margin-left: 18px;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	flex-direction: column;
+	-webkit-box-pack: justify;
+	justify-content: space-between;
+}
+
+.right {
+	float: right;
+}
+
+#articleListM .item .right .title {
+	font-weight: 700;
+	font-family: PingFangSC-Medium;
+	font-size: 20px;
+	color: #333;
+	padding-right: 80px;
+	max-height: 20px;
+}
+
+#articleListM .item .right .desc, #articleListM .item .right .title {
+	line-height: 20px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+#articleListM .item .right .desc {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #666;
+	max-height: 40px;
+	-webkit-line-clamp: 2;
+}
+
+#articleListM .item .statistics {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #ccc;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+#articleListM .item .right .info a {
+	background: #f1f5f9;
+	border-radius: 19px;
+	font-family: PingFangSC-Regular;
+	font-size: 12px;
+	color: #999;
+	padding: 2px 10px;
+	text-decoration: none;
+	margin-left: 18px;
+	line-height: 12px;
+}
+
+#articleListM .item .right .info span {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #999;
+	margin-left: 18px;
+	line-height: 14px;
+}
+
+#articleListM .item .right .info span:first-child {
+	margin-left: 0;
+}
+
+#articleListM .item .right .info a:first-child {
+	background-color: transparent;
+	margin-left: 0;
+	padding: 0;
+}
+
+#articleListM .item .right .info a:first-child span {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #999;
+	line-height: 14px;
+}
+
+.main-right-container {
+	width: 360px;
+	margin-left: 20px;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.white-bg {
+	background: #fff;
+}
+
+.main-left-container .page-wrap .pagination {
+	text-align: center;
+	margin-top: 40px;
+	margin-bottom: 50px;
+}
+
+.main-left-container .page-wrap .pagination li {
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	font-size: 14px;
+	color: #666;
+	background-color: #fff;
+	display: inline-block;
+	margin-right: 5px;
+	border-radius: 3px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.main-left-container .page-wrap .pagination .active {
+	color: #fff;
+	background-color: #0b8bff;
+}
+
+.main-left-container .page-wrap .pagination li a {
+	display: block;
+}
+
+.main-right-container .adver {
+	display: block;
+	width: 100%;
+}
+
+.main-right-container .adver img {
+	width: 100%;
+	height: auto;
+}
+
+.main-right-container .activity-m {
+	margin-top: 20px;
+}
+
+.main-right-container .activity-m .item {
+	display: block;
+	width: 100%;
+	margin-top: 20px;
+	padding-left: 10px;
+	position: relative;
+	font-family: PingFangSC-Regular;
+	font-size: 16px;
+	color: #333;
+	line-height: 16px;
+	text-decoration: none;
+}
+
+.main-right-container .qcode {
+	margin-top: 20px;
+	width: 360px;
+	height: 100px;
+}
+
+.main-right-container .qcode .qcode-img {
+	width: 360px;
+}
+
+.main-right-container .theme-list {
+	margin-top: 45px;
+}
+
+.main-right-container .theme-list .item {
+	display: block;
+	margin-top: 20px;
+	text-decoration: none;
+}
+
+.main-right-container .theme-list .item .title {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #333;
+}
+
+.main-right-container .theme-list .item .detail {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #999;
+	line-height: 20px;
+	margin-top: 3px;
+}
+
+.main-right-container .entrance-m {
+	margin-top: 30px;
+	display: flex;
+}
+
+.main-right-container .entrance-m a {
+	display: block;
+	text-decoration: none;
+	background: #0b8bff;
+	border-radius: 8px;
+	width: 150px;
+	height: 42px;
+	line-height: 42px;
+	color: #fff;
+	font-family: PingFangSC-Regular;
+	font-size: 16px;
+	text-align: center;
+}
+
+.main-right-container .entrance-m .all-theme {
+	margin-left: 20px;
+}
+</style>
 </head>
 <body>
-	<%-- <div class="btn-group">
-		<button type="button">
-			${sessionScope.loginUser.psychouser_name}</button>
-		<ul class="dropdown-menu" role="menu">
-			<li><a href="#"><i></i>个人中心</a></li>
-			<li><a href="#"><i></i>设置</a></li>
-			<li class="divider"></li>
-			<li><a href="${APP_PATH}/logout.do"><i></i>退出系统</a></li>
-		</ul>
-	</div> --%>
 
 
-	<div>
-		<ul>
-			<jsp:include page="/WEB-INF/jsp/common/main-top.jsp"></jsp:include>
-		</ul>
-	</div>
+	<div class="main-container">
+		<%-- <div>
+			<ul>
+				<jsp:include page="/WEB-INF/jsp/common/main-top.jsp"></jsp:include>
+			</ul>
+		</div> --%>
+		<!-- 左边 -->
+		<div class="main-left-container">
+			<div class="left-main white-bg">
+				<!-- 文章标签 -->
+				<div class="tag-m">
+					<ul class="first-tag">
+						<li class="selected open"><a href="#">全部</a></li>
+						<c:forEach items="${category}" var="c" varStatus="status">
+							<li><a href="javascript:void(0)"
+								data-category-id="${c.psycho_category_id}">${c.psycho_category_name}</a></li>
+						</c:forEach>
+					</ul>
 
+					<div id="secondTagM">
+						<div class="second-tag showed-second-tag"></div>
+						<div class="second-tag" style="display: none;">
+							<ul class="selector-tag">
+								<!-- 全部标签 -->
+								<li><a href="#" data-category-id="792">全部</a></li>
+								<c:forEach items="${subcategory}" var="sub" varStatus="status">
+									<li><a href="javascript:void(0)"
+										data-category-id="${sub.psycho_category_id}"
+										data-p-category-id="${sub.psycho_category_parentid}">${sub.psycho_category_name}</a></li>
+								</c:forEach>
+							</ul>
+						</div>
+					</div>
 
-	<a href="${APP_PATH }/article/toAddArticle.htm">写文章</a>
+				</div>
+				<!-- 文章列表 -->
+				<div id="articleListM"></div>
 
-
-	<div class="category_tree">
-		<a  href="#"
-			onclick="querybycategoryId()">全部
-		</a>
-		<ul class="list-group">
-			<c:forEach items="${category}" var="c" varStatus="status">
-				<li class="list-group-item tree-closed"><span><a
-						href="#" onclick="queryCategorys(${c.psycho_category_id})">${c.psycho_category_name}
-					</a> <!-- <span class="badge"
-					style="float: right">3</span> --></span>
-
-					<ul class="category-list" style="margin-top: 10px; display: none;">
-						<!-- <li style="height: 30px;"><a href="#">全部</a></li> -->
-						<!--<li style="height: 30px;"><a href="#">子分类1</a></li>
-					<li style="height: 30px;"><a href="#">子分类2</a></li>
-					<li style="height: 30px;"><a href="#">子分类3</a></li>
-					<li style="height: 30px;"><a href="#">子分类4</a></li> -->
-					</ul></li>
-
-			</c:forEach>
-			<!-- <li><span>文章分类 <span class="badge" style="float: right">3</span></span></li>
-			<li class="list-group-item tree-closed">
-				<span><i>头</i></span> <span>文章分类 <span class="badge"
-					style="float: right">3</span></span>
-
-				<ul style="margin-top: 10px; display: none;">
-					<li style="height: 30px;"><a href="#">心理科普</a></li>
-					<li style="height: 30px;"><a href="#">婚姻感情</a></li>
-					<li style="height: 30px;"><a href="#">家庭关系</a></li>
-					<li style="height: 30px;"><a href="#">人际社交</a></li>
-				</ul>
-			</li>
-			<li class="list-group-item tree-closed">
-				<span><i>头</i></span> <span>文章分类 <span class="badge"
-					style="float: right">3</span></span>
-
-				<ul style="margin-top: 10px; display: none;">
-					<li style="height: 30px;"><a href="#">心理科普</a></li>
-					<li style="height: 30px;"><a href="#">婚姻感情</a></li>
-					<li style="height: 30px;"><a href="#">家庭关系</a></li>
-					<li style="height: 30px;"><a href="#">人际社交</a></li>
-				</ul>
-			</li> -->
-		</ul>
-	</div>
-
-	<form class="form-inline" role="form" style="float: left;">
-		<div class="form-group has-feedback">
-			<div class="input-group">
-				<div class="input-group-addon">查询条件</div>
-				<input id="queryText"  class="form-control has-success" type="text"
-					placeholder="请输入查询条件">
+			</div>
+			<div class="page-wrap">
+				<div class="">
+					<ul class="pagination">
+						<li><span>«</span></li>
+						<li class="active"><span>1</span></li>
+						<!-- <li class=""><a href="https://www.xinli001.com/info/marry?page=2">2</a></li> -->
+						<li class=""><a href="#">2</a></li>
+						<li class=""><a href="#">3</a></li>
+						<li class=""><a
+							href="https://www.xinli001.com/info/marry?page=4">4</a></li>
+						<li class=""><a
+							href="https://www.xinli001.com/info/marry?page=5">5</a></li>
+						<li class=""><a
+							href="https://www.xinli001.com/info/marry?page=6">6</a></li>
+						<li class=""><a
+							href="https://www.xinli001.com/info/marry?page=7">7</a></li>
+						<li class=""><a
+							href="https://www.xinli001.com/info/marry?page=8">8</a></li>
+						<!-- <li class="next"><a href="https://www.xinli001.com/info/marry?page=2">»</a></li> -->
+						<li class="next"><a href="#">»</a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		<button id="queryBtn" type="button" class="btn btn-warning">
-			<i class="glyphicon glyphicon-search"></i> 查询
-		</button>
-	</form>
+		<!-- 右侧边栏 -->
+		<div class="main-right-container white-bg">
 
-	<hr style="clear: both;">
-	<div class="table-responsive">
-		<table class="table  table-bordered">
-			<thead>
-				<tr>
-					<th width="30">#</th>
-					<th width="30"><input type="checkbox"></th>
-					<th>标题</th>
-					<th>发布时间</th>
-					<th width="100">图片</th>
-				</tr>
-			</thead>
-			<tbody>
+			<a target="_blank" href="#" class="adver" data-title="悬赏说明"> <img
+				src="C:/Users/Lin/Pictures/test/zhiyu.jpg" alt="活动图片">
+			</a>
 
+			<!-- 活动列表 -->
+			<div class="activity-m">
+				<a target="_blank" href="#" class="item">内向者如何发挥独有的性格优势</a>
+			</div>
 
-				<%-- <c:forEach items="${page.data}" var="pa" varStatus="status">
-	                <tr>
-	                  <td>${status.count }</td>
-					  <td><input type="checkbox"></td>
-	                  <td><a>${pa.articleTitle }</a></td>
-	                  <td>${pa.pubTime }</td>
-	                  <td>${pa.articleImg }</td>
-	                  <td>
-					      <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>
-					      <button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>
-						  <button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>
-					  </td>
-	                </tr> 
-                </c:forEach> --%>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="6" align="center">
-						<ul class="pagination">
-							<%-- 
-								<c:if test="${page.pageno==1 }">
-									<li class="disabled"><a href="#">上一页</a></li>
-								</c:if>
-								<c:if test="${page.pageno!=1 }">
-									<li><a href="#" onclick="pageChange(${page.pageno-1})">上一页</a></li>
-								</c:if>
-								
-								<c:forEach begin="1" end="${page.totalno}" var="num">
-									<li 
-										<c:if test="${page.pageno == num}">
-											class="active"
-										</c:if>									
-									><a href="#" onclick="pageChange(${num})">${num }</a></li>									
-								</c:forEach>								
-								
-								<c:if test="${page.pageno==page.totalno }">
-									<li class="disabled"><a href="#">下一页</a></li>
-								</c:if>
-								<c:if test="${page.pageno!=page.totalno }">
-									<li><a href="#" onclick="pageChange(${page.pageno+1})">下一页</a></li>
-								</c:if> 
-								--%>
-						</ul>
-					</td>
-				</tr>
+			<!-- 贴片主题 -->
+			<div class="qcode">
+				<img src="C:/Users/Lin/Pictures/test/zhiyu.jpg" alt=""
+					class="qcode-img" style="position: static; top: 73px;">
 
-			</tfoot>
-		</table>
+			</div>
+			<!-- 主题列表 -->
+			<div class="theme-list">
+				<a target="_blank" href="#" class="item">
+					<p class="title">
+						<span>#抑郁者</span>&nbsp;&nbsp;<span>98篇</span>
+					</p>
+					<p class="detail">关于抑郁情绪、抑郁症。</p>
+				</a> <a target="_blank" href="#" class="item">
+					<p class="title">
+						<span>#复原力与逆商</span>&nbsp;&nbsp;<span>9篇</span>
+					</p>
+					<p class="detail">失败和不完美不可怕，如何保持激情才是重要的~</p>
+				</a>
+
+			</div>
+			<div class="entrance-m">
+				<a target="_blank" href="new_article.html" class="write-article">写文章</a>
+				<a target="_blank" href="#" class="all-theme">全部主题</a>
+			</div>
+		</div>
 	</div>
 
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
-	<%-- 	<script src="${APP_PATH }/script/docs.min.js"></script> --%>
 	<script type="text/javascript" src="${APP_PATH}/jquery/layer/layer.js"></script>
 	<script type="text/javascript">
 		$(function() {
-
-			$(".list-group-item").click(function() {
-				if ($(this).find("ul")) {
-					$(this).toggleClass("tree-closed");
-					if ($(this).hasClass("tree-closed")) {
-						$("ul", this).hide("fast");
-					} else {
-						$("ul", this).show("fast");
-					}
-				}
-				
-				var href = window.location.href;
-				var host = window.location.host;
-				var index = href.indexOf(host);
-				var path = href.substring(index + host.length)
-
-				var contextPath = "${APP_PATH}";
-				var pathAddress = path.substring(contextPath.length);
-				//alert(pathAddress);
-				var alink = $(".psycho-nav a[href*='" + pathAddress + "']");
-
-				alink.css("color", "purple")
-
-				
-			});
 			queryPageArticle(1);
-			showMenu();
-		});
-		
-		function queryCategorys(categoryid){
+		})
+
+		/* function queryCategorys(categoryid) {
 			$
-			.ajax({
-				type : "POST",
-				data : {"parentid":categoryid},
-				url : "${APP_PATH}/article/doCategory.do",
-				beforeSend : function() {
-					loadingIndex = layer.load(2, {
-						time : 10 * 1000
+					.ajax({
+						type : "POST",
+						data : {
+							"parentid" : categoryid
+						},
+						url : "${APP_PATH}/article/doCategory.do",
+						beforeSend : function() {
+							loadingIndex = layer.load(2, {
+								time : 10 * 1000
+							});
+							return true;
+						},
+						success : function(result) {
+							layer.close(loadingIndex);
+							if (result.success) {
+								var data = result.data;
+								//页面拿到数据后，获得tbody,然后向其中赋值，对页面标签进行拼串操作
+								var content = '<li class="selected"><a href="javascript:void(0)" data-category-id="'
+										+ categoryid + '">全部</a></li>';
+								$
+										.each(
+												data,
+												function(i, ca) {//i表示索引，ca表示data中的每一个元素
+
+													content += '<li><a href="javascript:querybycategoryId('
+															+ ca.psycho_category_id
+															+ ')" data-category-id="'
+															+ ca.psycho_category_id
+															+ '">'
+															+ ca.psycho_category_name
+															+ '</a></li>'
+
+												});
+
+								$(".selector-tag").html(content);
+
+							} else {
+								layer.msg(result.message, {
+									time : 1000,
+									icon : 5,
+									shift : 6
+								});
+							}
+						},
+						error : function() {
+							layer.msg("加载数据失败", {
+								time : 1000,
+								icon : 5,
+								shift : 6
+							});
+						}
 					});
-					return true;
-				},
-				success : function(result) {
-					layer.close(loadingIndex);
-					if (result.success) {
-						var data = result.data;
-						//页面拿到数据后，获得tbody,然后向其中赋值，对页面标签进行拼串操作
+		} */
 
-						var content ='<li style="height: 30px;"><a href="#" onclick="querybycategoryId('
-							+ categoryid+')">全部</a></li>';
-						//var content = '';
-						$
-								.each(
-										data,
-										function(i, ca) {//i表示索引，ca表示data中的每一个元素
-											
-											content += '<li style="height: 30px;"><a href="#" onclick="querybycategoryId('
-													+ ca.psycho_category_id+')">'+ca.psycho_category_name+'</a></li>'
-											
-										});
+		$(".first-tag li a")
+				.click(
+						function() {
+							var first_tag = $(this).parent();
+							first_tag.addClass("selected").siblings()
+									.removeClass("selected");
+							if (first_tag.index() != 0) {
+								var data_category_id = $(this).attr(
+										"data-category-id");
+								$(".second-tag li").eq(0).find("a").attr("data-category-id",data_category_id);
+								/* 获取以这个类为父类的所有子类的文章 */
+								querybypcategoryId(data_category_id);
+								var sub_categorys = $(".second-tag li");
 
-						$(".category-list").html(content);
+								// 如果展开
+								if (first_tag.hasClass("expand")) {
+									first_tag.removeClass("expand");
+									$(".second-tag").css("display", "none");
+								}
 
-					} else {
-						layer.msg(result.message, {
-							time : 1000,
-							icon : 5,
-							shift : 6
-						});
-					}
-				},
-				error : function() {
-					layer.msg("加载数据失败", {
-						time : 1000,
-						icon : 5,
-						shift : 6
-					});
-				}
-			});
-		}
-
-		function showMenu() {
-			var href = window.location.href;
-			var host = window.location.host;
-			var index = href.indexOf(host);
-			var path = href.substring(index + host.length)
-
-			var contextPath = "${APP_PATH}";
-			var pathAddress = path.substring(contextPath.length);
-			//alert(pathAddress);
-			var alink = $(".psycho-nav a[href*='" + pathAddress + "']");
-
-			alink.css("color", "purple")
-		}
+								// 如果没展开
+								else {
+									first_tag.siblings().removeClass("expand");
+									first_tag.addClass("expand");
+									$(".second-tag").css("display", "block");
+									sub_categorys.eq(0).addClass("selected").siblings().removeClass("selected");
+									sub_categorys.eq(0).show();
+									for (i = 1; i < sub_categorys.length; i++) {
+										if (sub_categorys.eq(i).find("a").attr(
+												"data-p-category-id") == data_category_id) {
+											sub_categorys.eq(i).show();
+										} else {
+											sub_categorys.eq(i).hide();
+										}
+									}
+									
+									
+								}
+							} else {
+								first_tag.siblings().removeClass("expand");
+								$(".second-tag").css("display", "none");
+								querybycategoryId();
+								
+							}
+						})
+		
+		$(".second-tag li a").click(function() {
+			var second_tag = $(this).parent();
+			second_tag.addClass("selected").siblings().removeClass("selected");
+			var id = $(this).attr("data-category-id");
+			if (second_tag.index() != 0) {
+				querybycategoryId(id);
+			} else {
+				querybypcategoryId(id);
+			}
+		})
 
 		function pageChange(pageno) {
 			//window.location.href="${APP_PATH}/article/index.do?pageno="+pageno ;
@@ -295,30 +587,34 @@
 										.each(
 												data,
 												function(i, pa) {//i表示索引，n表示data中的每一个元素
-													content += '<tr>';
-													content += '<td>' + (i + 1)
-															+ '</td>';
-													content += '<td><input type="checkbox"></td>';
-													content += '<td><a  href="#" onclick="window.location.href=\'${APP_PATH}/article/toArticle.htm?id='
+													content += '<div class="item">';
+													content += '<a target="_blank" href="#"> <img src="/article_img/'+'1584268791404_Article.jpg'+'"></a>';
+													content += '<div class="right">';
+													content += '<a target="_blank" href="#" class="title" onclick="window.location.href=\'${APP_PATH}/article/toArticle.htm?id='
 															+ pa.articleId
 															+ '\'">'
 															+ pa.articleTitle
-															+ '</a></td>';
-													content += '<td><img src="'
-															+ pa.articleImg
-															+ '"/></td>';
-													content += '<td>'
+															+ '</a>';
+													content += '<a target="_blank" href="#"><p class="desc">'+pa.content+'</p></a>';
+													content += '<div class="info">';
+													content += '<a target="_blank" href="user_page.html"> <span>'
+															+ pa.articleUser.psychouser_name
+															+ '</span></a>';
+													content += '<span class="date"> '
 															+ pa.pubTime
-															+ '</td>';
-													content += '<td>';
-													/* content += '    <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-													content += '    <button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
-													content += '  <button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>'; */
-													content += '</td>';
-													content += '</tr>';
+															+ ' </span>';
+													$.each(pa.articleLabels,function(j, label){
+														content += '<a target="_blank" href="#" data-tag-id="'+label.psycho_label_id+'"> #'+ label.psycho_label_name+ '</a>';
+													});
+													content += '</div></div>';
+													content += '<span class="statistics">'
+															+ pa.readsNum
+															+ '阅读</span>';
+													content += '</div>';
+
 												});
 								//实现局部刷新
-								$("tbody").html(content);
+								$("#articleListM").html(content);
 								//alert("需要进行局部刷新"+data);
 
 								//分页部分局部刷新
@@ -326,12 +622,12 @@
 								//使用JS中的做判断操作
 
 								if (page.pageno == 1) {
-									contentPagebar += '<li class="disabled"><a href="#">上一页</a></li>';
+									contentPagebar += '<li class="disabled"><a href="#"><span>«</span></a></li>';
 									//因内部要使用双引号，JS要拼串都用单引号拼串
 								} else {
 									contentPagebar += '<li><a href="#" onclick="pageChange('
 											+ (page.pageno - 1)
-											+ ')">上一页</a></li>';
+											+ ')"><span>«</span></a></li>';
 								}
 
 								for (var i = 1; i <= page.totalno; i++) {
@@ -344,11 +640,11 @@
 								}
 
 								if (page.pageno == page.totalno) {
-									contentPagebar += '<li class=disabled><a href="#">下一页</a></li>';
+									contentPagebar += '<li class="next disabled"><a href="#"><span>»</span></a></li>';
 								} else {
-									contentPagebar += '<li><a href="#" onclick="pageChange('
+									contentPagebar += '<li class="next"><a href="#" onclick="pageChange('
 											+ (page.pageno + 1)
-											+ ')">下一页</a></li>';
+											+ ')"><span>»</span></a></li>';
 								}
 
 								$(".pagination").html(contentPagebar);
@@ -371,24 +667,23 @@
 					});
 		}
 
-		$("#queryBtn").click(function() {
-			var queryText = $("#queryText").val();
-			jsonArticle.queryText = queryText;
-			/* alert(queryText); */
-			queryPageArticle(1);
-		});
-		
-		/* $(".category-list li a").click(function{
-			
-		}); */
-		
-		function querybycategoryId(categoryid){
+		function querybycategoryId(categoryid) {
 			var categoryid = categoryid;
 			jsonArticle.categoryId = categoryid;
+			jsonArticle.pcategoryId = null;
 			/* alert(queryText); */
 			queryPageArticle(1);
 		}
 		
+		function querybypcategoryId(pcategoryid) {
+			var pcategoryid = pcategoryid;
+			jsonArticle.pcategoryId = pcategoryid;
+			jsonArticle.categoryId = null;
+			/* alert(queryText); */
+			queryPageArticle(1);
+		}
+
 	</script>
+
 </body>
 </html>

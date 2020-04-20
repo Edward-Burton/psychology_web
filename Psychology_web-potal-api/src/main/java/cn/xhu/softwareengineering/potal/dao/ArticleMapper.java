@@ -29,4 +29,14 @@ public interface ArticleMapper {
 	Integer queryCount(Map<String,Object> paramMap);
 	
 	List<PsychoCategory> queryCategory(Map<String,Object> paramMap);
+
+	List<ArticleComments> queryComment(Map<String, Object> paramMap);
+
+	int queryUserIsLike(Map<String, Integer> likemap);
+
+	int queryLikeCountById(Map<String, Integer> likemap);
+
+	int updateArticle(Map<String, Object> parammap);
+
+	int addComment(Map<String, Object> paramMap);
 }

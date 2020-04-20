@@ -1,0 +1,1113 @@
+/* 覆盖浏览器的用户代理样式表的内边距和外边距设置 */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+img,
+li,
+ol,
+p,
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+body,
+button,
+div,
+form,
+html,
+input,
+li,
+p,
+select,
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #fff;
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	/* 指定文本颜色 */
+	color: #000;
+	margin: 0;
+	padding: 0;
+}
+
+body,
+html {
+	position: relative;
+	height: 100%;
+}
+
+html * {
+	outline: 0;
+	zoom: 1;
+}
+
+.swiper-container {
+	width: 100%;
+	height: 300px;
+	border: 1px solid #e1e1e1;
+}
+
+.container {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	/* 提供弹性布局方式 ，子元素的float\clear\vertical-aglign属性失效*/
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	
+	/* flexd的属性之一:页面在主轴(页面)上的排列居中 */
+	justify-content: center;
+	width: 100%;
+}
+
+.container-gray {
+	background-color: #f3f4f5;
+}
+
+/* 文章模块样式 */
+
+.article {
+	width: 1000px;
+	padding-bottom: 30px;
+}
+
+.article .content-container {
+	clear: both;
+}
+
+.article .article-title {
+	float: left;
+}
+
+.article .article-item {
+	width: 80px;
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid transparent;
+	color: #000;
+	display: inline-block;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.article .active-article {
+	border: 1px solid #0b8bff;
+	border-radius: 90px;
+	color: #0b8bff;
+}
+
+.article .article-content {}
+
+.article .content-container {
+	clear: both;
+	display: inline-block;
+}
+
+.article .content {
+	height: 136px;
+	width: 480px;
+	background: #f9f9fa;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	float: left;
+	margin-right: 20px;
+	margin-top: 20px;
+	border-radius: 10px;
+}
+
+.article .content .content-img {
+	width: 88px;
+	margin: 24px;
+}
+
+.article .content .content-img img {
+	width: 88px;
+	height: 88px;
+	object-fit: cover;
+	object-position: center;
+}
+
+.article .content .content-title {
+	margin: 24px 0;
+	-webkit-box-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+}
+
+.article .content .content-title .main-title {
+	font-size: 16px;
+	color: #333;
+	font-weight: 700;
+	margin-bottom: 8px;
+	line-height: 22px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	margin-right: 35px;
+}
+
+.article .content .content-title .small-title {
+	font-size: 12px;
+	color: #666;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-height: 18px;
+	margin-right: 35px;
+	margin-bottom: 12px;
+}
+
+.article .content .content-title .ci-title {
+	font-size: 12px;
+	color: #5c96ff;
+	line-height: 14px;
+}
+
+.common-a {
+	color: #666;
+}
+
+/* hover时不显示文本下滑线 */
+.common-a,
+.common-a:hover {
+	text-decoration: none;
+}
+
+
+.answer-and-ask {
+	height: 1000px;
+	background: #f2f3f4;
+	clear: both;
+	padding: 50px 0 20px;
+}
+
+.answer-and-ask .main-title .psycho-answer {
+	font-family: PingFangSC-Medium;
+	font-size: 24px;
+	color: #0b8bff;
+	line-height: 28px;
+	margin-right: 14px;
+}
+
+.answer-and-ask .main-title .sub-title {
+	font-size: 16px;
+	color: #999;
+	line-height: 18px;
+}
+
+.answer-and-ask .main-title .send-content {
+	float: right;
+	margin-right: 30px;
+	line-height: 25px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.margin-icon {
+	margin-left: 8px;
+}
+
+.answer-and-ask .main-title .my-content {
+	margin-right: 0;
+}
+
+.tringle {
+	display: inline-block;
+	border-right: 1px solid;
+	border-bottom: 1px solid;
+	width: 8px;
+	height: 8px;
+	-webkit-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	margin-left: 2px;
+}
+
+.answer-and-ask .main-content {
+	clear: both;
+	margin-top: 30px;
+}
+
+.answer-and-ask .main-content .left-content {
+	height: 900px;
+	width: 620px;
+	display: inline-block;
+	background: #fff;
+	border-radius: 10px;
+	margin-right: 20px;
+}
+
+.answer-and-ask .main-content .left-content .more-content {
+	float: right;
+	margin: 30px 30px 8px 0;
+	font-size: 14px;
+	color: #666;
+}
+
+.answer-and-ask .main-content .left-content .content-ul {
+	clear: both;
+	margin: 0 50px 32px 36px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid #f3f4f5;
+	margin-left: 20px;
+}
+
+.answer-and-ask .main-content .left-content .content-ul:last-child {
+	margin-bottom: 0;
+	padding-bottom: 34px;
+	border-bottom: none;
+}
+
+.answer-and-ask .main-content .left-content .main-title {
+	margin-bottom: 22px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+.answer-and-ask .main-content .left-content .main-title .answer-number,
+.answer-and-ask .main-content .left-content .main-title .use {
+	padding: 2px 12px;
+	background: #ddefff;
+	border-radius: 100px;
+	font-size: 12px;
+	color: #0b8bff;
+	display: inline-block;/* 行内块元素 */
+	margin-right: 2px;
+}
+
+.answer-and-ask .main-content .left-content .content {
+	position: relative;
+}
+
+.answer-and-ask .main-content .left-content .content .before {
+	position: absolute;
+	top: 14px;
+	left: 38px;
+	width: 0;
+	height: 0;
+	border-top: 7px solid transparent;
+	border-bottom: 8px solid transparent;
+	border-right: 10px solid #f2f3f4;
+}
+
+.answer-and-ask .main-content .left-content .content img {
+	float: left;
+	width: 36px;
+	height: 36px;
+	margin-right: 12px;
+	background-color: #fff;
+	border-radius: 50%;
+}
+
+.answer-and-ask .main-content .left-content .content .ellipsis {
+	position: relative;
+	background: #f1f1f1;
+	max-height: 55px;
+	line-height: 18px;
+	overflow: hidden;
+	margin-bottom: 10px;
+	border-radius: 4px;
+	padding: 5px;
+}
+
+.answer-and-ask .main-content .left-content .content .ellipsis-content {
+	display: inline;
+	vertical-align: top;
+	font-size: 12px;
+	background: #f3f4f5;
+	color: #666;
+	/* 省略显示 */
+	/* white-space: nowrap; */
+}
+
+.answer-and-ask .main-content .left-content .content .tip-margin {
+	margin-left: 50px;
+}
+
+.answer-and-ask .main-content .right-content {
+	height: 900px;
+	width: 330px;
+	display: inline-block;
+	background: #fff;
+	border-radius: 10px;
+	clear: both;
+	vertical-align: top;
+	overflow: hidden;
+}
+
+.answer-and-ask .main-content .right-content .last {
+	display: inline-block;
+	margin: 30px 0 0 24px;
+	font-size: 18px;
+	color: #333;
+	line-height: 18px;
+}
+
+.answer-and-ask .main-content .right-content .more {
+	float: right;
+	margin: 30px 20px 0 28px;
+	font-size: 16px;
+	color: #666;
+	line-height: 18px;
+	cursor: pointer;
+}
+
+.answer-and-ask .main-content .right-content ul {
+	clear: both;
+	margin-top: 44px;
+	list-style: none;
+	padding: 0 24px;
+}
+
+.answer-and-ask .main-content .right-content ul li {
+	margin-bottom: 20px;
+}
+
+/* 这里有处理省略显示的样式 */
+.answer-and-ask .main-content .right-content ul .title {
+	display: block; /* 块元素独占一行 */
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #666;
+	line-height: 14px;
+}
+
+/* 心理测试模块样式 */
+.psycho-test {
+	height: 600px;
+	background: #fff;
+	margin-bottom: 35px;
+	margin-top: 50px;
+	cursor: pointer;
+}
+
+
+.psycho-test .main-title .num {
+	float: right;
+	margin-top: 12px;
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	line-height: 16px;
+}
+
+.psycho-test .main-title {
+	margin-bottom: 20px;
+}
+
+.psycho-test .main-title .test-answer {
+	font-family: PingFangSC-Medium;
+	font-size: 24px;
+	color: #0b8bff;
+	line-height: 28px;
+	margin-right: 14px;
+}
+
+.psycho-test .main-title .sub-title {
+	font-size: 16px;
+	color: #999;
+	line-height: 18px;
+}
+
+.psycho-test .main-title .num .test-number {
+	color: #0b8bff;
+}
+
+.psycho-test .content {
+	height: 540px;
+	width: 980px;
+	position: relative;
+}
+
+.psycho-test .swiper-container {
+	margin: 0 0 0 -10px;
+	padding: 0 10px 10px;
+	height: 562px;
+	border: none;
+	z-index: 0;
+}
+
+.psycho-test .test-topic {
+	width: 230px;
+	height: 250px;
+	display: inline-block;
+	background: #fff;
+	box-shadow: 0 2px 20px 0 #eaeaea;
+	border-radius: 10px;
+	position: relative;
+	order: 0;
+	width: 230px;
+	margin-right: 20px;
+}
+
+.psycho-test .test-topic .go-test {
+	position: absolute; /* 绝对占位,生成块级元素,忽视普通流中其他元素,因此可重叠显示 */
+	left: 50%;
+	top: 50%;
+	width: 70px;
+	height: 36px;
+	line-height: 36px;
+	background: rgba(0, 0, 0, .5);
+	border-radius: 8px;
+	font-family: PingFangSC-Medium;
+	font-size: 14px;
+	color: #fff;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.psycho-test .test-topic img {
+	width: 100%;
+	height: 158px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	object-fit: cover;
+	object-position: center;
+}
+
+/* p元素时块级元素,独占一行 */
+.psycho-test .test-topic p {
+	text-align: left;
+	font-size: 16px;
+	color: #333;
+	line-height: 20px;
+	margin: 20px 20px 0; /* 上,左右,下 */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	height: 20px;
+}
+
+.psycho-test .test-topic .two-tip {
+	text-align: left;
+}
+
+.psycho-test .test-topic .free,
+.psycho-test .test-topic .no-free {
+	display: inline-block;
+	background: #5ed49d;
+	border-radius: 100px;
+	padding: 0 12px;
+	margin-top: 14px;
+	text-align: left;
+	color: #fff;
+	height: 20px;
+	font-size: 14px;
+	line-height: 20px;
+	margin-left: 20px;
+}
+
+.psycho-test .test-topic .no-free {
+	font-family: PingFangSC-Medium;
+	font-size: 16px;
+	color: #ff5b5b;
+	line-height: 18px;
+	padding: 0;
+	background-color: transparent;
+}
+
+.psycho-test .test-topic .test {
+	font-family: PingFangSC-Medium;
+	font-size: 12px;
+	color: #999;
+	line-height: 14px;
+	float: right;
+	margin-top: 17px;
+	margin-right: 20px;
+}
+
+/* 心理咨询 */
+.psycho-consult {
+	height: 470px;
+	background: #f3f4f5;
+	padding: 50px 300px 0;
+}
+
+.psycho-consult .main-title {
+	margin-bottom: 30px;
+}
+
+/* 板块名称样式 */
+.psycho-consult .main-title .psycho-answer {
+	font-family: PingFangSC-Medium;
+	font-size: 24px;
+	color: #0b8bff;
+	line-height: 28px;
+	margin-right: 14px;
+}
+
+/* 板块简介样式 */
+.psycho-consult .main-title .sub-title {
+	font-size: 16px;
+	color: #999;
+	line-height: 18px;
+}
+
+.psycho-consult .my-content {
+	margin-right: 0;
+}
+
+.psycho-consult .send-content {
+	float: right;
+	margin-right: 30px;
+	line-height: 25px;
+	margin-top: 5px;
+	font-size: 14px;
+}
+
+.psycho-consult .content {
+	height: 365px;
+	width: 1000px;
+	cursor: pointer;
+	position: relative;
+}
+
+.psycho-consult .swiper-consult {
+	height: 340px;
+	border: none;
+	z-index: 0;
+}
+
+.swiper-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-transition-property: -webkit-transform;
+	transition-property: -webkit-transform;
+	-o-transition-property: transform;
+	transition-property: transform;
+	transition-property: transform, -webkit-transform;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/* 咨询师卡片样式 */
+.psycho-consult .swiper-consult .swiper-slide {
+	height: 340px;
+	border-radius: 10px;
+}
+
+
+.psycho-consult .content .user-img {
+	width: 230px;
+	height: 340px;
+	position: relative;
+	border-radius: 10px;
+	background: #fff;
+}
+
+.psycho-consult .content .user-img .hidden-img {
+	width: 230px;
+	height: 84px;
+	overflow: hidden;
+	border-radius: 10px 10px 0 0;
+}
+
+.psycho-consult .content .user-img .hidden-img img {
+	width: 230px;
+	height: 100%;
+	-webkit-filter: blur(8px);
+	filter: blur(8px);
+	object-fit: cover;
+	object-position: center;
+}
+
+.psycho-consult .content .user-img .zhezhao {
+	width: 230px;
+	height: 84px;
+	position: absolute;
+	background: #000;
+	opacity: .3;
+	top: 0;
+	left: 0;
+	border-radius: 10px 10px 0 0;
+}
+
+/* 名字样式 */
+.psycho-consult .content .user-img span {
+	font-family: PingFangSC-Medium;
+	font-size: 18px;
+	color: #fff;
+	line-height: 20px;
+	position: absolute;
+	top: 58px;
+	margin-bottom: 10px;
+	left: 100px;
+}
+
+/* 头像样式 */
+.psycho-consult .content .user-img .user-radius-img {
+	width: 68px;
+	height: 68px;
+	border-radius: 50%;
+	top: 45px;
+	left: 15px;
+	position: absolute;
+	-webkit-filter: blur(0);
+	filter: blur(0);
+}
+
+/* 帮助人数样式 */
+.psycho-consult .content .show-user-tip {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #666;
+	line-height: 14px;
+	margin-top: 10px;
+	position: absolute;
+	left: 100px;
+}
+
+/* 资格介绍样式 */
+.psycho-consult .content .user-introudct {
+	margin-top: 45px;
+	text-align: left;
+	list-style: none;
+	padding-left: 20px;
+	height: 42px;
+}
+
+.psycho-consult .content .user-introudct li:before {
+	content: "\25CF";
+	color: #0b8bff;
+	font-size: 12px;
+	margin-right: 10px;
+}
+
+.psycho-consult .content .user-introudct li {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #333;
+	line-height: 14px;
+	margin-bottom: 14px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-right: 20px;
+}
+
+/* 擅长领域按钮 */
+.psycho-consult .content .aera-info {
+	font-family: PingFangSC-Regular;
+	font-size: 14px;
+	color: #999;
+	line-height: 18px;
+	margin: 30px 20px;
+	text-align: left;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	height: 36px;
+}
+
+
+/* 预约按钮 */
+.psycho-consult .content .prew-metting {
+	width: 90px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	background: #0b8bff;
+	border-radius: 8px;
+	margin: 0 30%;
+	margin-top: 28px;
+	color: #fff;
+	font-size: 14px;
+}
+
+.psycho-consult .content .prew-metting a {
+	color: #fff !important;
+	text-decoration: none !important;
+}
+
+/* 心理课程 */
+
+.psycho_course {
+	background: #fff;
+	padding: 50px 300px 16px;
+}
+
+.psycho_course .main-title {
+	margin-bottom: 30px;
+}
+
+.psycho_course .main-title .psycho-answer {
+	font-family: PingFangSC-Medium;
+	font-size: 24px;
+	color: #0b8bff;
+	line-height: 28px;
+	margin-right: 14px;
+}
+
+.psycho_course .main-title .sub-title {
+	font-size: 16px;
+	color: #999;
+	line-height: 18px;
+}
+
+.psycho_course .send-content {
+	float: right;
+	margin-right: 30px;
+	line-height: 25px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.psycho_course .my-content {
+	margin-right: 0;
+}
+
+.psycho_course .content {
+	width: 1000px;
+	cursor: pointer;
+	position: relative;
+}
+
+.swiper-course {
+	width: 1000px;
+	height: 712px;
+	background: #fbfbfc;
+	margin-bottom: 40px;
+	margin-top: 50px;
+	cursor: pointer;
+	position: relative;
+	border: none;
+	z-index: 0;
+}
+
+.swiper-course .top-margin {
+	margin-right: 14px;
+}
+
+.swiper-course .swiper-slide {
+	font-size: 18px;
+	display: block;
+	text-align: left;
+	margin: 15px;
+}
+
+.swiper-course .slide-top {
+	width: 970px;
+	height: 408px;
+	border-radius: 10px;
+	position: relative;
+}
+
+
+.swiper-course .slide-bottom {
+	height: 278px;
+	border-radius: 10px;
+	position: relative;
+	margin-top: 20px;
+}
+
+.swiper-course .slide-top .top-one {
+	background: #fff;
+	border-radius: 20px;
+	background: #ffffff;
+}
+
+.swiper-course .slide-top .info {
+	height: 126px;
+	width: 450px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	text-align: left;
+	margin-left: 20px;
+}
+
+
+.swiper-course .slide-top .info .info-title {
+	font-size: 18px;
+	color: #333;
+	line-height: 24px;
+	margin-top: 15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	margin-right: 20px;
+}
+
+.swiper-course .slide-top .info .teacher-info {
+	font-size: 16px;
+	color: #666;
+	line-height: 16px;
+	margin-top: 10px;
+}
+
+.swiper-course .slide-top .info .pay {
+	color: #ff5b5b;
+	line-height: 16px;
+	display: inline-block;
+	border-radius: 100px;
+	margin-right: 14px;
+	margin-top: 14px;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.swiper-course .slide-top .info .class-info {
+	width: 80px;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	float: right;
+	margin-right: 10px;
+	margin-top: 12px;
+	border: 1px solid #666;
+	border-radius: 85px;
+	color: #666;
+	font-size: 14px;
+}
+
+.swiper-course .bottom-one,
+.swiper-course .top-one {
+	width: 470px;
+	height: 408px;
+	display: inline-block;
+	position: relative;
+}
+
+.swiper-course .slide-bottom .slide-top-img {
+	width: 230px;
+	height: 129px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-repeat: no-repeat;
+	border-radius: 10px 10px 0 0;
+	background-size: 100% auto;
+}
+
+.swiper-course .bottom-margin {
+	margin-right: 14px;
+}
+
+.swiper-course .bottom-one {
+	width: 228px;
+	height: 259px;
+	background: #fff;
+	border-radius: 10px;
+}
+
+.swiper-course .slide-bottom .info {
+	width: 200px;
+	height: 130px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	text-align: left;
+	margin-left: 20px;
+}
+
+.swiper-course .slide-bottom .info .info-title {
+	font-size: 16px;
+	color: #333;
+	line-height: 20px;
+	height: 38px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	margin-right: 0;
+	margin-top: 15px;
+}
+
+.swiper-course .slide-bottom .info .teacher-info {
+	font-size: 14px;
+	color: #666;
+	line-height: 16px;
+	margin-top: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+}
+
+.swiper-course .slide-bottom .info .pay {
+	color: #ff5b5b;
+	line-height: 16px;
+	display: inline-block;
+	border-radius: 100px;
+	margin-right: 14px;
+	margin-top: 14px;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.swiper-course .slide-bottom .info .class-info {
+	width: 72px;
+	margin-right: 0;
+	margin-top: 10px;
+	font-size: 12px;
+	line-height: 24px;
+	border: 1px solid #666;
+	border-radius: 85px;
+	color: #666;
+	text-align: center;
+	float: right;
+	height: 24px;
+}
+
+/* 心理电台样式 */
+
+.psycho-fm {
+	margin-bottom: 20px;
+	margin-top: 50px;
+	width: 1000px;
+	position: relative;
+}
+
+.psycho-fm .main-title {
+	margin-bottom: 30px;
+}
+
+.psycho-fm .main-title .psycho-answer {
+	font-family: PingFangSC-Medium;
+	font-size: 24px;
+	color: #0b8bff;
+	line-height: 28px;
+	margin-right: 14px;
+}
+
+.psycho-fm .main-title .sub-title {
+	font-size: 16px;
+	color: #999;
+	line-height: 18px;
+}
+
+.psycho-fm .send-content {
+	float: right;
+	margin-right: 30px;
+	line-height: 34px;
+	font-size: 14px;
+	cursor: pointer;
+	margin-right: 0;
+}
+
+.psycho-fm .swiper-fm {
+	border: none;
+	overflow: hidden;
+	z-index: 0;
+	height: 268px !important;
+}
+
+.psycho-fm .slide-top {
+	width: 580px;
+	height: 256px;
+	background: #fff;
+	position: relative;
+	box-shadow: 0 2px 20px 0 #eaeaea;
+	border-radius: 10px;
+}
+
+.psycho-fm .slide-top .slide-top-img {
+	height: 124px;
+	width: 180px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	border-radius: 10px 10px 0 0;
+}
+
+.psycho-fm .slide-top .info {
+	height: 138px;
+	width: 180px;
+	position: absolute;
+	bottom: -6px;
+	left: 0;
+}
+
+/* 主播信息块 */
+.psycho-fm .slide-top .info .img-info {
+	margin-top: 78px;
+	position: relative;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	font-size: 14px;
+	float: left;
+	margin-left: 15px;
+}
+
+.psycho-fm .slide-top .info .img-info .user-img {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.psycho-fm .slide-top .info .img-info .zhubo {
+	padding-top: 4px;
+}
+
+.psycho-fm .slide-top .info .play-blue {
+	margin-top: 78px;
+	float: right;
+	margin-right: 30px;
+}
+
+.psycho-fm .slide-top .info .title {
+	position: absolute;
+	top: 10px;
+	left: 0;
+}
+
+.psycho-fm .slide-top .info .title .content-title {
+	line-height: 26px;
+	overflow: hidden;
+	height: 56px;
+	max-height: 56px;
+	position: relative;
+	letter-spacing: 0;
+	font-size: 14px;
+	color: #fff;
+	opacity: .9;
+	margin: 0 15px;
+	text-align: left;
+	display: block;
+}
+
+.psycho-fm .slide-top .info .title .content-title .content-splice {
+	display: inline;
+	color: #333;
+}

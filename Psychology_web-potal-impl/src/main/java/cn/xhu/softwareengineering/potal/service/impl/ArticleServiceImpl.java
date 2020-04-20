@@ -1,6 +1,7 @@
 package cn.xhu.softwareengineering.potal.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -145,6 +146,41 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<PsychoCategory> queryCategory(Map<String,Object> paramMap) {
 		return articleMapper.queryCategory(paramMap);
 	}
+
+	@Override
+	public List<ArticleComments> queryComment(Map<String, Object> paramMap) {
+		return articleMapper.queryComment(paramMap);
+	}
+
+	@Override
+	public int queryUserIsLike(Map<String, Integer> likemap) {
+		return articleMapper.queryUserIsLike(likemap);
+	}
+
+	@Override
+	public int queryLikeCountById(Map<String, Integer> likemap) {
+		return articleMapper.queryLikeCountById(likemap);
+	}
+
+	@Override
+	public int updateReadNum(Integer articleid) {
+		int curReadnum = articleMapper.selectArticleById(articleid).getReadsNum();
+		int nowReadnum = curReadnum+1;
+		
+		Map<String,Object> parammap = new HashMap<String,Object>();
+		parammap.put("articleid", articleid);
+		parammap.put("nowReadnum", nowReadnum);
+		articleMapper.updateArticle(parammap);
+		
+		return articleMapper.selectArticleById(articleid).getReadsNum();
+	}
+
+	@Override
+	public int addComment(Map<String, Object> paramMap) {
+		return articleMapper.addComment(paramMap);
+	}
+
+
 
 	
 

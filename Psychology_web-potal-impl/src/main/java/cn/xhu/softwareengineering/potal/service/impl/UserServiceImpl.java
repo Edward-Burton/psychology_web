@@ -1,5 +1,6 @@
 package cn.xhu.softwareengineering.potal.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,48 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return psychoUser;
+	}
+
+	@Override
+	public int handleUserLike(Map<String, Integer> paramMap, Integer action) {
+		int status=0;
+		if(action==0) {
+			status=userMapper.cancelLike(paramMap);
+		}
+		else{
+			status=userMapper.addLike(paramMap);
+		}
+		System.out.println("serstatus:"+status);
+		if(status!=0) {
+			int c = userMapper.queryLikesNum(paramMap);
+			System.out.println("serlikenum"+c);
+			return c;
+		}
+		return 0;
+	}
+
+	@Override
+	public int queryIsCollect(Map<String, Integer> paramMap) {
+		return userMapper.queryIsCollect(paramMap);
+	}
+
+	@Override
+	public int handleUserCollect(Map<String, Integer> paramMap, Integer iscollect) {
+		int status=0;
+		if(iscollect==1) {
+			status=userMapper.cancelCollect(paramMap);
+		}else if(iscollect==0) {
+			status=userMapper.addCollect(paramMap);
+		}
+		if(status!=0) {
+			return userMapper.queryIsCollect(paramMap);
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Integer> queryUserlikeComment(Map<String, Object> paramMap) {
+		return userMapper.queryUserLikeComment(paramMap);
 	}
 
 }

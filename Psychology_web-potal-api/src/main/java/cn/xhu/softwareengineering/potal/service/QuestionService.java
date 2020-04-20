@@ -13,6 +13,9 @@ public interface QuestionService {
 	List<UserQuestions> getQuestionsByUserId(int userId);
 	Page<UserQuestions> queryQuestionPage(Map<String, Object> parammap);
 	UserQuestions queryQuestionById(Integer questionId);
-	Integer queryAnswerCount(Integer id);
+	//Integer queryAnswerCount(Integer id);
+	Integer queryAnswerCount(Map<String, Object> param);
 	Page<QuestionAnswer> queryQuestionAnswerPage(Map<String, Object> parammap);
+	Integer addQuestionAnswer(QuestionAnswer questionAnswer);
+	Page<QuestionAnswer> queryAnswerPage(Map<String, Object> parammap);
 }

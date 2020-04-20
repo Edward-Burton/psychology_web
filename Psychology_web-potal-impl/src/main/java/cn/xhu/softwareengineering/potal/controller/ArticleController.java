@@ -15,15 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import cn.xhu.softwareengineering.bean.ArticleComments;
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoCategory;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.potal.service.ArticleService;
+import cn.xhu.softwareengineering.potal.service.UserService;
 import cn.xhu.softwareengineering.util.AjaxResult;
 import cn.xhu.softwareengineering.util.Const;
 import cn.xhu.softwareengineering.util.Page;
@@ -36,26 +39,61 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 
+	@Autowired
+	private UserService userService;
+
 	@RequestMapping("/index")
 	public String toIndex(Map<String, Object> map) {
-		List<PsychoCategory> categoryList= articleService.queryCategory(new HashMap<String,Object>());
-		for(PsychoCategory pc:categoryList) {
+		List<PsychoCategory> categoryList = articleService.queryCategory(new HashMap<String, Object>());
+		for (PsychoCategory pc : categoryList) {
+			System.out.println("分类: " + pc.getPsycho_category_name());
+		}
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sub_category", "all");
+		List<PsychoCategory> subcategoryList = articleService.queryCategory(paramMap);
+		for (PsychoCategory pc : subcategoryList) {
 			System.out.println("分类: " + pc.getPsycho_category_name());
 		}
 		map.put("category", categoryList);
+		map.put("subcategory", subcategoryList);
 		return "article/index";
 	}
-	
+
 	@RequestMapping("/toArticle")
-	public String toArticle(Integer id,Map<String, PsychoArticle> map) {
-		
+	public String toArticle(Integer id, HttpSession session, Map<String, Object> map) {
+		/* 当前用户是否喜欢 */
+		PsychoUser loginuser = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (loginuser != null) {
+			Map<String, Integer> likemap = new HashMap<String, Integer>();
+			likemap.put("from_user_id", loginuser.getPsychouser_id());
+			likemap.put("to_article_id", id);
+			likemap.put("liketype", 1);
+			int islike = articleService.queryUserIsLike(likemap);
+			map.put("islike", islike);
+			System.out.println(islike);
+			/*
+			 * Map<String, Integer>collectmap=new HashMap<String, Integer>();
+			 */
+		} else {
+			map.put("islike", -1);
+		}
+
+		/* 获取文章点赞总数 */
+		Map<String, Integer> likemap = new HashMap<String, Integer>();
+		likemap.put("liketype", 1);
+		likemap.put("id", id);
+		int likecount = articleService.queryLikeCountById(likemap);
+		map.put("likecount", likecount);
+
+		// 获取文章详细信息
 		PsychoArticle pa = articleService.getArticleById(id);
-		map.put("pa",pa);
-		
+		map.put("pa", pa);
+		for (ArticleComments pc : pa.getArticleComments()) {
+			System.out.println("评论: " + pc.getArticle_comment_pulcontent() + pc.getComment_user().getPsychouser_name());
+		}
 		return "article/articledetail";
 	}
-	
-	
+
 	@ResponseBody
 	@RequestMapping("/doCategory")
 	public Object doCategory(int parentid) {
@@ -79,12 +117,85 @@ public class ArticleController {
 		return result;// 将result对象序列化为JSON字符串，以流的形式返回。
 	}
 
+	@ResponseBody
+	@RequestMapping("/updateReadNum")
+	public Object updateReadNum(Integer articleid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			int readnum = articleService.updateReadNum(articleid);
+			result.setData(readnum);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+		}
+		return result;
+	}
+
+	@ResponseBody
+	@RequestMapping("/doComment")
+	public Object doComment(int articleid) {
+		AjaxResult result = new AjaxResult();
+		List<ArticleComments> commentList;
+		try {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("articleid", articleid);
+			commentList = articleService.queryComment(paramMap);
+			for (ArticleComments pc : commentList) {
+				System.out.println(
+						
+						"分类: " + pc.getArticle_comment_pulcontent() + pc.getComment_user().getPsychouser_name());
+			}
+			result.setData(commentList);
+			result.setSuccess(true);
+
+		} catch (Exception e) {
+			result.setSuccess(false);
+			e.printStackTrace();
+			result.setMessage("查询数据失败！");
+		}
+
+		return result;
+		// 将result对象序列化为JSON字符串，以流的形式返回。
+	}
+
+	@ResponseBody
+	@RequestMapping("/dolikeComment")
+	public Object dolikeComment(int articleid, HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser loginuser = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (loginuser != null) {
+			try {
+				List<Integer> likecommentList;
+				Map<String, Object> paramMap = new HashMap<String, Object>();
+				paramMap.put("mainid", articleid);
+				paramMap.put("userid", loginuser.getPsychouser_id());
+				paramMap.put("typeid", 3);
+				paramMap.put("maintype", 1);
+				likecommentList = userService.queryUserlikeComment(paramMap);
+				for (int pc : likecommentList) {
+					System.out.println("看这里---------------评论ID: " + pc);
+				}
+				result.setData(likecommentList);
+				result.setSuccess(true);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				e.printStackTrace();
+				result.setMessage("查询数据失败！");
+			}
+		}else {
+			result.setSuccess(false);
+			result.setMessage("请登录！！！");
+		}
+		return result;
+		// 将result对象序列化为JSON字符串，以流的形式返回。
+	}
+
 	// 3.条件查询
 	@ResponseBody
 	@RequestMapping("/doIndex")
 	public Object doIndex(@RequestParam(value = "pageno", required = false, defaultValue = "1") Integer pageno,
-			@RequestParam(value = "pagesize", required = false, defaultValue = "2") Integer pagesize,
-			String queryText,Integer categoryId) {
+			@RequestParam(value = "pagesize", required = false, defaultValue = "2") Integer pagesize, String queryText,
+			Integer categoryId, Integer pcategoryId) {
 		System.out.println("queryText: " + queryText);
 		AjaxResult result = new AjaxResult();
 		Page<PsychoArticle> page;
@@ -97,21 +208,24 @@ public class ArticleController {
 
 				if (queryText.contains("%")) {
 					queryText = queryText.replaceAll("%", "\\\\%");
-					//此处需要四个斜杠，两个斜线作转义用，转义后得到两个斜线
-				    //replaceAll底层是一个正则表达式，正则表达式中的斜线也需要进行转义，故最后只剩一个真正意义的斜线
-					//此处记得将替换后的值再赋值给queryText
+					// 此处需要四个斜杠，两个斜线作转义用，转义后得到两个斜线
+					// replaceAll底层是一个正则表达式，正则表达式中的斜线也需要进行转义，故最后只剩一个真正意义的斜线
+					// 此处记得将替换后的值再赋值给queryText
 				}
 
 				paramMap.put("queryText", queryText);
-				
+
 			}
-			if(categoryId!=null) {
+			if (categoryId != null) {
 				paramMap.put("categoryId", categoryId);
 			}
-			
+			if (pcategoryId != null) {
+				paramMap.put("pcategoryId", pcategoryId);
+			}
+
 			page = articleService.queryArticlePage(paramMap);
 
-			//List<PsychoArticle> ls = page.getData();
+			// List<PsychoArticle> ls = page.getData();
 			/* System.out.println("时间："+ls.get(0).getPubTime()); */
 			result.setPage(page);
 			result.setSuccess(true);
@@ -158,6 +272,36 @@ public class ArticleController {
 	 * 
 	 * return "article/index"; }
 	 */
+
+	@ResponseBody
+	@RequestMapping(value = "/doAddComment", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public Object doAddComment(Integer articleid, String inputValue,@RequestParam(value="pcommentid",required = false)Integer pcommentid, HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser loginuser = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (loginuser != null) {
+			try {
+				System.out.println("inputValue: " + inputValue);
+				Map<String, Object> paramMap = new HashMap<String, Object>();
+				paramMap.put("articleid", articleid);
+				paramMap.put("inputValue", inputValue);
+				if(pcommentid!=null) {
+					paramMap.put("pcommentid", pcommentid);
+				}
+				paramMap.put("userid", loginuser.getPsychouser_id());
+				paramMap.put("curtime", new Date());
+				if(articleService.addComment(paramMap)>0) {
+					result.setSuccess(true);
+				}
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setMessage("评论添加失败！！！");
+			}
+		} else {
+			result.setSuccess(false);
+			result.setMessage("请登录后操作！！！");
+		}
+		return result;
+	}
 
 	@RequestMapping("/toAddArticle")
 	public String addArticle(PsychoArticle pa, Model model) {
@@ -207,7 +351,7 @@ public class ArticleController {
 			request.setAttribute("uploadFileError", "*上传图片格式不正确");
 			return "article/addarticle";
 		}
-		pa.setArticleUser((PsychoUser)session.getAttribute(Const.LOGIN_USER));
+		pa.setArticleUser((PsychoUser) session.getAttribute(Const.LOGIN_USER));
 		PsychoUser pu = new PsychoUser();
 		pu.setPsychouser_id(2);
 		pa.setArticleUser(pu);

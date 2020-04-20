@@ -5,6 +5,40 @@
 <mapper
 	namespace="cn.xhu.softwareengineering.potal.dao.QuestionMapper">
 
+	
+	<resultMap type="QuestionAnswer" id="questionAnswerBase">
+		<id column="question_answer_id" property="question_answer_id" />
+		<result column="question_id" property="question_id" />
+		<result column="question_answer_content" property="question_answer_content" />
+		<result column="question_answer_pultime" property="question_answer_pultime" />
+		<result column="question_answer_likes_num" property="question_answer_likes_num" />
+		<association property="answerUser" javaType="PsychoUser" column="question_answer_id" select="selectUserbyAnswerId"/>
+		
+	</resultMap>
+	
+	<resultMap type="QuestionAnswer" id="AnswerBase">
+		<id column="question_answer_id" property="question_answer_id" />
+		<result column="question_answer_content" property="question_answer_content" />
+		<result column="question_answer_pultime" property="question_answer_pultime" />
+		<result column="question_answer_likes_num" property="question_answer_likes_num" />
+		<association column="question_id" property="question" javaType="UserQuestions" select="queryQuestionById" />
+		<association property="answerUser" javaType="PsychoUser" column="question_answer_id" select="selectUserbyAnswerId"/>
+		
+	</resultMap>
+	
+	<resultMap type="PsychoUser" id="BaseArticleUser">
+		<id column="psychouser_id" property="psychouser_id" />
+		<result column="psychouser_name" property="psychouser_name" />
+		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />
+	</resultMap>
+	
+	<select id="selectUserbyAnswerId" resultType="PsychoUser">
+		select pu.psychouser_id,pu.psychouser_name,psychouser_head_portrait
+		from psycho_user pu,question_answers qa
+		where qa.question_answer_id =#{question_answer_id} and pu.psychouser_id = qa.answerer_id
+	</select>
+	
+	
 	<insert id="insertQuestion" parameterType="UserQuestions">
 		insert into user_questions
 		(user_question_title,user_question_content,user_question_pultime,question_master_id)
@@ -21,22 +55,40 @@
 	select * from user_questions order by user_question_pultime desc limit #{startIndex},#{pagesize}
 	</select>
 	
+	<select id="queryAnswerPage" resultMap="AnswerBase">
+	select * from question_answers order by question_answer_pultime desc limit #{startIndex},#{pagesize}
+	</select>
+	
+	
 	<select id="queryQuestionCount" resultType="Integer">
 	select count(*) from user_questions
 	</select>
 	
 	<select id="queryQuestionById" resultType="UserQuestions">
-	select * from user_questions where user_question_id=#{questionId}
+	select * from user_questions where user_question_id=#{question_id}
 	</select>
 	
 	<select id="queryAnswerCount" resultType="Integer">
-	select count(*) from question_answers where question_id=#{questionId}
+	select count(*) from question_answers 
+	<where>
+	<if test="questionId!=null">question_id=#{questionId}</if>
+	</where>
 	</select>
 	
-	<select id="queryQuestionAnswerPage" resultType="QuestionAnswer">
+	<!-- <select id="queryQuestionAnswerPage" resultType="QuestionAnswer">
+	select * from question_answers where question_id=#{questionId} order by question_answer_pultime desc limit #{startIndex},#{pagesize}
+	</select> -->
+	
+	<select id="queryQuestionAnswerPage" resultMap="questionAnswerBase">
 	select * from question_answers where question_id=#{questionId} order by question_answer_pultime desc limit #{startIndex},#{pagesize}
 	</select>
 	
-	
+	<insert id="addQuestionAnswer" parameterType="QuestionAnswer">
+		insert into question_answers
+		(question_id,answerer_id,question_answer_content,question_answer_pultime)
+		values(#{question_id},#{answerUser.psychouser_id},#{question_answer_content},#{question_answer_pultime})
+		<selectKey keyProperty="question_answer_id" resultType="int"> select
+			@@identity </selectKey>
+	</insert>
 
 </mapper>

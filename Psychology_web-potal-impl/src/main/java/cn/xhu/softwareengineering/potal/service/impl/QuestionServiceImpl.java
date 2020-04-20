@@ -1,5 +1,6 @@
 package cn.xhu.softwareengineering.potal.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +47,8 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public Integer queryAnswerCount(Integer id) {
-		return questionMapper.queryAnswerCount(id);
+	public Integer queryAnswerCount(Map<String, Object> param) {
+		return questionMapper.queryAnswerCount(param);
 	}
 
 	@Override
@@ -56,8 +57,26 @@ public class QuestionServiceImpl implements QuestionService {
 		Integer startIndex=questionAnswerpage.getStartIndex();
 		parammap.put("startIndex", startIndex);
 		questionAnswerpage.setData(questionMapper.queryQuestionAnswerPage(parammap));
-		questionAnswerpage.setTotalsize(questionMapper.queryAnswerCount((Integer)parammap.get("questionId")));
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("questionId", parammap.get("questionId"));
+		questionAnswerpage.setTotalsize(questionMapper.queryAnswerCount(param));
 		return questionAnswerpage;
+	}
+
+	@Override
+	public Integer addQuestionAnswer(QuestionAnswer questionAnswer) {
+		return questionMapper.addQuestionAnswer(questionAnswer);
+	}
+
+	@Override
+	public Page<QuestionAnswer> queryAnswerPage(Map<String, Object> parammap) {
+		Page<QuestionAnswer> page = new Page<QuestionAnswer>((Integer)parammap.get("pageno"), (Integer)parammap.get("pagesize"));
+		parammap.put("startIndex",page.getStartIndex());
+		List<QuestionAnswer> questionAnswer = questionMapper.queryAnswerPage(parammap);
+		page.setData(questionAnswer);
+		Integer totalsize = questionMapper.queryAnswerCount(new HashMap<String,Object>());
+		page.setTotalsize(totalsize);
+		return page;
 	}
 
 }

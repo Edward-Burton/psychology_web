@@ -14,7 +14,10 @@ public interface QuestionMapper {
 	List<UserQuestions> getQuestionsByUserId(@Param("id")int userId);
 	List<UserQuestions> queryQuestionPage(Map<String, Object> parammap);
 	Integer queryQuestionCount();
-	UserQuestions queryQuestionById(Integer questionId);
-	Integer queryAnswerCount(Integer questionId);
+	UserQuestions queryQuestionById(@Param("question_id")Integer questionId);
+	//Integer queryAnswerCount(Integer questionId);
+	Integer queryAnswerCount(Map<String, Object> parammap);
 	List<QuestionAnswer> queryQuestionAnswerPage(Map<String, Object> parammap);
+	Integer addQuestionAnswer(QuestionAnswer questionAnswer);
+	List<QuestionAnswer> queryAnswerPage(Map<String, Object> parammap);
 }

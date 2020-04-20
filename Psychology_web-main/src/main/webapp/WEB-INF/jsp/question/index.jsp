@@ -56,9 +56,9 @@ body {
 }
 
 .ans-bar a {
-    float: right;
-    font-size: 16px;
-    color: #69b8ff;
+	float: right;
+	font-size: 16px;
+	color: #69b8ff;
 }
 
 #left .content {
@@ -66,10 +66,10 @@ body {
 }
 
 #left .content li {
-    margin-bottom: 20px;
-    padding: 30px 30px 25px;
-    background-color: #fff;
-    border-radius: 10px;
+	margin-bottom: 20px;
+	padding: 30px 30px 25px;
+	background-color: #fff;
+	border-radius: 10px;
 }
 
 #left .content li img {
@@ -128,27 +128,27 @@ body {
 }
 
 #left .content li .title strong {
-    padding: 7px 17px;
-    float: right;
-    background-color: #0b8bff;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 14px;
-    color: #fff;
-    font-weight: 400;
+	padding: 7px 17px;
+	float: right;
+	background-color: #0b8bff;
+	border-radius: 8px;
+	font-size: 14px;
+	line-height: 14px;
+	color: #fff;
+	font-weight: 400;
 }
 
 #left .page {
-    text-align: center;
-    margin-top: 40px;
-    margin-bottom: 50px;
+	text-align: center;
+	margin-top: 40px;
+	margin-bottom: 50px;
 }
 
 .contain {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    margin-bottom: 50px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	margin-bottom: 50px;
 }
 </style>
 <link rel="stylesheet"
@@ -162,18 +162,16 @@ body {
 				<div class="ans-barl" id="ans-barl">
 					<p attr-id="answer">
 						<a class="common-a"
-							href="https://www.xinli001.com/qa?type=answer&amp;object_name=answer&amp;from=shouye-dh">
-
+							onclick="queryAnswers()">
 							<span
 							class="yxl-icon yxl-font-icon-recommend-answer icon-default"></span>
 							<span class="">推荐答案</span>
 						</a>
 					</p>
 					<p attr-id="remque">
-						<a class="common-a"
-							href="${APP_PATH}/question/doIndex.htm">
-
-							<span
+						<%-- <a class="common-a" href="${APP_PATH}/question/doIndex.htm">  --%>
+						<a class="common-a" onclick="queryQuestions()">
+						<span
 							class="yxl-icon yxl-font-icon-recommend-question icon-default"></span>
 							<span class="">推荐问题</span>
 						</a>
@@ -207,26 +205,13 @@ body {
 			<div class="show-info">
 
 				<ul class="content">
-					<li>
-						<p class="title">
-							<a class="common-a"><img
-								src="https://lapp.xinli001.com/images/yiapp/v4.8/incognito.png"></a>
-							<a class="common-a" target="_blank" href=""><span>问题标题</span></a>
-							<a target="_blank" href="${APP_PATH}/question/toQuestion.htm/"> <strong>去回答</strong>
-							</a>
-						</p> <a class="common-a" href="">
-							<p class="text">问题描述</p>
-					</a>
-						<p class="label">
-							<span>2小时前 · 回答 2 · 有用 0</span>
-						</p>
-					</li>
+					
 				</ul>
 
 				<div class="page">
 					<nav>
 						<ul class="pagination">
-							<li><a href="#" aria-label="Previous"> <span
+							<!-- <li><a href="#" aria-label="Previous"> <span
 									aria-hidden="true">&laquo;</span>
 							</a></li>
 							<li><a href="#">1</a></li>
@@ -236,7 +221,7 @@ body {
 							<li><a href="#">5</a></li>
 							<li><a href="#" aria-label="Next"> <span
 									aria-hidden="true">&raquo;</span>
-							</a></li>
+							</a></li> -->
 						</ul>
 					</nav>
 				</div>
@@ -281,16 +266,101 @@ body {
 
 		$(function() {
 			queryQuestions();
+			//queryAnswers()
 		});
 
 		function pageChange(pageno) {
 			//window.location.href="${APP_PATH}/article/index.do?pageno="+pageno ;
-			queryQuestions(pageno);
+			//queryQuestions(pageno);
+			queryAnswers(pageno)
 		};
 
 		jsonPage = {
 			"pageno" : 1,
 			"pagesize" : 10
+		}
+		
+		function queryAnswers(pageno){
+			jsonPage.pageno = pageno;
+			$
+					.ajax({
+						type : "GET",
+						data : jsonPage,
+						url : "${APP_PATH}/question/doAnswerIndex.do",
+						beforeSend : function() {
+							alert("查询中...")
+							return true;
+						},
+						success : function(result) {
+							if (result.success) {
+								alert(result.message);
+								var page = result.page;
+								var answers = page.data;
+								var content = '';
+
+								$.each(answers, function(i, answer) {
+									content += '<li>';
+		                            content += '<p class="user">';
+		                            content += '<a target="_blank" class="common-a" href="https://www.xinli001.com/user/1007619904">';
+		                            content += '<img src="'+answer.answerUser.psychouser_head_portrait+'"></a>';
+		                            content += '<span class="username">'+answer.answerUser.psychouser_name+'</span><span class="honor-icon honor-icon-3"></span>';
+		                            content += '<a class="answers" target="_blank" href="/qa/100593421?from=shouye"><strong>去回答</strong></a></p>';
+		                            content += '</a><a>'+answer.question_answer_pultime+'回答了：</a>';
+		                            content += '<a class="common-a" target="_blank" href="/qa/100593421?from=shouye">';
+		                            content += '<span>'+answer.question.user_question_title+'</span>';
+		                            content += '</a></p><div class="ellipsis"><div class="ellipsis-container">';
+                                    content += '<a class="common-a" target="_blank" href="/qa/100593421?from=shouye">';
+                                    content += '<div class="ellipsis-content">'+answer.question_answer_content+'</div></a>';
+                                    content += '<div class="ellipsis-ghost">';
+                                    content += '<div class="ellipsis-placeholder"></div>';
+                                    content += '<div class="ellipsis-more">';
+                                    content += '<a class="click-more" target="_blank" href="/qa/100593421?from=shouye">点击看更多</a></div></div></div>';
+		                            content += '</div></li>';
+								});
+								/* alert(content); */
+								$(".content").html(content);
+
+								//分页部分局部刷新
+								var contentPagebar = '';
+								//使用JS中的做判断操作
+
+								if (page.pageno == 1) {
+									contentPagebar += '<li class="disabled"><a href="#">上一页</a></li>';
+									//因内部要使用双引号，JS要拼串都用单引号拼串
+								} else {
+									contentPagebar += '<li><a href="#" onclick="pageChange('
+											+ (page.pageno - 1)
+											+ ')">上一页</a></li>';
+								}
+
+								for (var i = 1; i <= page.totalno; i++) {
+									contentPagebar += '<li';
+									if (page.pageno == i) {
+										contentPagebar += ' class="active"';//注意此处有空格
+									}
+									contentPagebar += '><a href="#" onclick="pageChange('
+											+ i + ')">' + i + '</a></li>';
+								}
+
+								if (page.pageno == page.totalno) {
+									contentPagebar += '<li class=disabled><a href="#">下一页</a></li>';
+								} else {
+									contentPagebar += '<li><a href="#" onclick="pageChange('
+											+ (page.pageno + 1)
+											+ ')">下一页</a></li>';
+								}
+
+								$(".pagination").html(contentPagebar);
+
+							} else {
+								alert(result.message);
+							}
+
+						},
+						error : function() {
+
+						}
+					});
 		}
 		
 		function queryQuestions(pageno) {
@@ -324,7 +394,7 @@ body {
 									content += '</p></a>';
 									content += '<p class="label">';
 									content += '<span>';
-									content += '2小时前 · 回答 2 · 有用 0   '+question.user_question_pultime;
+									content += '回答 2 · 有用 0   '+question.user_question_pultime;
 									content += '</span></p></li>';
 
 								});

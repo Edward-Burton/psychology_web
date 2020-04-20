@@ -6,32 +6,30 @@ public class ArticleComments {
 
 	private int article_comment_id;
 	private int comment_article_id;
-	private int comment_user_id;
+	private PsychoUser comment_user;
 	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 	private String article_comment_pultime;
 	private String article_comment_pulcontent;
 	private int article_comment_likes_num;
-	private int article_comment_parentid;
+	private ArticleComments article_p_comment;
 	
 	public ArticleComments() {
 		super();
 	}
-	
-	
 
-	public ArticleComments(int article_comment_id, int comment_article_id, int comment_user_id,
+
+	public ArticleComments(int article_comment_id, int comment_article_id, PsychoUser comment_user,
 			String article_comment_pultime, String article_comment_pulcontent, int article_comment_likes_num,
-			int article_comment_parentid) {
+			ArticleComments article_p_comment) {
 		super();
 		this.article_comment_id = article_comment_id;
 		this.comment_article_id = comment_article_id;
-		this.comment_user_id = comment_user_id;
+		this.comment_user = comment_user;
 		this.article_comment_pultime = article_comment_pultime;
 		this.article_comment_pulcontent = article_comment_pulcontent;
 		this.article_comment_likes_num = article_comment_likes_num;
-		this.article_comment_parentid = article_comment_parentid;
+		this.article_p_comment = article_p_comment;
 	}
-
 
 
 	public int getArticle_comment_id() {
@@ -50,12 +48,12 @@ public class ArticleComments {
 		this.comment_article_id = comment_article_id;
 	}
 
-	public int getComment_user_id() {
-		return comment_user_id;
+	public PsychoUser getComment_user() {
+		return comment_user;
 	}
 
-	public void setComment_user_id(int comment_user_id) {
-		this.comment_user_id = comment_user_id;
+	public void setComment_user(PsychoUser comment_user) {
+		this.comment_user = comment_user;
 	}
 
 	public String getArticle_comment_pultime() {
@@ -83,16 +81,15 @@ public class ArticleComments {
 	}
 
 
-
-	public int getArticle_comment_parentid() {
-		return article_comment_parentid;
+	public ArticleComments getArticle_p_comment() {
+		return article_p_comment;
 	}
 
 
-
-	public void setArticle_comment_parentid(int article_comment_parentid) {
-		this.article_comment_parentid = article_comment_parentid;
+	public void setArticle_p_comment(ArticleComments article_p_comment) {
+		this.article_p_comment = article_p_comment;
 	}
+	
 	
 	
 	
