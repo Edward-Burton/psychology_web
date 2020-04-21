@@ -597,7 +597,7 @@ a img, fieldset {
 															+ '</a>';
 													content += '<a target="_blank" href="#"><p class="desc">'+pa.content+'</p></a>';
 													content += '<div class="info">';
-													content += '<a target="_blank" href="user_page.html"> <span>'
+													content += '<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid='+pa.articleUser.psychouser_id+'"> <span>'
 															+ pa.articleUser.psychouser_name
 															+ '</span></a>';
 													content += '<span class="date"> '

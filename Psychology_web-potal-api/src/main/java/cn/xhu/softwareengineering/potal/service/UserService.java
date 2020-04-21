@@ -3,6 +3,7 @@ package cn.xhu.softwareengineering.potal.service;
 import java.util.List;
 import java.util.Map;
 
+import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 
 public interface UserService {
@@ -16,5 +17,15 @@ public interface UserService {
 	int handleUserCollect(Map<String, Integer> paramMap, Integer iscollect);
 
 	List<Integer> queryUserlikeComment(Map<String, Object> paramMap);
+
+	PsychoUser queryUserById(Integer userid);
+
+	List<PsychoArticle> queryArticleByUserId(Integer userid);
+
+	int queryFollow(Map<String, Object> paramMap);
+
+	int doFollow(Map<String, Object> paramMap, Integer action);
+
+	int queryLikeByUserId(Integer userId);
 
 }

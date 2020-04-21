@@ -2,6 +2,8 @@ package cn.xhu.softwareengineering.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PsychoUser {
 	private int psychouser_id;
 	private String psychouser_name;
@@ -13,6 +15,7 @@ public class PsychoUser {
 	private String psychouser_phone_number;
 	private String psychouser_mail;
 	private String psychouser_acct;
+	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd HH:mm:ss")
 	private Date psychouser_createtime;
 	
 	public PsychoUser() {

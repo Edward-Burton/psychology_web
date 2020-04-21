@@ -14,11 +14,62 @@
 			property="psychouser_password" jdbcType="CHAR" />
 		<result column="psychouser_name" property="psychouser_name"
 			jdbcType="VARCHAR" />
+		<result column="psychouser_title" property="psychouser_title"
+			jdbcType="VARCHAR" />
+		<result column="psychouser_intro" property="psychouser_intro"
+			jdbcType="VARCHAR" />
+		<result column="psychouser_head_portrait" property="psychouser_head_portrait"
+			jdbcType="VARCHAR" />
+		<result column="psychouser_phone_number" property="psychouser_phone_number"
+			jdbcType="VARCHAR" />
 		<result column="psychouser_mail" property="psychouser_mail"
 			jdbcType="VARCHAR" />
 		<result column="psychouser_createtime"
 			property="psychouser_createtime" jdbcType="CHAR" />
 	</resultMap>
+	
+	<resultMap type="PsychoArticle" id="BaseArticleMap">
+		<id column="psycho_article_id" property="articleId" />
+		<result column="psycho_article_title" property="articleTitle" />
+		<result column="psycho_article_img" property="articleImg" />
+		<result column="psycho_article_pubtime" property="pubTime" />
+		<result column="psycho_article_author" property="author" />
+		<result column="psycho_article_reads_num" property="readsNum" />
+		<result column="psycho_article_content" property="content" />
+		<association property="psychoCategory"
+			javaType="PsychoCategory" column="psycho_article_id"
+			select="selectCategorybyArticleId" />
+		<collection property="articleLabels" ofType="PsychoLabel"
+			column="psycho_article_id" select="selectLabelsbyArticleId" />
+	</resultMap>
+	
+	<!-- 获取文章心理学分类 -->
+	<select id="selectCategorybyArticleId"
+		resultType="PsychoCategory">
+		select pc.*
+		from psycho_article pa,psycho_category
+		pc,article_category ac
+		where pa.psycho_article_id =#{psycho_article_id}
+		and pa.psycho_article_id = ac.article_id and ac.category_id =
+		pc.psycho_category_id
+	</select>
+	
+	<!-- 获取文章标签列表 -->
+	<select id="selectLabelsbyArticleId" resultType="PsychoLabel">
+		select
+		psycho_label_id,psycho_label_name,psycho_label_parentid,psycho_label_description,psycho_label_alias
+		from psycho_label,article_label
+		where label_id=psycho_label_id and
+		psychoarticle_id =#{psycho_article_id}
+	</select>
+	
+	<select id="queryFollow" resultType="Integer">
+		select count(*) from user_follow where cur_user_id=#{curUserId} and follow_user_id=#{followUserId}
+	</select>
+	
+	<select id="queryUserById" resultMap="BaseResultMap">
+		select * from psycho_user where psychouser_id=#{userid}
+	</select>
 
 	<select id="queryUserlogin" parameterType="map"
 		resultMap="BaseResultMap">
@@ -33,7 +84,12 @@
 		select like_to_id from user_like where like_type=#{typeid} and like_from_user_id=#{userid} and like_main_id=#{mainid} and like_main_type=#{maintype}
 	</select>
 	
-	<select id="queryLikesNum" parameterType="map"
+	<select id="queryLikeByUserId" parameterType="Integer"
+		resultType="Integer">
+		select COUNT(*) FROM user_like WHERE (like_type=1 AND like_to_id IN (SELECT psycho_article_id FROM psycho_article WHERE psycho_article_pubuserid=#{userid}) )OR(like_type=2 AND like_to_id IN(SELECT question_answer_id FROM question_answers WHERE answerer_id=#{userid}))
+	</select>
+	
+	<select id="queryLikesNum" parameterType="Integer"
 		resultType="Integer">
 		select count(*) from user_like where like_type=#{typeid} and like_to_id=#{toid}
 	</select>
@@ -41,6 +97,11 @@
 	<select id="queryIsCollect" parameterType="map"
 		resultType="Integer">
 		select count(*) from user_collection where user_collectioin_to_id=#{toid} and user_collection_from_user_id=#{userid} and user_collection_type=#{typeid}
+	</select>
+	
+	<select id="queryArticleByUserId" parameterType="Integer"
+		resultMap="BaseArticleMap">
+	select * from psycho_article where psycho_article_pubuserid=#{userid}
 	</select>
 	
 	<!-- <insert id="insertUser"> insert into t_user ( name,userpswd,sex,email,loginacct 
@@ -52,6 +113,16 @@
 		id="deleteUserRole"> delete from t_user_role where userid = #{userid} and 
 		roleid = #{roleid} </delete> -->
 
+	<insert id="addFollow">
+	     insert into user_follow
+	     (cur_user_id,follow_user_id)values(#{curUserId},#{followUserId})
+		
+	</insert>
+	
+	<delete id="cancelFollow">
+	delete from user_follow where follow_user_id=#{followUserId} and cur_user_id=#{curUserId}
+	</delete>
+	
 	<insert id="addLike">
 	     insert into user_like
 	     <choose>

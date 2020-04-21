@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.exception.LoginFailException;
 import cn.xhu.softwareengineering.potal.dao.UserMapper;
@@ -67,6 +68,35 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Integer> queryUserlikeComment(Map<String, Object> paramMap) {
 		return userMapper.queryUserLikeComment(paramMap);
+	}
+
+	@Override
+	public PsychoUser queryUserById(Integer userid) {
+		return userMapper.queryUserById(userid);
+	}
+
+	@Override
+	public List<PsychoArticle> queryArticleByUserId(Integer userid) {
+		return userMapper.queryArticleByUserId(userid);
+	}
+
+	@Override
+	public int queryFollow(Map<String, Object> paramMap) {
+		return userMapper.queryFollow(paramMap);
+	}
+
+	@Override
+	public int doFollow(Map<String, Object> paramMap, Integer action) {
+		if(action>0) {
+			return userMapper.addFollow(paramMap);
+		}else {
+			return userMapper.cancelFollow(paramMap);
+		}
+	}
+
+	@Override
+	public int queryLikeByUserId(Integer userid) {
+		return userMapper.queryLikeByUserId(userid);
 	}
 
 }

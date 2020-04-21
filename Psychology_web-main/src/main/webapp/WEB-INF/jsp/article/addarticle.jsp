@@ -1,236 +1,610 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert article</title>
-<link href="${APP_PATH }/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
-<link
-	href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css"
-	rel="stylesheet">
-</head>
-<body>
+	<head>
+		<meta charset="utf-8">
+		<title>编辑文章</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+		<style>
+			a {
+			    text-decoration: none;
+				
+			}
+			
+			
+			.global-head {
+			    height: 68px;
+			    line-height: 68px;
+			    padding: 0 16px;
+			    background: #fff;
+			    border-bottom: 1px solid #eaeaea;
+			}
+			
+			.global-head .global-head-left {
+			    float: left;
+			    line-height: 68px;
+			}
+			
+			.global-head .global-head-right {
+			    height: 100%;
+			}
+			
+			.global-head .global-head-left .index-link {
+			    display: inline-block;
+			    width: 90px;
+			    height: 100%;
+			    line-height: 60px;
+			    vertical-align: middle;
+			}
+			
+			.global-head .global-head-left .index-link img {
+			    width: 100%;
+			}
+			
+			.global-head .global-head-right {
+			    float: right;
+			}
+			
+			.global-head .global-head-right > div {
+			    display: inline-block;
+			    vertical-align: top;
+			    height: 100%;
+			}
+			
+			.global-head .user-avatar-img {
+			    position: relative;
+			    top: 50%;
+			    width: 30px;
+			    height: 30px;
+			    overflow: hidden;
+			    border-radius: 50%;
+			    vertical-align: middle;
+			    margin: -15px 12px 0;
+			}
+			
+			.global-head .user-center-link {
+			    display: block;
+			    width: 100%;
+			    height: 100%;
+			}
+			
+			.global-head .user-avatar-img .user-avatar {
+			    width: 100%;
+			    vertical-align: top;
+			}
+			
+			.article-edit-container {
+			    width: 850px;
+			    margin: 0 auto;
+			    padding: 0 0 40px;
+			}
+			
+			.article-edit-container .article-cover {
+			    cursor: pointer;
+			}
+			
+			.article-edit-container .article-cover-null {
+			    width: 850px;
+			    height: 533px;
+			    background: #f3f4f5;
+			    color: #999;
+			    text-align: center;
+			}
+			
+			.article-edit-container .article-cover-camera:before {
+			    content: '\e037';
+			    display: inline-block;
+			    font-size: 60px;
+			    margin-top: 200px;
+			}
+			
+			.article-edit-container .article-cover-tips {
+			    font-size: 18px;
+			}
+			
+			.article-edit-container .article-cover-subtitle {
+			    font-size: 14px;
+			    margin-top: 10px;
+			}
+			
+			.article-edit-container .article-cover-published {
+			    position: relative;
+			    max-height: 533px;
+			    overflow: hidden;
+			}
+			
+			.article-edit-container img {
+			    display: block;
+			    max-width: 100%;
+			    margin: 0 auto;
+			}
+			
+			.article-edit-container .article-cover-fn {
+			    display: none;
+			    position: absolute;
+			    bottom: 0;
+			    right: 0;
+			    z-index: 2;
+			}
+			
+			.article-edit-container .article-cover-fn > span {
+			    display: inline-block;
+			    width: 68px;
+			    height: 68px;
+			    background: rgba(51, 51, 51, .9);
+			    color: #fff;
+			    font-family: yxl-iconfont;
+			    text-align: center;
+			    line-height: 68px;
+			    vertical-align: bottom;
+			    font-size: 30px;
+			}
+			
+			.article-edit-container .article-title-text {
+			    width: 100%;
+			    outline: 0;
+			    border: 0;
+			    font-size: 32px;
+			    padding: 1em 0;
+			    color: #333;
+			}
+			
+			.article-edit-container .article-tags {
+			    padding-bottom: 36px;
+			}
+			
+			.article-edit-container .article-tag-list {
+			    display: inline-block;
+			    vertical-align: middle;
+			}
+			
+			.article-edit-container .article-tag {
+			    position: relative;
+			    display: inline-block;
+			    width: 102px;
+			    background: #f3f4f5;
+			    border-radius: 6px;
+			    height: 36px;
+			    padding: 0 9px;
+			    margin-right: 16px;
+			    box-sizing: border-box;
+			    vertical-align: middle;
+			}
+			
+			.article-edit-container .article-tag-input {
+			    width: 100%;
+			    height: 100%;
+			    outline: 0;
+			    border: 0;
+			    font-size: 14px;
+			    color: #333;
+			    background: #f3f4f5;
+			    text-align: center;
+			    border-radius: 6px;
+			}
+			.article-edit-container .article-tag-del-btn {
+			    display: flex;
+			    position: absolute;
+			    top: 0;
+			    right: 0;
+			    width: 16px;
+			    height: 16px;
+			    line-height: 16px;
+			    margin-right: -8px;
+			    margin-top: -8px;
+			    cursor: pointer;
+			    color: #666;
+			}
+			
+			.article-edit-container .article-tag-add-btn {
+			    cursor: pointer;
+			}
+			
+			.article-edit-container .article-tag-add-btn:after, .article-edit-container .article-tag-add-btn:before {
+			    content: '';
+			    position: absolute;
+			    width: 14px;
+			    height: 2px;
+			    top: 50%;
+			    left: 50%;
+			    margin-top: -1px;
+			    margin-left: -7px;
+			    background: #ccc;
+			}
+			
+			/* 添加标签的加号那一竖 */
+			.article-edit-container .article-tag-add-btn:after {
+			    transform: rotate(90deg);
+			}
+			
+			input[type=file] {
+			    display: inline-block;
+				margin-top: 200px;
+			}
+			
+			.img {
+				z-index:10;
+				opacity:1;
+				left:-94px;
+				top:1px;
+				border:0;
+				outline:0;
+				padding:1px 30px;
+				font-size:16px;
+				
+			}
+			
+			.col-md-7 {
+			    width: 100%;
+			}
+			
+			.form-group a{
+				display: inline-block;
+				    text-decoration: none;
+				    background: #0b8bff;
+				    border-radius: 8px;
+					margin-right: 15px;
+				    width: 100px;
+				    height: 42px;
+				    line-height: 42px;
+				    color: #fff;
+				    font-family: PingFangSC-Regular;
+				    font-size: 16px;
+				    text-align: center;
+			}
+			
+			.main-container {
+				width: 900px;
+				height: 100%;
+				margin: 0 auto;
+				padding-top: 20px;
+				border-radius: 10px;
+				padding-bottom: 51px;
+				background: #fff;
+				position: relative;
+				min-height: 100%;
+			}
+			
+			.main-container .top {
+				padding: 0 30px;
+				padding-top: 40px;
+			}
+			
+			.main-container .top .title {
+				margin-top: 20px;
+				font-family: PingFangSC-Medium;
+				font-size: 22px;
+				color: #333;
+				font-weight: 700;
+			}
+			
+			
+			.main-container .article-body-m {
+				padding: 0 120px;
+				margin-top: 69px;
+			}
+			
+			.main-container .article-body-m .cover-con {
+				text-align: center;
+			}
+			
+			.main-container .article-body-m .article-cover {
+				max-width: 100%;
+			}
+			
+			.main-container .article-body-m .yxl-editor {
+				margin-top: 30px;
+			}
+			
+			.yxl-editor-article {
+				min-height: 48px;
+			}
+			
+			.yxl-editor {
+				padding-top: 16px;
+			}
+			
+			.view,
+			.yxl-editor {
+				color: #444;
+				font-size: 16px;
+				line-height: 1.8;
+				word-break: break-all;
+			}
+			
+			.control-btn{
+				    display: flex;
+				    -webkit-box-pack: justify;
+				    justify-content: space-between;
+				    padding: 18px 0 0;
+				    margin: 0;
+			}
+			
+			.control-btn a{
+				display: inline-block;
+				    text-decoration: none;
+				    background: #0b8bff;
+				    border-radius: 8px;
+				    width: 150px;
+				    height: 42px;
+				    line-height: 42px;
+				    color: #fff;
+				    font-size: 16px;
+					cursor: pointer;
+					text-align: center;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<header class="global-head">
+			<div class="global-head-left">
+				<!-- 首页链接 -->
+				<a href="#" class="index-link">
+					<img src="#" alt="心理logo">
+				</a>
+			</div>
 
-<div class="form-group">
-		<label class="col-md-3 control-label">详情 <span
-			class="required"> * </span>
-		</label>
-		<div class="col-md-7" id="contextText">
-			<div class="form-group" align="center" id="nochecke">
-				<!--  <textarea id="editor" hidden="true" autofocus>
-	     </textarea> -->
-				<!-- <textarea id="editor" placeholder="Balabala" autofocus></textarea> -->
-				<form method="post">
-					<textarea id="summernote" name="editordata"></textarea>
-					<button onclick="doCommit()">提交</button>
-					<button onclick="doReset()">重置</button>
-				</form>
+			<div class="global-head-right">
+
+				<div class="user-avatar-img-wrap">
+					<div class="user-avatar-img">
+						<!-- 用户个人主页 -->
+						<a href="#" class="user-center-link">
+
+							<!-- 用户头像 -->
+							<img src="https://ossimg.xinli001.com/20200222/19d1695be26b091c2d752e338f1e9b0c.jpg" alt="" class="user-avatar">
+						</a>
+					</div>
+				</div>
+			</div>
+		</header>
+
+
+
+		<main class="article-edit-container" style="display: block;">
+			<div class="article-edit-wrap" style="">
+				<div class="article-cover">
+					<div class="article-cover-null" style="display: block;">
+						<input type="file" id="img" class="img" value="" />
+						<!-- <p class="article-cover-camera"></p>
+						<p class="article-cover-tips">点击更换封面图片</p> -->
+						<p class="article-cover-subtitle">最佳尺寸：900x600px</p>
+					</div>
+					<div class="article-cover-published" style="display: none;">
+						<img src="" alt="" class="cover-img">
+						<div class="article-cover-fn">
+							<span class="article-cover-replace-btn">重置</span>
+							<span class="article-cover-remove-btn">删除</span>
+						</div>
+					</div>
+				</div>
+				<div class="article-title">
+					<input type="text" placeholder="点击输入文章标题" id="article-title-text" class="article-title-text" autocomplete="off">
+
+				</div>
+				<div class="article-tags">
+					<div class="article-tag-list">
+						<div class="article-tag">
+							<input type="text" class="article-tag-input" value="" placeholder="编辑标签">
+							<div class="article-tag-del-btn yxl-iconfont">
+
+							</div>
+						</div>
+						<div class="article-tag">
+							<input type="text" class="article-tag-input" value="" placeholder="编辑标签">
+							<div class="article-tag-del-btn yxl-iconfont">
+
+							</div>
+						</div>
+						<div class="article-tag">
+							<input type="text" class="article-tag-input" value="" placeholder="编辑标签">
+							<div class="article-tag-del-btn yxl-iconfont">
+
+							</div>
+						</div>
+					</div>
+
+					<div class="article-tag article-tag-add-btn">
+
+					</div>
+				</div>
+
+				<div class="col-md-7" id="contextText">
+					<div class="form-group" align="center" id="nochecke">
+						<!--  <textarea id="editor" hidden="true" autofocus>
+					     </textarea> -->
+						<!-- <textarea id="editor" placeholder="Balabala" autofocus></textarea> -->
+						
+						<textarea id="summernote" name="editordata"></textarea>
+						
+						<a onclick="doCommit()">发布文章</a>
+						<a onclick="doReset()">重置</a>
+						<!-- href="javascript:showarticle()" -->
+						<a class="pre-article" href="javascript:void(0);">预览</a>
+					</div>
+				</div>
+		</main>
+
+		<div class="article-pre" style="display: none;">
+			<div class="main-container" style="display: block;">
+				<div class="top">
+
+					<p class="title">标题很长很长 </p>
+
+
+				</div>
+				<div class="article-body-m">
+					<div class="cover-con">
+						<img class="article-cover" src="https://ossimg.xinli001.com/20200316/312e9f6d25129cee1014e5295e31a428.jpeg?x-oss-process=image/quality,Q_80"
+						 alt="文章封面">
+					</div>
+					<div class="yxl-editor">
+						<div class="yxl-editor-article ">
+							富文本内容
+						</div>
+
+					</div>
+					<!-- 文章结尾 -->
+
+					<div class="control-btn">
+						<a target="_blank" class="public_article_btn">发布文章</a>
+						<a target="_blank" class="edit_article_btn">编辑文章</a>
+					</div>
+
+				</div>
 			</div>
 		</div>
-		<div style="display: none">
-			<input type="hidden" id="content" name="content" value='提交'>
-		</div>
-	</div>
 
-	<form id="articleForm" method="post" enctype="multipart/form-data"
-		action="">
-		<label>文章标题：</label> <input type="text" name="articleTitle"
-			id="articleTitle"><br> <label>文章内容：</label><input
-			type="text" name="content" id="content"><br> <label>上传图片：</label>
-		<input type="file" name="indexImg" id="indexImg"><br> <img
-			src="" id="preview" style="width: 20rem; height: 15rem;"> <input
-			type="submit" id="addBtn"> <input type="hidden"
-			id="errorinfo" value="${uploadFileEroor}">
-	</form>
+		<script src="js/jquery-2.1.1.min.js"></script>
 
-	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
-	<script src="${APP_PATH }/jquery/jquery-form/jquery-form.min.js"></script>
-	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
-	<script type="text/javascript">
-	function doCommit(){
-		var content = $('#summernote').summernote('code');
-		alert(content); 
-		
-		var innnerhtml = $("comtent").val();
-		$("#summernote").val(innerhtml);
-		
-		$.ajax({
-    		type:"POST",
-    		data:{
-    			"content":content,
-    			"psychouser_password":psychouser_password.val()
-    		},
-    		url:"${APP_PATH}/doLogin.do",
-    		beforeSend:function(){
-    			//表单数据校验
-				loadingIndex = layer.msg('处理中', {icon: 16});
-    			return true;
-    		},
-    		success:function(result){ //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
-    			layer.close(loadingIndex);
-    			if(result.success){
-    				window.location.href="${APP_PATH}/main.htm";
-        			/* alert("success"); */
-    			}else{
-    				/* alert("failed"); */
-    				layer.msg(result.message, {time:1000, icon:5, shift:6});
-
-    			}
-    		},
-    		//error代码只有在controller处理方法抛出异常或则有拦截器处理时抛异常(如服务器代码问题，类型转换问题)就执行该函数，不执行success函数
-    		error:function(){
-    			/* alert("error"); */
-    			layer.msg("登陆失败！", {time:1000, icon:5, shift:6});
-    		}
-    	});
-	}
-	
-	
-	function doReset(){
-		$('#summernote').summernote('reset')
-	}
-		$(function() {
-			$('#summernote').summernote({
-		        placeholder: 'Hello Bootstrap 4',
-		        tabsize: 2,
-		        height: 100,
-		        focus:true
-		      });
-		});
-		/* var articleImg = null;
-		 var errorInfo = null;
-		 $(function(){
-		 articleImg = $("#articleImg");
-		 errorInfo = $("#errorinfo");
-		 if(errorinfo.val() == null||errorinfo.val() == ""){
-		 articleImg.next.html("上传文件大小不能超过5000KB*上传文件类型必须为：jpg,jpeg,png,pneg");
-		 }else{
-		 articleImg.next.html(errorinfo.val());
-		 }
-		 }) */
-
-		/* public function uppic()
-		 {
-		 $file = request()->file('f');
-		 $info = $file->move(ROOT_PATH . 'public/uploads/avatar');
-		 $a=$info->getSaveName();  
-		 $imgp= str_replace("\\","/",$a);  
-		 $imgpath='uploads/avatar/'.$imgp;  
-		 $banner_img= $imgpath;
-		 $response = array();  
-		 if($info){  
-		 $response['isSuccess'] = true;  
-		 $response['f'] = $imgpath;  
-		 }else{  
-		 $response['isSuccess'] = false;  
-		 }  
-		
-		 echo json_encode($response);
-		 } */
-
-		 $("#indexImg").change(function(){  
-		 		 var objUrl = getObjectURL(this.files[0]) ;//获取文件信息  
-		 		 console.log("objUrl = "+objUrl);  
-		 		  if (objUrl) {  
-		 		  $("#preview").attr("src", objUrl);  
-		 		 }   
-		 }) ;  
-		 function getObjectURL(file) {  
-		 		 var url = null;   
-		 		 if (window.createObjectURL!=undefined) {  
-		 		  url = window.createObjectURL(file) ;  
-		 		 } else if (window.URL!=undefined) { // mozilla(firefox)  
-		 		  url = window.URL.createObjectURL(file) ;  
-		 		 } else if (window.webkitURL!=undefined) { // webkit or chrome  
-		 		  url = window.webkitURL.createObjectURL(file) ;  
-		 		 }  
-		 		 return url ;  
-		 		} 
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('#summernote').summernote({
+					placeholder: 'Hello Bootstrap 4',
+					tabsize: 2,
+					height: 100,
+					focus: true
+				});
 
 
-		$("#addBtn")
-				.click(
-						function() {
-							
-							var articleTitle = $("articleTitle");
-							var content = $("content");
-							/* 
-							if(($.trim(articleTitle.val()) == "")){
-					    		layer.msg("文章标题不能为空!", {time:1000, icon:5}, function(){
-					    			articleTitle.val("");
-					    			articleTitle.focus();
-					        		//return false ;  //不能结束if,只是结束msg函数.
-					    		});    		
-					    		return false;
-					    	}
-							
-							if(($.trim(content.val()) == "")){
-					    		layer.msg("文章内容不能为空!", {time:1000, icon:5}, function(){
-					    			content.val("");
-					    			content.focus();
-					        		//return false ;  //不能结束if,只是结束msg函数.
-					    		});    		
-					    		return false;
-					    	}  */
-							
-							/* 
-							$.ajax({
-								type : "POST",
-								data : form,
-								url : "${APP_PATH}/article/doAddArticle.do",
-								beforeSend : function() {            			
-									return true ;
-								},
-								success : function(result){
-									if(result.success){
-										window.location.href="${APP_PATH}/article/toIndex.htm";
-									}else{
-										layer.msg("保存用户失败", {time:1000, icon:5, shift:6}); 
-									}
-								},
-								error : function(){
-									layer.msg("保存失败", {time:1000, icon:5, shift:6}); 
-								}
-							});  */
-							
 
-							/* var options = {
-								url : "${APP_PATH}/addArticle.do",
-								beforeSubmit : function() {
-									loadingIndex = layer.msg('数据正在保存中', {
-										icon : 6
-									});
-									return true; //必须返回true,否则,请求终止.
-								},
-								success : function(result) {
-									layer.close(loadingIndex);
-									if (result.success) {
-										layer.msg("广告数据保存成功", {
-											time : 1000,
-											icon : 6
-										});
-										window.location.href = "${APP_PATH}/jsp/addarticle.jsp";
-									} else {
-										layer.msg("广告数据保存失败", {
-											time : 1000,
-											icon : 5,
-											shift : 6
-										});
-									}
-								}
-							};
+			});
 
-							$("#articleForm").ajaxSubmit(options); //异步提交
-							return; */
+			function doCommit() {
 
-							$("#articleForm").attr("action","${APP_PATH}/article/doAddArticle.do");
-							$("#articleForm").submit();  
+				// 获取标题
+				var title = $("#article-title-text").val();
+
+				// 获取内容
+				var content = $('#summernote').summernote('code');
+
+				// 获取标签个数
+				var num = $(".article-tag-list div").length;
+
+				// 获取标签
+				var tags = [];
+				for (i = 0; i < num; i++) {
+					tags[i] = $(".article-tag").eq(i).find(".article-tag-input").val();
+				}
+
+				alert(title + "\n" + content + "\n" + tags);
+
+				var innnerhtml = $("comtent").val();
+				$("#summernote").val(innerhtml);
+
+				$.ajax({
+					type: "POST",
+					data: {
+						"content": content,
+						"psychouser_password": psychouser_password.val()
+					},
+					url: "${APP_PATH}/doLogin.do",
+					beforeSend: function() {
+						//表单数据校验
+						loadingIndex = layer.msg('处理中', {
+							icon: 16
 						});
-	</script>
-</body>
+						return true;
+					},
+					success: function(result) { //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
+						layer.close(loadingIndex);
+						if (result.success) {
+							window.location.href = "${APP_PATH}/main.htm";
+							/* alert("success"); */
+						} else {
+							/* alert("failed"); */
+							layer.msg(result.message, {
+								time: 1000,
+								icon: 5,
+								shift: 6
+							});
+
+						}
+					},
+					//error代码只有在controller处理方法抛出异常或则有拦截器处理时抛异常(如服务器代码问题，类型转换问题)就执行该函数，不执行success函数
+					error: function() {
+						/* alert("error"); */
+						layer.msg("登陆失败！", {
+							time: 1000,
+							icon: 5,
+							shift: 6
+						});
+					}
+				});
+			}
+
+
+			function doReset() {
+				$('#summernote').summernote('reset')
+			}
+
+			$(function() {
+				$('#summernote').summernote({
+					placeholder: 'Hello Bootstrap 4',
+					tabsize: 2,
+					height: 100,
+					focus: true
+				});
+			});
+
+			$(".edit_article_btn").click(function() {
+				$(".article-edit-container").css('display', 'block');
+				$(".article-pre").css('display', 'none');
+			})
+
+			$("#img").change(function() {
+				var objUrl = getObjectURL(this.files[0]); //获取文件信息  
+				console.log("objUrl = " + objUrl);
+				if (objUrl) {
+					$(".cover-img").attr('src', objUrl);
+					$(".article-cover-published").css('display', 'block');
+					$(".article-cover-null").css('display', 'none');
+					$(".article-cover-fn").css('display', 'block')
+				}
+			});
+
+			function getObjectURL(file) {
+				var url = null;
+				if (window.createObjectURL != undefined) {
+					url = window.createObjectURL(file);
+				} else if (window.URL != undefined) { // mozilla(firefox)  
+					url = window.URL.createObjectURL(file);
+				} else if (window.webkitURL != undefined) { // webkit or chrome  
+					url = window.webkitURL.createObjectURL(file);
+				}
+				return url;
+			}
+
+
+			$(".article-cover-replace-btn").click(function() {
+				$("#img").trigger('click')
+			})
+
+			$(".article-cover-remove-btn").click(function() {
+				$(".article-cover-published").css('display', 'none');
+				$(".article-cover-null").css('display', 'block');
+				$(".article-cover-fn").css('display', 'none')
+				// 清除input中的文件
+				$(".img").val("")
+			})
+
+			$(".pre-article").click(function() {
+
+				var title = $("#article-title-text").val();
+				var content = $('#summernote').summernote('code');
+
+				$(".title").html(title);
+				$(".yxl-editor-article").html(content);
+				$(".article-edit-container").css('display', 'none');
+				$(".article-pre").css('display', 'block');
+
+			});
+		</script>
+
+	</body>
 </html>

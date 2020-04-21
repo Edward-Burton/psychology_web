@@ -3,6 +3,7 @@ package cn.xhu.softwareengineering.potal.dao;
 import java.util.List;
 import java.util.Map;
 
+import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 
 public interface UserMapper {
@@ -22,5 +23,17 @@ public interface UserMapper {
 	int addCollect(Map<String, Integer> paramMap);
 
 	List<Integer> queryUserLikeComment(Map<String, Object> paramMap);
+
+	PsychoUser queryUserById(Integer userid);
+
+	List<PsychoArticle> queryArticleByUserId(Integer userid);
+
+	int queryFollow(Map<String, Object> paramMap);
+
+	int addFollow(Map<String, Object> paramMap);
+
+	int cancelFollow(Map<String, Object> paramMap);
+
+	int queryLikeByUserId(Integer userid);
 
 }

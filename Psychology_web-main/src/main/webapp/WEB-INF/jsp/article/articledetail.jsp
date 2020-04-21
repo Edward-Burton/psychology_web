@@ -458,6 +458,10 @@ a {
 	word-break: break-all;
 }
 
+.article-comment #commentList .comment-item .orinal-comment .active{
+	color: #66b1ff;
+}
+
 .article-comment #commentList .comment-item .orinal-comment a {
 	font-family: PingFangSC-Semibold;
 	font-size: 16px;
@@ -595,6 +599,11 @@ a {
 .main-right-container .base-info-m .tool-m {
 	display: flex;
 	margin: 30px 0;
+}
+
+.main-right-container .base-info-m .tool-m .selected {
+    color: #ccc!important;
+    background-color: #f3f4f5!important;
 }
 
 .main-right-container .base-info-m .tool-m a+a {
@@ -900,7 +909,11 @@ a {
 
 							<!-- 这条评论的原评论 -->
 							<div class="orinal-comment" v-if="comment.article_p_comment!=null">
-								<span>回复</span> <a target="_blank" href="#" :data-id="comment.article_p_comment.comment_user.psychouser_id">@{{comment.article_p_comment.comment_user.psychouser_name}}：</a> <span>{{comment.article_p_comment.article_comment_pulcontent}}</span>
+								<span>回复</span> 
+								<a target="_blank" href="#" :data-id="comment.article_p_comment.comment_user.psychouser_id">
+								@<span :class="{active:curuserid==comment.article_p_comment.comment_user.psychouser_id}">{{comment.article_p_comment.comment_user.psychouser_name}}：</span>
+								</a> 
+								<span>{{comment.article_p_comment.article_comment_pulcontent}}</span>
 							</div>
 
 							<!-- 针对评论的评论框 -->
@@ -934,14 +947,14 @@ a {
 			<!-- 作者基本信息 -->
 			<div class="base-info-m white-bg">
 				<div class="top">
-					<a target="_blank" href="#" class="avatar-con"> <img
-						class="avatar" src="/article_img/1584265340768_Article.jpg" alt="个人头像">
+					<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid=${pa.articleUser.psychouser_id }" @click="" class="avatar-con"> 
+					<img class="avatar" src="/article_img/1584265340768_Article.jpg" alt="个人头像">
 					</a>
 					<p class="name">${pa.articleUser.psychouser_name}</p>
 					<p class="desc">${pa.articleUser.psychouser_intro }</p>
 					<div class="tool-m">
-						<a id="btn-follow" data-user-id="735619" href="javascript:;">关注ta</a>
-						<a id="btn-message" href="javascript:;">私信</a>
+						<a id="btn-follow" data-userid="${pa.articleUser.psychouser_id }" :class="{selected:isfollow=='已关注'}" href="javascript:;" @click="dofollow($event)">{{isfollow}}ta</a>
+						<a id="btn-message" href="javascript:;" loading="" @click="">私信</a>
 					</div>
 				</div>
 				<div class="statistics">
@@ -1055,7 +1068,8 @@ a {
 		      commentnum:0,
 		      tag:0,
 		      likecomment:[],
-		      curuserid:0
+		      curuserid:0,
+		      isfollow:"关注",
 		    }
 		  },
 		  created() {
@@ -1063,8 +1077,52 @@ a {
 		      this.getCollectStatus();
 		      this.getuserid();
 		      this.getlikecomment();
+		      this.isFollow();
 		    },
 		    methods: {
+		    	
+		    	dofollow(e){
+					  let action=0;
+					  if(this.isfollow=="关注"){
+						  action=1;
+					  }
+					  axios({
+					      url: "${APP_PATH}/user/doFollow.do",
+					      method: "get",
+					      params:{
+					    	  followuserid:e.target.dataset.userid,
+					    	  action:action
+					      }
+					    }).then(res => {
+					    	if(res.data.success){
+					    		if(action==1){
+					    			this.isfollow="已关注";
+					    		}else{
+					    			this.isfollow="关注";
+					    		}
+					    	}else{
+					    		alert(res.data.message);
+					    	}
+					    });
+				  },
+		    	
+		    	isFollow(){
+					  axios({
+					      url: "${APP_PATH}/user/doIsFollow.do",
+					      method: "get",
+					      params:{
+					    	  followuserid:parseInt($(".author-name").attr("data-id"))
+					      }
+					    }).then(res => {
+					    	if(res.data.success){
+					    		if(res.data.data){
+					    			this.isfollow="已关注";
+					    		}
+					    	}else{
+					    		alert(res.data.message);
+					    	}
+					    });
+				  },
 		    	getuserid(){
 		    		axios({
 					      url: "${APP_PATH}/doUserId.do",
@@ -1104,7 +1162,7 @@ a {
 				      }
 				    }).then(res => {
 				    	this.comments = res.data.data;
-				    	alert("评论数："+this.comments.length);
+				    	/* alert("评论数："+this.comments.length); */
 				    	this.commentnum = this.comments.length;
 				    });
 		    	},
@@ -1364,11 +1422,6 @@ a {
 
 		}) */
 
-		// 关注
-		function follow() {
-			$("#btn-follow")
-
-		}
 
 		// window.onbeforeunload = function(){
 		//     var scrollPos;    
