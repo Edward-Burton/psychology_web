@@ -452,7 +452,7 @@
 			</div>
 			<div class="user_info" data-id="${user.psychouser_id}">
 				<div class="user_img">
-					<img src="/article_img/1584265340768_Article.jpg" alt="">
+					<img src="${APP_PATH }/${user.psychouser_head_portrait }" alt="">
 				</div>
 				<div class="user_info_wrap">
 					<div class="user_name">${user.psychouser_name}</div>
@@ -632,7 +632,7 @@
 										<i class="yxlicon icon-tuijian"></i>
 									</div>
 									<a :href="'${APP_PATH }/article/toArticle.htm?id='+(article.articleId)" target="_blank">
-										<div class="content_b_content_item_l" style="background-image:url(https://ossimg.xinli001.com/20200409/98429ba7601629e546dba0a3a001983e.jpeg!180x120)">
+										<div class="content_b_content_item_l" :style="{backgroundImage: 'url(${APP_PATH}/' + article.articleImg + ')' }">
 										</div>
 									</a>
 									<div class="content_b_content_item_r">
@@ -641,7 +641,7 @@
 												{{article.articleTitle}}
 											</div>
 											<div class="content_b_content_item_dec">
-												{{article.content}}
+												{{article.content.replace(/<[^>]+>/g, "")}}
 											</div>
 										</a>
 										<div class="author_info">

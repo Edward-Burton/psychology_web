@@ -5,12 +5,13 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import cn.xhu.softwareengineering.bean.PsychoLabel;
 import cn.xhu.softwareengineering.bean.QuestionAnswer;
 import cn.xhu.softwareengineering.bean.UserQuestions;
 
 public interface QuestionMapper {
 
-	int insertQuestion(UserQuestions question);
+	int insertQuestion(Map<String, Object> parammap);
 	List<UserQuestions> getQuestionsByUserId(@Param("id")int userId);
 	List<UserQuestions> queryQuestionPage(Map<String, Object> parammap);
 	Integer queryQuestionCount();
@@ -18,6 +19,12 @@ public interface QuestionMapper {
 	//Integer queryAnswerCount(Integer questionId);
 	Integer queryAnswerCount(Map<String, Object> parammap);
 	List<QuestionAnswer> queryQuestionAnswerPage(Map<String, Object> parammap);
-	Integer addQuestionAnswer(QuestionAnswer questionAnswer);
+	Integer addQuestionAnswer(Map<String, Object> parammap);
 	List<QuestionAnswer> queryAnswerPage(Map<String, Object> parammap);
+	int updatequestion(Map<String, Object> parammap);
+	int queryReadCount(Integer questionid);
+	List<Integer> querycollectuserById(Integer questionid);
+	List<PsychoLabel> querySubTags();
+	List<PsychoLabel> queryTags();
+	int addQuestionLabel(Map<String, Object> parammap);
 }

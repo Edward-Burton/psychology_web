@@ -144,6 +144,11 @@ a img, fieldset {
 	overflow: hidden;
 }
 
+#articleListM .item .right .content{
+	max-height: 100px;
+    overflow: hidden;
+}
+
 #articleListM .item .right .desc {
 	font-family: PingFangSC-Regular;
 	font-size: 14px;
@@ -424,7 +429,7 @@ a img, fieldset {
 
 			</div>
 			<div class="entrance-m">
-				<a target="_blank" href="new_article.html" class="write-article">写文章</a>
+				<a target="_blank" href="${APP_PATH }/article/toAddArticle.htm" class="write-article">写文章</a>
 				<a target="_blank" href="#" class="all-theme">全部主题</a>
 			</div>
 		</div>
@@ -588,14 +593,14 @@ a img, fieldset {
 												data,
 												function(i, pa) {//i表示索引，n表示data中的每一个元素
 													content += '<div class="item">';
-													content += '<a target="_blank" href="#"> <img src="/article_img/'+'1584268791404_Article.jpg'+'"></a>';
+													content += '<a target="_blank" href="#"> <img src="${APP_PATH}/'+pa.articleImg+'"></a>';
 													content += '<div class="right">';
 													content += '<a target="_blank" href="#" class="title" onclick="window.location.href=\'${APP_PATH}/article/toArticle.htm?id='
 															+ pa.articleId
 															+ '\'">'
 															+ pa.articleTitle
 															+ '</a>';
-													content += '<a target="_blank" href="#"><p class="desc">'+pa.content+'</p></a>';
+													content += '<a target="_blank" href="#" class="content"><p class="desc">'+pa.content+'</p></a>';
 													content += '<div class="info">';
 													content += '<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid='+pa.articleUser.psychouser_id+'"> <span>'
 															+ pa.articleUser.psychouser_name

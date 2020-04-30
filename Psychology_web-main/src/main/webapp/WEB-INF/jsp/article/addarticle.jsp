@@ -1,610 +1,728 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>编辑文章</title>
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-		<style>
-			a {
-			    text-decoration: none;
-				
-			}
-			
-			
-			.global-head {
-			    height: 68px;
-			    line-height: 68px;
-			    padding: 0 16px;
-			    background: #fff;
-			    border-bottom: 1px solid #eaeaea;
-			}
-			
-			.global-head .global-head-left {
-			    float: left;
-			    line-height: 68px;
-			}
-			
-			.global-head .global-head-right {
-			    height: 100%;
-			}
-			
-			.global-head .global-head-left .index-link {
-			    display: inline-block;
-			    width: 90px;
-			    height: 100%;
-			    line-height: 60px;
-			    vertical-align: middle;
-			}
-			
-			.global-head .global-head-left .index-link img {
-			    width: 100%;
-			}
-			
-			.global-head .global-head-right {
-			    float: right;
-			}
-			
-			.global-head .global-head-right > div {
-			    display: inline-block;
-			    vertical-align: top;
-			    height: 100%;
-			}
-			
-			.global-head .user-avatar-img {
-			    position: relative;
-			    top: 50%;
-			    width: 30px;
-			    height: 30px;
-			    overflow: hidden;
-			    border-radius: 50%;
-			    vertical-align: middle;
-			    margin: -15px 12px 0;
-			}
-			
-			.global-head .user-center-link {
-			    display: block;
-			    width: 100%;
-			    height: 100%;
-			}
-			
-			.global-head .user-avatar-img .user-avatar {
-			    width: 100%;
-			    vertical-align: top;
-			}
-			
-			.article-edit-container {
-			    width: 850px;
-			    margin: 0 auto;
-			    padding: 0 0 40px;
-			}
-			
-			.article-edit-container .article-cover {
-			    cursor: pointer;
-			}
-			
-			.article-edit-container .article-cover-null {
-			    width: 850px;
-			    height: 533px;
-			    background: #f3f4f5;
-			    color: #999;
-			    text-align: center;
-			}
-			
-			.article-edit-container .article-cover-camera:before {
-			    content: '\e037';
-			    display: inline-block;
-			    font-size: 60px;
-			    margin-top: 200px;
-			}
-			
-			.article-edit-container .article-cover-tips {
-			    font-size: 18px;
-			}
-			
-			.article-edit-container .article-cover-subtitle {
-			    font-size: 14px;
-			    margin-top: 10px;
-			}
-			
-			.article-edit-container .article-cover-published {
-			    position: relative;
-			    max-height: 533px;
-			    overflow: hidden;
-			}
-			
-			.article-edit-container img {
-			    display: block;
-			    max-width: 100%;
-			    margin: 0 auto;
-			}
-			
-			.article-edit-container .article-cover-fn {
-			    display: none;
-			    position: absolute;
-			    bottom: 0;
-			    right: 0;
-			    z-index: 2;
-			}
-			
-			.article-edit-container .article-cover-fn > span {
-			    display: inline-block;
-			    width: 68px;
-			    height: 68px;
-			    background: rgba(51, 51, 51, .9);
-			    color: #fff;
-			    font-family: yxl-iconfont;
-			    text-align: center;
-			    line-height: 68px;
-			    vertical-align: bottom;
-			    font-size: 30px;
-			}
-			
-			.article-edit-container .article-title-text {
-			    width: 100%;
-			    outline: 0;
-			    border: 0;
-			    font-size: 32px;
-			    padding: 1em 0;
-			    color: #333;
-			}
-			
-			.article-edit-container .article-tags {
-			    padding-bottom: 36px;
-			}
-			
-			.article-edit-container .article-tag-list {
-			    display: inline-block;
-			    vertical-align: middle;
-			}
-			
-			.article-edit-container .article-tag {
-			    position: relative;
-			    display: inline-block;
-			    width: 102px;
-			    background: #f3f4f5;
-			    border-radius: 6px;
-			    height: 36px;
-			    padding: 0 9px;
-			    margin-right: 16px;
-			    box-sizing: border-box;
-			    vertical-align: middle;
-			}
-			
-			.article-edit-container .article-tag-input {
-			    width: 100%;
-			    height: 100%;
-			    outline: 0;
-			    border: 0;
-			    font-size: 14px;
-			    color: #333;
-			    background: #f3f4f5;
-			    text-align: center;
-			    border-radius: 6px;
-			}
-			.article-edit-container .article-tag-del-btn {
-			    display: flex;
-			    position: absolute;
-			    top: 0;
-			    right: 0;
-			    width: 16px;
-			    height: 16px;
-			    line-height: 16px;
-			    margin-right: -8px;
-			    margin-top: -8px;
-			    cursor: pointer;
-			    color: #666;
-			}
-			
-			.article-edit-container .article-tag-add-btn {
-			    cursor: pointer;
-			}
-			
-			.article-edit-container .article-tag-add-btn:after, .article-edit-container .article-tag-add-btn:before {
-			    content: '';
-			    position: absolute;
-			    width: 14px;
-			    height: 2px;
-			    top: 50%;
-			    left: 50%;
-			    margin-top: -1px;
-			    margin-left: -7px;
-			    background: #ccc;
-			}
-			
-			/* 添加标签的加号那一竖 */
-			.article-edit-container .article-tag-add-btn:after {
-			    transform: rotate(90deg);
-			}
-			
-			input[type=file] {
-			    display: inline-block;
-				margin-top: 200px;
-			}
-			
-			.img {
-				z-index:10;
-				opacity:1;
-				left:-94px;
-				top:1px;
-				border:0;
-				outline:0;
-				padding:1px 30px;
-				font-size:16px;
-				
-			}
-			
-			.col-md-7 {
-			    width: 100%;
-			}
-			
-			.form-group a{
-				display: inline-block;
-				    text-decoration: none;
-				    background: #0b8bff;
-				    border-radius: 8px;
-					margin-right: 15px;
-				    width: 100px;
-				    height: 42px;
-				    line-height: 42px;
-				    color: #fff;
-				    font-family: PingFangSC-Regular;
-				    font-size: 16px;
-				    text-align: center;
-			}
-			
-			.main-container {
-				width: 900px;
-				height: 100%;
-				margin: 0 auto;
-				padding-top: 20px;
-				border-radius: 10px;
-				padding-bottom: 51px;
-				background: #fff;
-				position: relative;
-				min-height: 100%;
-			}
-			
-			.main-container .top {
-				padding: 0 30px;
-				padding-top: 40px;
-			}
-			
-			.main-container .top .title {
-				margin-top: 20px;
-				font-family: PingFangSC-Medium;
-				font-size: 22px;
-				color: #333;
-				font-weight: 700;
-			}
-			
-			
-			.main-container .article-body-m {
-				padding: 0 120px;
-				margin-top: 69px;
-			}
-			
-			.main-container .article-body-m .cover-con {
-				text-align: center;
-			}
-			
-			.main-container .article-body-m .article-cover {
-				max-width: 100%;
-			}
-			
-			.main-container .article-body-m .yxl-editor {
-				margin-top: 30px;
-			}
-			
-			.yxl-editor-article {
-				min-height: 48px;
-			}
-			
-			.yxl-editor {
-				padding-top: 16px;
-			}
-			
-			.view,
-			.yxl-editor {
-				color: #444;
-				font-size: 16px;
-				line-height: 1.8;
-				word-break: break-all;
-			}
-			
-			.control-btn{
-				    display: flex;
-				    -webkit-box-pack: justify;
-				    justify-content: space-between;
-				    padding: 18px 0 0;
-				    margin: 0;
-			}
-			
-			.control-btn a{
-				display: inline-block;
-				    text-decoration: none;
-				    background: #0b8bff;
-				    border-radius: 8px;
-				    width: 150px;
-				    height: 42px;
-				    line-height: 42px;
-				    color: #fff;
-				    font-size: 16px;
-					cursor: pointer;
-					text-align: center;
-			}
-			
-		</style>
-	</head>
-	<body>
-		<header class="global-head">
-			<div class="global-head-left">
-				<!-- 首页链接 -->
-				<a href="#" class="index-link">
-					<img src="#" alt="心理logo">
-				</a>
-			</div>
+<head>
+<meta charset="utf-8">
+<title>编辑文章</title>
+<link href="${APP_PATH }/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css"
+	rel="stylesheet" />
+<%-- <link href="${APP_PATH }/css/summernote.min.css"
+	rel="stylesheet" /> --%>
 
-			<div class="global-head-right">
+<%-- <link
+	href="${APP_PATH }/css/summernote.min.css"
+	rel="stylesheet"> --%>
+<style>
+a {
+	text-decoration: none;
+}
 
-				<div class="user-avatar-img-wrap">
-					<div class="user-avatar-img">
-						<!-- 用户个人主页 -->
-						<a href="#" class="user-center-link">
+.global-head {
+	height: 68px;
+	line-height: 68px;
+	padding: 0 16px;
+	background: #fff;
+	border-bottom: 1px solid #eaeaea;
+}
 
-							<!-- 用户头像 -->
-							<img src="https://ossimg.xinli001.com/20200222/19d1695be26b091c2d752e338f1e9b0c.jpg" alt="" class="user-avatar">
-						</a>
-					</div>
-				</div>
-			</div>
-		</header>
+.global-head .global-head-left {
+	float: left;
+	line-height: 68px;
+}
 
+.global-head .global-head-right {
+	height: 100%;
+}
 
+.global-head .global-head-left .index-link {
+	display: inline-block;
+	width: 90px;
+	height: 100%;
+	line-height: 60px;
+	vertical-align: middle;
+}
 
-		<main class="article-edit-container" style="display: block;">
-			<div class="article-edit-wrap" style="">
-				<div class="article-cover">
-					<div class="article-cover-null" style="display: block;">
-						<input type="file" id="img" class="img" value="" />
-						<!-- <p class="article-cover-camera"></p>
-						<p class="article-cover-tips">点击更换封面图片</p> -->
-						<p class="article-cover-subtitle">最佳尺寸：900x600px</p>
-					</div>
-					<div class="article-cover-published" style="display: none;">
-						<img src="" alt="" class="cover-img">
-						<div class="article-cover-fn">
-							<span class="article-cover-replace-btn">重置</span>
-							<span class="article-cover-remove-btn">删除</span>
-						</div>
-					</div>
-				</div>
-				<div class="article-title">
-					<input type="text" placeholder="点击输入文章标题" id="article-title-text" class="article-title-text" autocomplete="off">
+.global-head .global-head-left .index-link img {
+	width: 100%;
+}
 
-				</div>
-				<div class="article-tags">
-					<div class="article-tag-list">
-						<div class="article-tag">
-							<input type="text" class="article-tag-input" value="" placeholder="编辑标签">
-							<div class="article-tag-del-btn yxl-iconfont">
+.global-head .global-head-right {
+	float: right;
+}
 
-							</div>
-						</div>
-						<div class="article-tag">
-							<input type="text" class="article-tag-input" value="" placeholder="编辑标签">
-							<div class="article-tag-del-btn yxl-iconfont">
+.global-head .global-head-right>div {
+	display: inline-block;
+	vertical-align: top;
+	height: 100%;
+}
 
-							</div>
-						</div>
-						<div class="article-tag">
-							<input type="text" class="article-tag-input" value="" placeholder="编辑标签">
-							<div class="article-tag-del-btn yxl-iconfont">
+.global-head .user-avatar-img {
+	position: relative;
+	top: 50%;
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	border-radius: 50%;
+	vertical-align: middle;
+	margin: -15px 12px 0;
+}
 
-							</div>
-						</div>
-					</div>
+.global-head .user-center-link {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
 
-					<div class="article-tag article-tag-add-btn">
+.global-head .user-avatar-img .user-avatar {
+	width: 100%;
+	vertical-align: top;
+}
 
-					</div>
-				</div>
+.article-edit-container {
+	width: 850px;
+	margin: 0 auto;
+	padding: 0 0 40px;
+}
 
-				<div class="col-md-7" id="contextText">
-					<div class="form-group" align="center" id="nochecke">
-						<!--  <textarea id="editor" hidden="true" autofocus>
-					     </textarea> -->
-						<!-- <textarea id="editor" placeholder="Balabala" autofocus></textarea> -->
-						
-						<textarea id="summernote" name="editordata"></textarea>
-						
-						<a onclick="doCommit()">发布文章</a>
-						<a onclick="doReset()">重置</a>
-						<!-- href="javascript:showarticle()" -->
-						<a class="pre-article" href="javascript:void(0);">预览</a>
-					</div>
-				</div>
-		</main>
+.article-edit-container .article-cover {
+	cursor: pointer;
+}
 
-		<div class="article-pre" style="display: none;">
-			<div class="main-container" style="display: block;">
-				<div class="top">
+.article-edit-container .article-cover-null {
+	width: 850px;
+	height: 533px;
+	background: #f3f4f5;
+	color: #999;
+	text-align: center;
+}
 
-					<p class="title">标题很长很长 </p>
+.article-edit-container .article-cover-camera:before {
+	content: '\e037';
+	display: inline-block;
+	font-size: 60px;
+	margin-top: 200px;
+}
 
+.article-edit-container .article-cover-tips {
+	font-size: 18px;
+}
 
-				</div>
-				<div class="article-body-m">
-					<div class="cover-con">
-						<img class="article-cover" src="https://ossimg.xinli001.com/20200316/312e9f6d25129cee1014e5295e31a428.jpeg?x-oss-process=image/quality,Q_80"
-						 alt="文章封面">
-					</div>
-					<div class="yxl-editor">
-						<div class="yxl-editor-article ">
-							富文本内容
-						</div>
+.article-edit-container .article-cover-subtitle {
+	font-size: 14px;
+	margin-top: 10px;
+}
 
-					</div>
-					<!-- 文章结尾 -->
+.article-edit-container .article-cover-published {
+	position: relative;
+	max-height: 533px;
+	overflow: hidden;
+}
 
-					<div class="control-btn">
-						<a target="_blank" class="public_article_btn">发布文章</a>
-						<a target="_blank" class="edit_article_btn">编辑文章</a>
-					</div>
+.article-edit-container img {
+	display: block;
+	max-width: 100%;
+	margin: 0 auto;
+}
 
+.article-edit-container .article-cover-fn {
+	display: none;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 2;
+}
+
+.article-edit-container .article-cover-fn>span {
+	display: inline-block;
+	width: 68px;
+	height: 68px;
+	background: rgba(51, 51, 51, .9);
+	color: #fff;
+	font-family: yxl-iconfont;
+	text-align: center;
+	line-height: 68px;
+	vertical-align: bottom;
+	font-size: 30px;
+}
+
+.article-edit-container .article-title-text {
+	width: 100%;
+	outline: 0;
+	border: 0;
+	font-size: 32px;
+	padding: 1em 0;
+	color: #333;
+}
+
+.article-edit-container .article-tags {
+	padding-bottom: 36px;
+}
+
+.article-edit-container .article-tag-list {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.article-edit-container .article-tag {
+	position: relative;
+	display: inline-block;
+	width: 102px;
+	background: #f3f4f5;
+	border-radius: 6px;
+	height: 36px;
+	padding: 0 9px;
+	margin-right: 16px;
+	box-sizing: border-box;
+	vertical-align: middle;
+}
+
+.article-edit-container .article-tag-input {
+	width: 100%;
+	height: 100%;
+	outline: 0;
+	border: 0;
+	font-size: 14px;
+	color: #333;
+	background: #f3f4f5;
+	text-align: center;
+	border-radius: 6px;
+}
+
+.article-edit-container .article-tag-del-btn {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+	margin-right: -8px;
+	margin-top: -8px;
+	cursor: pointer;
+	color: #666;
+}
+
+.article-edit-container .article-tag-add-btn {
+	cursor: pointer;
+}
+
+.article-edit-container .article-tag-add-btn:after,
+	.article-edit-container .article-tag-add-btn:before {
+	content: '';
+	position: absolute;
+	width: 14px;
+	height: 2px;
+	top: 50%;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -7px;
+	background: #ccc;
+}
+
+/* 添加标签的加号那一竖 */
+.article-edit-container .article-tag-add-btn:after {
+	transform: rotate(90deg);
+}
+
+input[type=file] {
+	display: inline-block;
+	margin-top: 200px;
+}
+
+.img {
+	z-index: 10;
+	opacity: 1;
+	left: -94px;
+	top: 1px;
+	border: 0;
+	outline: 0;
+	padding: 1px 30px;
+	font-size: 16px;
+}
+
+.col-md-7 {
+	width: 100%;
+}
+
+.form-bnt a {
+	display: inline-block;
+	text-decoration: none;
+	background: #0b8bff;
+	border-radius: 8px;
+	margin-right: 15px;
+	width: 100px;
+	height: 42px;
+	line-height: 42px;
+	color: #fff;
+	font-family: PingFangSC-Regular;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.main-container {
+	width: 900px;
+	height: 100%;
+	margin: 0 auto;
+	padding-top: 20px;
+	border-radius: 10px;
+	padding-bottom: 51px;
+	background: #fff;
+	position: relative;
+	min-height: 100%;
+}
+
+.main-container .top {
+	padding: 0 30px;
+	padding-top: 40px;
+}
+
+.main-container .top .title {
+	margin-top: 20px;
+	font-family: PingFangSC-Medium;
+	font-size: 22px;
+	color: #333;
+	font-weight: 700;
+}
+
+.main-container .article-body-m {
+	padding: 0 120px;
+	margin-top: 69px;
+}
+
+.main-container .article-body-m .cover-con {
+	text-align: center;
+}
+
+.main-container .article-body-m .article-cover {
+	max-width: 100%;
+}
+
+.main-container .article-body-m .yxl-editor {
+	margin-top: 30px;
+}
+
+.yxl-editor-article {
+	min-height: 48px;
+}
+
+.yxl-editor {
+	padding-top: 16px;
+}
+
+.view, .yxl-editor {
+	color: #444;
+	font-size: 16px;
+	line-height: 1.8;
+	word-break: break-all;
+}
+
+.control-btn {
+	display: flex;
+	-webkit-box-pack: justify;
+	justify-content: space-between;
+	padding: 18px 0 0;
+	margin: 0;
+}
+
+.control-btn a {
+	display: inline-block;
+	text-decoration: none;
+	background: #0b8bff;
+	border-radius: 8px;
+	width: 150px;
+	height: 42px;
+	line-height: 42px;
+	color: #fff;
+	font-size: 16px;
+	cursor: pointer;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<header class="global-head">
+		<div class="global-head-left">
+			<!-- 首页链接 -->
+			<a href="#" class="index-link"> <img src="#" alt="心理logo">
+			</a>
+		</div>
+
+		<div class="global-head-right">
+
+			<div class="user-avatar-img-wrap">
+				<div class="user-avatar-img">
+					<!-- 用户个人主页 -->
+					<a href="#" class="user-center-link"> <!-- 用户头像 --> <img
+						src="https://ossimg.xinli001.com/20200222/19d1695be26b091c2d752e338f1e9b0c.jpg"
+						alt="" class="user-avatar">
+					</a>
 				</div>
 			</div>
 		</div>
-
-		<script src="js/jquery-2.1.1.min.js"></script>
-
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				$('#summernote').summernote({
-					placeholder: 'Hello Bootstrap 4',
-					tabsize: 2,
-					height: 100,
-					focus: true
-				});
+	</header>
 
 
 
-			});
+	<main class="article-edit-container" style="display: block;">
+	<div class="article-edit-wrap" style="">
+		<div class="article-cover">
+			<div class="article-cover-null" style="display: block;">
+				<input type="file" id="articleImg" name="articleImg" class="img" value="" />
+				<!-- <p class="article-cover-camera"></p>
+						<p class="article-cover-tips">点击更换封面图片</p> -->
+				<p class="article-cover-subtitle">最佳尺寸：900x600px</p>
+			</div>
+			<div class="article-cover-published" style="display: none;">
+				<img src="" alt="" class="cover-img">
+				<div class="article-cover-fn">
+					<span class="article-cover-replace-btn">重置</span> <span
+						class="article-cover-remove-btn">删除</span>
+				</div>
+			</div>
+		</div>
+		<div class="article-title">
+			<input type="text" placeholder="点击输入文章标题" id="article-title-text"
+				class="article-title-text" autocomplete="off">
 
-			function doCommit() {
+		</div>
+		<div class="article-tags">
+			<div class="article-tag-list">
+				<div class="article-tag">
+					<input type="text" class="article-tag-input" value=""
+						placeholder="编辑标签">
+					<div class="article-tag-del-btn yxl-iconfont"></div>
+				</div>
+				<div class="article-tag">
+					<input type="text" class="article-tag-input" value=""
+						placeholder="编辑标签">
+					<div class="article-tag-del-btn yxl-iconfont"></div>
+				</div>
+				<div class="article-tag">
+					<input type="text" class="article-tag-input" value=""
+						placeholder="编辑标签">
+					<div class="article-tag-del-btn yxl-iconfont"></div>
+				</div>
+			</div>
 
-				// 获取标题
-				var title = $("#article-title-text").val();
+			<div class="article-tag article-tag-add-btn"></div>
+		</div>
 
-				// 获取内容
-				var content = $('#summernote').summernote('code');
+		<div class="col-md-7" id="contextText">
+			<div class="form-group" id="nochecke">
+				<!--  <textarea id="editor" hidden="true" autofocus>
+					     </textarea> -->
+				<!-- <textarea id="editor" placeholder="Balabala" autofocus></textarea> -->
 
-				// 获取标签个数
-				var num = $(".article-tag-list div").length;
+				<textarea id="summernote" name="editordata"></textarea>
 
-				// 获取标签
-				var tags = [];
-				for (i = 0; i < num; i++) {
-					tags[i] = $(".article-tag").eq(i).find(".article-tag-input").val();
-				}
+				<div class="form-bnt">
+					<a onclick="doCommit()">发布文章</a> <a onclick="doReset()">重置</a>
+					<!-- href="javascript:showarticle()" -->
+					<a class="pre-article" href="javascript:void(0);">预览</a>
+				</div>
+			</div>
+		</div>
+		</div>
+	</form>
+	</main>
 
-				alert(title + "\n" + content + "\n" + tags);
+	<div class="article-pre" style="display: none;">
+		<div class="main-container" style="display: block;">
+			<div class="top">
 
-				var innnerhtml = $("comtent").val();
-				$("#summernote").val(innerhtml);
+				<p class="title">标题很长很长</p>
 
-				$.ajax({
-					type: "POST",
-					data: {
-						"content": content,
-						"psychouser_password": psychouser_password.val()
-					},
-					url: "${APP_PATH}/doLogin.do",
-					beforeSend: function() {
-						//表单数据校验
-						loadingIndex = layer.msg('处理中', {
-							icon: 16
-						});
-						return true;
-					},
-					success: function(result) { //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
-						layer.close(loadingIndex);
-						if (result.success) {
-							window.location.href = "${APP_PATH}/main.htm";
-							/* alert("success"); */
-						} else {
-							/* alert("failed"); */
-							layer.msg(result.message, {
-								time: 1000,
-								icon: 5,
-								shift: 6
+
+			</div>
+			<div class="article-body-m">
+				<div class="cover-con">
+					<img class="article-cover"
+						:src="https://ossimg.xinli001.com/20200316/312e9f6d25129cee1014e5295e31a428.jpeg?x-oss-process=image/quality,Q_80"
+						alt="文章封面">
+				</div>
+				<div class="yxl-editor">
+					<div class="yxl-editor-article ">富文本内容</div>
+
+				</div>
+				<!-- 文章结尾 -->
+
+				<div class="control-btn">
+					<a target="_blank" class="public_article_btn">发布文章</a> <a
+						target="_blank" class="edit_article_btn">编辑文章</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
+    <script src="${APP_PATH }/jquery/layer/layer.js"></script>
+	<script
+		src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${APP_PATH }/js/summernote.min.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script> -->
+	<script type="text/javascript" src="${APP_PATH}/jquery/layer/layer.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$('#summernote')
+			.summernote({
+				placeholder: 'Hello stand alone ui',
+				tabsize: 2,
+				height: 400,
+				toolbar: [
+					['style', ['style']],
+					[
+						'font',
+						['bold', 'underline', 'clear']
+					],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['table', ['table']],
+					['insert',
+						['link', 'picture', 'video']
+					],
+					[
+						'view',
+						['fullscreen', 'codeview',
+							'help'
+						]
+					]
+				],
+				lang: 'zh-CN',
+				focus: true,
+				dialogsFade: true, // Add fade effect on dialogs
+				dialogsInBody: true, // Dialogs can be placed in body, not in
+				// summernote.
+				disableDragAndDrop: false, // default false You can disable drag
+				// and drop
+				tabDisable: false,
+				callbacks: {
+					onImageUpload: function(files) {
+						$.each(files, function() {
+							var file = this;
+							alert(file);
+							var data = new FormData();
+							data.append("file",
+								file);
+							$.ajax({
+								data: data,
+								type: "POST",
+								url: "${APP_PATH}/file/img.do",
+								cache: false,
+								contentType: false,
+								processData: false,
+								success: function(
+									res) {
+									alert(res.message);
+									alert(res.data.completeSavePath);
+									$('#summernote').summernote(
+										'insertImage',
+										res.data.completeSavePath);
+
+								},
+								error: function() {
+									layer.msg("加载数据失败", {
+										time: 1000,
+										icon: 5,
+										shift: 6
+									});
+								}
+
 							});
-
-						}
+						})
 					},
-					//error代码只有在controller处理方法抛出异常或则有拦截器处理时抛异常(如服务器代码问题，类型转换问题)就执行该函数，不执行success函数
-					error: function() {
-						/* alert("error"); */
-						layer.msg("登陆失败！", {
-							time: 1000,
-							icon: 5,
-							shift: 6
+					onPaste: function(e) {
+						console.log(e)
+						setTimeout(function() {
+							var str = $('#summernote').summernote('code');
+							//匹配图片（g表示匹配所有结果i表示区分大小写）
+							var imgReg = /<img.*?(?:>|\/>)/gi;
+							//匹配src属性
+							var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+							if (srcReg!=null) {
+								var arr = str.match(imgReg);
+								alert('所有已成功匹配图片的数组：' + arr);
+								for (var i = 0; i < arr.length; i++) {
+									var src = arr[i].match(srcReg);
+									//alert("src:"+src);
+									//当然你也可以替换src属性
+									if (src) {
+										var imgpath = encodeURI(src[1]);
+										alert(imgpath);
+										$
+											.ajax({
+												url: '${APP_PATH}/file/pathupload.do',
+												type: 'POST',
+												data: {
+													"imgpath": src[1]
+												},
+												async: false,
+												success: function(res) {
+													str = str.replace(src[0], 'src="' + res.data.completeSavePath + '"');
+													if (res.success) {
+														//$("#img").val(data.data);
+													} else {
+														alert("失败");
+													}
+												}
+											});
+									}
+								}
+							}
+							$('#summernote').summernote('code', str);
+						}, 1000);
+					},
+					onMediaDelete: function(target) {
+						alert(target.context.currentSrc);
+						var imgSrc = target.context.currentSrc;
+					    var  data = new FormData();  
+					    data.append("imgSrc",imgSrc);  
+						$.ajax({
+							data: data,
+							type: "POST",
+							url: "${APP_PATH}/file/deletefile.do",
+							cache: false,
+							contentType: false,
+							processData: false,
+							success: function(data) {
+								console.log(data);
+							}
 						});
 					}
-				});
-			}
-
-
-			function doReset() {
-				$('#summernote').summernote('reset')
-			}
-
-			$(function() {
-				$('#summernote').summernote({
-					placeholder: 'Hello Bootstrap 4',
-					tabsize: 2,
-					height: 100,
-					focus: true
-				});
+				},
 			});
+	})
 
-			$(".edit_article_btn").click(function() {
-				$(".article-edit-container").css('display', 'block');
-				$(".article-pre").css('display', 'none');
-			})
+		function doCommit() {
+			var indeximg = $("#articleImg")[0].files[0];
 
-			$("#img").change(function() {
-				var objUrl = getObjectURL(this.files[0]); //获取文件信息  
-				console.log("objUrl = " + objUrl);
-				if (objUrl) {
-					$(".cover-img").attr('src', objUrl);
-					$(".article-cover-published").css('display', 'block');
-					$(".article-cover-null").css('display', 'none');
-					$(".article-cover-fn").css('display', 'block')
+			// 获取标题
+			var title = $("#article-title-text").val();
+
+			// 获取内容
+			var content = $('#summernote').summernote('code');
+
+			// 获取标签个数
+			var num = $(".article-tag-list div").length;
+
+			// 获取标签
+			var tags = [];
+			for (i = 0; i < num; i++) {
+				tags[i] = $(".article-tag").eq(i).find(".article-tag-input")
+						.val();
+			}
+
+			alert(indeximg);
+			
+		    var  data = new FormData();  
+		    data.append("articleImg", indeximg); 
+		    data.append("articleTitle", title);
+		    data.append("content", content);
+		    data.append("articleLabels", tags);
+		    
+		    alert(data);
+		    
+			$.ajax({
+				type : "POST",
+				data : data,
+				url : "${APP_PATH}/article/doAddArticle.do",
+				processData: false,
+				contentType: false,
+				beforeSend : function() {
+					//表单数据校验
+					loadingIndex = layer.msg('处理中', {
+						icon : 16
+					});
+					return true;
+				},
+				success : function(result) { //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
+					layer.close(loadingIndex);
+					if (result.success) {
+						window.location.href = "${APP_PATH}/main.htm";
+						/* alert("success"); */
+					} else {
+						/* alert("failed"); */
+						layer.msg(result.message, {
+							time : 1000,
+							icon : 5,
+							shift : 6
+						});
+
+					}
+				},
+				//error代码只有在controller处理方法抛出异常或则有拦截器处理时抛异常(如服务器代码问题，类型转换问题)就执行该函数，不执行success函数
+				error : function() {
+					/* alert("error"); */
+					layer.msg("发布失败！", {
+						time : 1000,
+						icon : 5,
+						shift : 6
+					});
 				}
 			});
+		}
 
-			function getObjectURL(file) {
-				var url = null;
-				if (window.createObjectURL != undefined) {
-					url = window.createObjectURL(file);
-				} else if (window.URL != undefined) { // mozilla(firefox)  
-					url = window.URL.createObjectURL(file);
-				} else if (window.webkitURL != undefined) { // webkit or chrome  
-					url = window.webkitURL.createObjectURL(file);
-				}
-				return url;
+		function doReset() {
+			$('#summernote').summernote('reset')
+		}
+
+		$(".edit_article_btn").click(function() {
+			$(".article-edit-container").css('display', 'block');
+			$(".article-pre").css('display', 'none');
+		})
+
+		$("#articleImg").change(function() {
+			var objUrl = getObjectURL(this.files[0]); //获取文件信息  
+			console.log("objUrl = " + objUrl);
+			if (objUrl) {
+				$(".cover-img").attr('src', objUrl);
+				$(".article-cover-published").css('display', 'block');
+				$(".article-cover-null").css('display', 'none');
+				$(".article-cover-fn").css('display', 'block')
 			}
+		})
 
+		function getObjectURL(file) {
+			var url = null;
+			if (window.createObjectURL != undefined) {
+				url = window.createObjectURL(file);
+			} else if (window.URL != undefined) { // mozilla(firefox)  
+				url = window.URL.createObjectURL(file);
+			} else if (window.webkitURL != undefined) { // webkit or chrome  
+				url = window.webkitURL.createObjectURL(file);
+			}
+			return url;
+		}
 
-			$(".article-cover-replace-btn").click(function() {
-				$("#img").trigger('click')
-			})
+		$(".article-cover-replace-btn").click(function() {
+			$("#img").trigger('click')
+		})
 
-			$(".article-cover-remove-btn").click(function() {
-				$(".article-cover-published").css('display', 'none');
-				$(".article-cover-null").css('display', 'block');
-				$(".article-cover-fn").css('display', 'none')
-				// 清除input中的文件
-				$(".img").val("")
-			})
+		$(".article-cover-remove-btn").click(function() {
+			$(".article-cover-published").css('display', 'none');
+			$(".article-cover-null").css('display', 'block');
+			$(".article-cover-fn").css('display', 'none')
+			// 清除input中的文件
+			$(".img").val("")
+		})
 
-			$(".pre-article").click(function() {
+		$(".pre-article").click(function() {
 
-				var title = $("#article-title-text").val();
-				var content = $('#summernote').summernote('code');
+			var title = $("#article-title-text").val();
+			var content = $('#summernote').summernote('code');
 
-				$(".title").html(title);
-				$(".yxl-editor-article").html(content);
-				$(".article-edit-container").css('display', 'none');
-				$(".article-pre").css('display', 'block');
+			$(".title").html(title);
+			$(".yxl-editor-article").html(content);
+			$(".article-edit-container").css('display', 'none');
+			$(".article-pre").css('display', 'block');
 
-			});
-		</script>
+		})
+	</script>
 
-	</body>
+</body>
 </html>

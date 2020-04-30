@@ -39,9 +39,12 @@
 		<label>文章标题：</label> <input type="text" name="articleTitle"
 			id="articleTitle"><br> <label>文章内容：</label><input
 			type="text" name="content" id="content"><br> <label>上传图片：</label>
-		<input type="file" name="indexImg" id="indexImg"><br> <img
-			src="" id="preview" style="width: 20rem; height: 15rem;"> <input
-			type="submit" id="addBtn"> <input type="hidden"
+		<input type="file" name="indexImg" id="indexImg"><br> 
+		<img
+			src="" id="preview" style="width: 20rem; height: 15rem;"> 
+			<input
+			type="submit" id="addBtn"> 
+			<input type="hidden"
 			id="errorinfo" value="${uploadFileEroor}">
 	</form>
 

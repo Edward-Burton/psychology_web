@@ -3,6 +3,7 @@ package cn.xhu.softwareengineering.bean;
 public class CourseTeacher {
 	
 	private int instructor_id;
+	private int instrutor_userid;
 	private String instructor_name;
 	private String instructor_img;
 	private String instructor_glory;
@@ -12,13 +13,31 @@ public class CourseTeacher {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CourseTeacher(int instructor_id, String instructor_name, String instructor_img, String instructor_glory) {
+	
+
+	public CourseTeacher(int instructor_id, int instrutor_userid, String instructor_name, String instructor_img,
+			String instructor_glory) {
 		super();
 		this.instructor_id = instructor_id;
+		this.instrutor_userid = instrutor_userid;
 		this.instructor_name = instructor_name;
 		this.instructor_img = instructor_img;
 		this.instructor_glory = instructor_glory;
 	}
+
+
+
+	public int getInstrutor_userid() {
+		return instrutor_userid;
+	}
+
+
+
+	public void setInstrutor_userid(int instrutor_userid) {
+		this.instrutor_userid = instrutor_userid;
+	}
+
+
 
 	public int getInstructor_id() {
 		return instructor_id;
@@ -37,7 +56,7 @@ public class CourseTeacher {
 	}
 
 	public String getInstructor_img() {
-		return instructor_img;
+		return instructor_img.substring(instructor_img.indexOf("img")).replaceAll("\\\\", "/");
 	}
 
 	public void setInstructor_img(String instructor_img) {

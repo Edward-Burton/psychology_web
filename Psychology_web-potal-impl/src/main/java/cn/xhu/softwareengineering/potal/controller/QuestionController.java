@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.xhu.softwareengineering.bean.PsychoLabel;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.bean.QuestionAnswer;
 import cn.xhu.softwareengineering.bean.UserQuestions;
@@ -60,6 +61,79 @@ public class QuestionController {
 		}
 		return result;
 	}
+
+	@ResponseBody
+	@RequestMapping("/addReadNum")
+	public Object addReadNum(@RequestParam(value = "questionid") Integer questionid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			if (questionService.updateReadNum(questionid)>0) {
+				result.setData(questionService.queryReadCount(questionid));
+			} else {
+				result.setSuccess(false);
+				result.setMessage("添加失败！！！");
+			}
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMessage("添加失败！！！");
+		}
+		result.setSuccess(true);
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getCollect")
+	public Object getCollect(Integer questionid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			List<Integer> collectusers = questionService
+					.queryCollectusers(questionid);
+			result.setData(collectusers);
+			result.setSuccess(true);
+			result.setMessage("查询成功");
+		} catch (NullPointerException e) {
+			result.setSuccess(false);
+			e.printStackTrace();
+			result.setMessage("查询数据失败！");
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getTags")
+	public Object getTags() {
+		AjaxResult result = new AjaxResult();
+		try {
+			List<PsychoLabel> tags = questionService
+					.queryTags();
+			result.setData(tags);
+			result.setSuccess(true);
+			result.setMessage("查询成功");
+		} catch (NullPointerException e) {
+			result.setSuccess(false);
+			e.printStackTrace();
+			result.setMessage("查询数据失败！");
+		}
+		return result;
+	}
+
+	@ResponseBody
+	@RequestMapping("/getSubTags")
+	public Object getSubTags() {
+		AjaxResult result = new AjaxResult();
+		try {
+			List<PsychoLabel> tags = questionService
+					.querySubTags();
+			result.setData(tags);
+			result.setSuccess(true);
+			result.setMessage("查询成功");
+		} catch (NullPointerException e) {
+			result.setSuccess(false);
+			e.printStackTrace();
+			result.setMessage("查询数据失败！");
+		}
+		return result;
+	}
 	
 	@ResponseBody
 	@RequestMapping("/doAnswerIndex")
@@ -74,7 +148,6 @@ public class QuestionController {
 			List<QuestionAnswer> list = (List<QuestionAnswer>) (userAnswerPage.getData());
 
 			for (QuestionAnswer q : list) {
-				System.out.println(q.getQuestion_answer_content());
 				System.out.println(q.getAnswerUser().getPsychouser_name());
 				System.out.println(q.getQuestion().getUser_question_title());
 			}
@@ -98,40 +171,35 @@ public class QuestionController {
 
 	@ResponseBody
 	@RequestMapping("/doAdd")
-	public Object doAdd(String title, String content, HttpSession session) {
+	public Object doAdd(@RequestParam(value = "anonym", required = false, defaultValue = "1")Integer anonym, @RequestParam(value = "tags", required = false)List<Integer> tags,String title, String content, HttpSession session) {
+		System.out.println("这里"+title+content);
 		AjaxResult result = new AjaxResult();
-		UserQuestions question = new UserQuestions();
-		Date now = new Date();
-		question.setUser_question_title(title);
-		question.setUser_question_content(content);
-		question.setUser_question_pultime(now);
-		question.setQuestion_master_id(1);
-		// question.setUser_question_id(((PsychoUser)(session.getAttribute(Const.LOGIN_USER))).getPsychouser_id());
-
-		if (questionService.insertQuestion(question) > 0) {
-			System.out.println("这里");
-			System.out.println(question.getUser_question_id() + question.getUser_question_title()
-					+ question.getUser_question_content());
+		Map<String, Object> parammap = new HashMap<String, Object>();
+		parammap.put("title", title);
+		parammap.put("content", content);
+		parammap.put("pultime", new Date());
+		parammap.put("masterid", 1);
+		parammap.put("tags", tags);
+		parammap.put("anonym", anonym);
+		parammap.put("id", 0);
+		if (questionService.insertQuestion(parammap) > 0) {
 			result.setSuccess(true);
-			return "question/myquestion";
-			// return result;
+//			return "question/myquestion";
+			return result;
 		}
 		result.setSuccess(false);
+		result.setMessage("添加问题失败！！！");
 		return result;
 	}
 
 	@RequestMapping("/toQuestion")
-	public String toQuestion(Integer id, Map<String, Object> map) {
+	public String toQuestion(Integer id,HttpSession session, Map<String, Object> map) {
 
 		UserQuestions question = questionService.queryQuestionById(id);
 		map.put("question", question);
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("questionId",id);
-		int answerCount = questionService.queryAnswerCount(param);
-		map.put("answerCount", answerCount);
-
-		return "question/question";
+		return "question/question_detail";
 	}
+	
 
 	@ResponseBody
 	@RequestMapping("/doQuestionAnswer")
@@ -169,15 +237,19 @@ public class QuestionController {
 
 	@ResponseBody
 	@RequestMapping("/doAddAnswer")
-	public Object doAddAnswer(QuestionAnswer qa,HttpSession session) {
-		qa.setQuestion_answer_pultime(new Date());
-		qa.setAnswerUser((PsychoUser)session.getAttribute(Const.LOGIN_USER));;
-		System.out.println(qa.getQuestion_id());
+	public Object doAddAnswer(@RequestParam(value="answerpid",required=false)Integer parentanswerid,Integer userid, Integer questionId, String content) {
 		AjaxResult result = new AjaxResult();
 		try {
 			Map<String, Object> parammap = new HashMap<String, Object>();
-			parammap.put("questionAnswer", qa);
-			Integer addStatus = questionService.addQuestionAnswer(qa);
+			parammap.put("userid", userid);
+			parammap.put("questionId", questionId);
+			parammap.put("content", content);
+			parammap.put("userid", userid);
+			parammap.put("pultime",new Date());
+			if(parentanswerid!=null) {
+				parammap.put("parentanswerid",parentanswerid);
+			}
+			Integer addStatus = questionService.addQuestionAnswer(parammap);
 			if (addStatus > 0) {
 				result.setSuccess(true);
 				result.setMessage("添加成功！！！");

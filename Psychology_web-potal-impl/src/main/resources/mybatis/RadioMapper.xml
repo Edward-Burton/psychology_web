@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="cn.xhu.softwareengineering.potal.dao.RadioMapper">
+
+	<resultMap type="PsychoRadio" id="BaseRadio">
+		<id column="psycho_radio_id" property="psycho_radio_id" />
+		<result column="psycho_radio_title"
+			property="psycho_radio_title" />
+		<result column="psycho_radio_description"
+			property="psycho_radio_description" />
+		<result column="psycho_radio_audio"
+			property="psycho_radio_audio" />
+		<result column="psycho_radio_backgroud"
+			property="psycho_radio_backgroud" />
+		<result column="psycho_radio_pultime"
+			property="psycho_radio_pultime" />
+		<association property="radioAnchor" javaType="RadioAnchor"
+			column="psycho_radio_anchor_id" select="selectanchorbyid" />
+		<collection property="radioCollectList" ofType="Integer"
+			column="psycho_radio_id" select="selectusercollect"></collection>
+	</resultMap>
+
+	<resultMap type="RadioComment" id="BaseComment">
+		<id column="radio_comment_id" property="radio_comment_id" />
+		<result property="radio_id" column="radio_id" />
+		<result property="radio_comment_content"
+			column="radio_comment_content" />
+		<result property="radio_comment_pultime"
+			column="radio_comment_pultime" />
+		<association property="commentUser"
+			column="{userid=radio_comment_userid}" javaType="PsychoUser"
+			select="selectuserbyid"></association>
+	</resultMap>
+
+	<select id="selectusercollect" resultType="Integer">
+		select
+		user_collection_from_user_id from user_collection where
+		user_collection_type=5 and user_collectioin_to_id=#{psycho_radio_id}
+	</select>
+
+	<select id="selectuserbyid" resultType="PsychoUser">
+		select
+		psychouser_id,psychouser_name,psychouser_head_portrait from
+		psycho_user where psychouser_id=#{userid}
+	</select>
+
+	<select id="selectanchorbyid" resultType="RadioAnchor">
+		select * from
+		radio_anchor where radio_anchor_id=#{psycho_radio_anchor_id}
+	</select>
+
+	<select id="queryRadioIndexList" resultMap="BaseRadio">
+		select * from psycho_radio
+			<choose>
+				<when test="typeid!=null">
+					RIGHT JOIN radio_type ON radioid=psycho_radio_id WHERE typeid=#{typeid}
+				</when>
+				
+				<when test="anchorid">
+					where psycho_radio_anchor_id=#{anchorid}
+				</when>
+			</choose>
+		order by psycho_radio_pultime desc
+	</select>
+
+	<select id="queryRadioComment" resultMap="BaseComment">
+		select * from
+		radio_comment where radio_id=#{radioid}
+	</select>
+
+	<select id="queryLastestPlayList" resultMap="BaseRadio">
+		select * from
+		psycho_radio order by psycho_radio_pultime desc
+	</select>
+
+	<select id="queryLikedMostPlayList" resultMap="BaseRadio">
+		select * from
+		psycho_radio order by (select count(*) from user_collection where
+		user_collection_type=5 and user_collectioin_to_id=psycho_radio_id)
+		desc
+	</select>
+
+	<select id="queryMoodList" resultType="RadioType">
+		select * from fmtype where
+		type_typeid=#{typeId}
+	</select>
+
+	<select id="querydoAnchorList" resultType="RadioAnchor">
+		select * from
+		radio_anchor
+	</select>
+
+</mapper>

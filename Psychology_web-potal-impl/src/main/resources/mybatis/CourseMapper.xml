@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="cn.xhu.softwareengineering.potal.dao.CourseMapper">
+	
+	<resultMap type="PsychoCourse" id="BaseCourse">
+	<id column="course_id" property="course_id" />
+	<result column="course_name" property="course_name" />
+	<result column="professionid" property="professionid" />
+	<result column="description" property="description" />
+	<result column="cover_img" property="cover_img" />
+	<result column="course_price" property="course_price" />
+	<result column="status" property="status" />
+	<association property="instructor" column="course_instructorid"  javaType="CourseTeacher"  select="selectinstructor"></association>
+	</resultMap>
+	
+	<resultMap type="PsychoCourse" id="Course">
+	<id column="course_id" property="course_id" />
+	<result column="course_name" property="course_name" />
+	<result column="professionid" property="professionid" />
+	<result column="description" property="description" />
+	<result column="cover_img" property="cover_img" />
+	<result column="course_price" property="course_price" />
+	<result column="course_info" property="course_info" />
+	<result column="created_time" property="created_time" />
+	<result column="updated_time" property="updated_time" />
+	<result column="status" property="status" />
+	<result column="type" property="type" />
+	<association column="course_id" property="join_number" javaType="Integer" select="selectjoincount"/>
+	<association property="instructor" column="course_instructorid"  javaType="CourseTeacher" select="selectinstructor"></association>
+	</resultMap>
+	
+	<resultMap type="CourseCatalog" id="courseCatalog">
+	<id column="catalog_id" property="catalog_id" />
+	<result column="catalog_name" property="catalog_name" />
+	<result column="catalog_Courseid" property="catalog_Courseid" />
+	<result column="catalog_level" property="catalog_level" />
+	<!-- <collection column="{catalog_id=catalog_id,catalog_level=catalog_level}" property="subcatalog" ofType="CourseCatalog" select="selectsubcatalog"/> -->
+	<collection column="catalog_id" property="subcatalog" ofType="CourseCatalog" select="selectsubcatalog"/>
+	<collection property="lesson" column="catalog_id"  ofType="Lesson"  select="selectlesson"/>
+	</resultMap>
+	
+	<resultMap type="SaleComment" id="courseComment">
+	<id column="comment_id" property="comment_id" />
+	<result column="comment_toid" property="comment_toid" />
+	<result column="comment_type_id" property="comment_type_id" />
+	<result column="comment_content" property="comment_content" />
+	<result column="comment_pultime" property="comment_pultime" />
+	<association property="comment_user" column="{userid=comment_userid}" javaType="PsychoUser" select="selectuserbyid"/>
+	<collection property="commentlikedList" column="{comment_id=comment_id,comment_toid=comment_toid}"  ofType="Integer"  select="selectcommentliked"/>
+	</resultMap>
+	
+	<resultMap type="SalesQuestion" id="salesQuestion">
+	<id column="sales_question_id" property="sales_question_id" />
+	<result column="sales_question_content" property="sales_question_content" />
+	<result column="sales_question_pultime" property="sales_question_pultime" />
+	<result column="sales_id" property="sales_id" />
+	<result column="sales_type" property="sales_type" />
+	<association property="questionUser" column="{userid=sales_question_user_id}" javaType="PsychoUser" select="selectuserbyid"/>
+	<collection property="answers" column="sales_question_id"  ofType="SalesAnswer"  select="selectanswers"/>
+	</resultMap>
+	
+	<select id="selectanswers" resultType="SalesAnswer">
+		select * from sales_answer where sales_questionid=#{sales_question_id} order by sales_answer_pultime desc
+	</select>
+	
+	<select id="selectcommentliked" resultType="Integer">
+		select like_from_user_id from user_like where like_main_type=3 and like_main_id=#{comment_toid} and like_to_id=#{comment_id}
+	</select>
+	
+	<select id="selectuserbyid" resultType="PsychoUser">
+		select psychouser_id,psychouser_name,psychouser_head_portrait from psycho_user where psychouser_id=#{userid}
+	</select>
+	
+	<select id="selectlesson" resultType="Lesson">
+		select * from lesson where lesson_catalogid=#{catalog_id}
+	</select>
+	
+	<select id="selectsubcatalog" resultMap="courseCatalog">
+		select * from course_catalog where catalog_parent_id=#{catalog_id} and catalog_level=2
+	</select>
+	
+	<select id="selectjoincount" resultType="Integer">
+		select count(*) from orderlist where order_obj_id=#{course_id} and order_type=1
+	</select>
+	
+	<select id="selectinstructor" resultType="CourseTeacher">
+		select * from psycho_instructor where instructor_id=#{course_instructorid}
+	</select>
+	
+	<select id="queryCourseCount" resultType="Integer">
+		select count(*) from psycho_course
+		<where>
+		<if test="professionid!=null">
+		professionid=#{professionid}
+		</if>
+		<if test="teacherid!=null">
+		course_instructorid=#{teacherid}	
+		</if>
+		and status='1'
+		</where>
+	</select>
+	
+	<select id="queryCoursePage" resultMap="BaseCourse">
+		select * from psycho_course 
+		<where>
+		<if test="professionid!=null">
+			professionid=#{professionid}
+		</if>
+		<if test="teacherid!=null">
+			course_instructorid=#{teacherid}	
+		</if>
+		and status='1' limit #{startIndex},#{pagesize}
+		</where>
+	</select>
+	
+	
+	<select id="queryCourseBy" resultMap="BaseCourse">
+		select * from psycho_course
+		<if test="tag==0">
+			where level=1 and status='1'
+		</if>
+		<if test="tag==1">
+			where status='1'
+			order by join_number desc
+		</if>
+		 limit 0,6
+	</select>
+	
+	<select id="queryInstructor" resultType="CourseTeacher">
+		select * from psycho_instructor
+	</select>
+	
+	<select id="queryProfession" resultType="CourseProfession">
+		select * from course_profession
+	</select>
+	
+	<select id="queryCourseByid" resultMap="Course">
+		select * from psycho_course where course_id=#{id}
+	</select>
+	
+	<select id="queryOrder" resultType="Order">
+		select * from orderlist where order_obj_id=#{courseid} and order_userid=#{userid} and order_type=1
+	</select>
+	
+	<select id="queryCourseCatalog" resultMap="courseCatalog">
+		select * from course_catalog where catalog_course_id=#{courseid} and catalog_level=1
+	</select>
+	
+	<select id="queryCourseComment" resultMap="courseComment">
+		select * from sales_comment where comment_toid=#{courseid} and comment_type_id=1 order by comment_pultime desc
+	</select>
+	
+	<select id="queryCourseQuestion" resultMap="salesQuestion">
+		select * from sales_question where sales_id=#{courseid} and sales_type=1 order by sales_question_pultime desc
+	</select>
+	
+	<insert id="addCourseComment" parameterType="map">
+		insert into sales_comment(comment_userid,comment_toid,comment_content,comment_pultime,comment_type_id)
+		values(#{userid},#{toid},#{content},#{pultime},1)
+	</insert>
+	
+	<insert id="addCourseQuestion" parameterType="map">
+		insert into sales_question(sales_question_user_id,sales_id,sales_question_content,sales_question_pultime,sales_type)
+		values(#{userid},#{salesid},#{content},#{pultime},1)
+	</insert>
+	
+	<insert id="addQuestionAnswer" parameterType="map">
+		insert into sales_answer(sales_answer_instructorid,sales_questionid,sales_answer_content,sales_answer_pultime)
+		values(#{instructorid},#{questionid},#{content},#{pultime})
+	</insert>
+	
+	<delete id="deleteCourseQuestion" parameterType="Integer">
+		delete from sales_comment where comment_id=#{Commentid}
+	</delete>
+
+</mapper>

@@ -92,7 +92,7 @@ public class PsychoUser {
 	}
 
 	public String getPsychouser_head_portrait() {
-		return psychouser_head_portrait;
+		return psychouser_head_portrait.substring(psychouser_head_portrait.indexOf("img")).replaceAll("\\\\", "/");
 	}
 
 	public void setPsychouser_head_portrait(String psychouser_head_portrait) {

@@ -75,7 +75,7 @@ public class PsychoArticle {
 
 
 	public String getArticleImg() {
-		return articleImg;
+		return articleImg.substring(articleImg.indexOf("img")).replaceAll("\\\\", "/");
 	}
 
 

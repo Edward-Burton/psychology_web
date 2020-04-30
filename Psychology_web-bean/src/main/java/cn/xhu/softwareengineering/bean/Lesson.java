@@ -5,7 +5,7 @@ import java.util.Date;
 public class Lesson {
 	private int lesson_id;
 	private String lesson_name;
-	private int courseid;
+	private int lesson_catalogid;
 	private String media_addr;
 	private int media_time;
 	private String description;
@@ -16,12 +16,12 @@ public class Lesson {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Lesson(int lesson_id, String lesson_name, int courseid, String media_addr, int media_time,
+	public Lesson(int lesson_id, String lesson_name, int lesson_catalogid, String media_addr, int media_time,
 			String description, Date created_time, Date updated_time, String status) {
 		super();
 		this.lesson_id = lesson_id;
 		this.lesson_name = lesson_name;
-		this.courseid = courseid;
+		this.lesson_catalogid = lesson_catalogid;
 		this.media_addr = media_addr;
 		this.media_time = media_time;
 		this.description = description;
@@ -41,14 +41,14 @@ public class Lesson {
 	public void setLesson_name(String lesson_name) {
 		this.lesson_name = lesson_name;
 	}
-	public int getCourseid() {
-		return courseid;
+	public int getLesson_catalogid() {
+		return lesson_catalogid;
 	}
-	public void setCourseid(int courseid) {
-		this.courseid = courseid;
+	public void setLesson_catalogid(int lesson_catalogid) {
+		this.lesson_catalogid = lesson_catalogid;
 	}
 	public String getMedia_addr() {
-		return media_addr;
+		return media_addr.substring(media_addr.indexOf("img")).replaceAll("\\\\", "/");
 	}
 	public void setMedia_addr(String media_addr) {
 		this.media_addr = media_addr;

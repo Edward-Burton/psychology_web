@@ -107,6 +107,23 @@ public class DispatcherController {
 
 	}
 	
+	@ResponseBody
+	@RequestMapping("/doUser")
+	public Object doUser(HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		System.out.println(user);
+		if (user != null) {
+			result.setData(user);
+			result.setSuccess(true);
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping("/doIsCollect")

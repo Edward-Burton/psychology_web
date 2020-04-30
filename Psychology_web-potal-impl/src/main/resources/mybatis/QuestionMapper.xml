@@ -11,19 +11,34 @@
 		<result column="question_id" property="question_id" />
 		<result column="question_answer_content" property="question_answer_content" />
 		<result column="question_answer_pultime" property="question_answer_pultime" />
-		<result column="question_answer_likes_num" property="question_answer_likes_num" />
 		<association property="answerUser" javaType="PsychoUser" column="question_answer_id" select="selectUserbyAnswerId"/>
-		
+		<collection property="question_answer_likes" ofType="Integer" column="question_answer_id" select="queryanswerlikebyid"></collection>
+		<collection property="user_follows" ofType="Integer" column="question_answer_id" select="queryuserfollows"></collection>
+		<collection property="answercomment" ofType="QuestionAnswer" column="question_answer_id" select="queryanswercomment"></collection>
 	</resultMap>
 	
 	<resultMap type="QuestionAnswer" id="AnswerBase">
 		<id column="question_answer_id" property="question_answer_id" />
 		<result column="question_answer_content" property="question_answer_content" />
 		<result column="question_answer_pultime" property="question_answer_pultime" />
-		<result column="question_answer_likes_num" property="question_answer_likes_num" />
 		<association column="question_id" property="question" javaType="UserQuestions" select="queryQuestionById" />
 		<association property="answerUser" javaType="PsychoUser" column="question_answer_id" select="selectUserbyAnswerId"/>
-		
+		<collection property="question_answer_likes" ofType="Integer" column="question_answer_id" select="queryanswerlikebyid"></collection>
+		<collection property="user_follows" ofType="Integer" column="question_answer_id" select="queryuserfollows"></collection>
+	</resultMap>
+	
+	<resultMap type="UserQuestions" id="BaseQuestion">
+		<id column="user_question_id" property="user_question_id" />
+		<result column="user_question_title" property="user_question_title" />
+		<result column="user_question_content" property="user_question_content" />
+		<result column="user_question_pultime" property="user_question_pultime" />
+		<result column="user_question_views" property="user_question_views" />
+		<result column="user_anonym" property="user_anonym" />
+		<association column="user_question_id" property="answer_count" javaType="Integer" select="queryanswercountById" />
+		<association column="question_master_id" property="question_master" javaType="PsychoUser" select="queryUserById" />
+		<association column="user_question_id" property="question_answerlike_count" javaType="Integer" select="query_answerlike_count" />
+		<association column="{user_question_id=user_question_id,question_master_id=question_master_id}" property="master_answercount" javaType="Integer" select="query_masteranswer_count" />
+		<collection property="qustion_labels" ofType="PsychoLabel" column="user_question_id" select="querylableById"></collection>
 	</resultMap>
 	
 	<resultMap type="PsychoUser" id="BaseArticleUser">
@@ -32,31 +47,81 @@
 		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />
 	</resultMap>
 	
+	<select id="queryanswercomment" resultMap="questionAnswerBase">
+		SELECT * FROM question_answers WHERE answer_parent_id=#{question_answer_id}
+	</select>
+	
+	<update id="updatequestion">
+		update user_questions set user_question_views=${viewnum} where user_question_id=${questionid}
+	</update>
+	
+	<select id="queryReadCount" resultType="Integer">
+		SELECT user_question_views FROM user_questions WHERE user_question_id=#{questionid}
+	</select>
+	
+	<select id="querylableById" resultType="PsychoLabel">
+		SELECT psycho_label.* FROM psycho_label INNER JOIN user_question_labels ON question_labelid=psycho_label_id AND user_questionid=#{user_question_id}
+	</select>
+	
+	<select id="query_masteranswer_count" resultType="Integer">
+		SELECT COUNT(*) FROM question_answers WHERE answerer_id=#{question_master_id} AND (question_id=#{user_question_id} OR answer_parent_id in (SELECT question_answer_id FROM question_answers WHERE question_id=#{user_question_id}))
+	</select>
+	
+	<select id="query_answerlike_count" resultType="Integer">
+		SELECT COUNT(*) FROM user_like WHERE like_type=2 and like_to_id in (SELECT question_answer_id FROM question_answers WHERE question_id=#{user_question_id})
+	</select>
+	
+	<select id="querycollectuserById" resultType="Integer">
+		SELECT user_collection_from_user_id FROM user_collection WHERE user_collectioin_to_id=#{questionid} AND user_collection_type=2
+	</select>
+	
+	<select id="queryanswercountById" resultType="Integer">
+		SELECT COUNT(*) FROM question_answers WHERE  answer_parent_id IS Null and question_id=#{user_question_id}
+	</select>
+	
+	<select id="queryUserById" resultType="PsychoUser">
+		SELECT psychouser_id,psychouser_acct,psychouser_name,psychouser_head_portrait FROM psycho_user WHERE psychouser_id = #{question_master_id}	
+	</select>
+	
+	<select id="queryuserfollows" resultType="Integer">
+		SELECT cur_user_id FROM user_follow INNER JOIN question_answers ON answerer_id = follow_user_id AND  question_answer_id = #{question_answer_id}	
+	</select>
+	
+	<select id="queryanswerlikebyid" resultType="Integer">
+		select like_from_user_id from user_like where like_type=2 and like_to_id=#{question_answer_id}
+	</select>
+	
 	<select id="selectUserbyAnswerId" resultType="PsychoUser">
 		select pu.psychouser_id,pu.psychouser_name,psychouser_head_portrait
 		from psycho_user pu,question_answers qa
 		where qa.question_answer_id =#{question_answer_id} and pu.psychouser_id = qa.answerer_id
 	</select>
 	
-	
-	<insert id="insertQuestion" parameterType="UserQuestions">
+	<insert id="insertQuestion" parameterType="map">
 		insert into user_questions
-		(user_question_title,user_question_content,user_question_pultime,question_master_id)
-		values(#{user_question_title},#{user_question_content},#{user_question_pultime},#{question_master_id})
-		<selectKey keyProperty="user_question_id" resultType="int"> select
-			@@identity </selectKey>
+		(user_question_title,user_question_content,user_question_pultime,question_master_id,user_anonym)
+		values(#{title},#{content},#{pultime},#{masterid},#{anonym})
+		<selectKey keyProperty="id" resultType="int"> select @@identity as 
+			id </selectKey>
+	</insert>
+	
+	<insert id="addQuestionLabel" parameterType="map">
+		insert into user_question_labels(question_labelid,user_questionid) values
+		<foreach item="item" collection="tags">
+			(#{item},#{id})
+		</foreach>
 	</insert>
 	
 	<select id="getQuestionsByUserId" resultType="UserQuestions">
 	select * from user_questions where question_master_id=#{id}
 	</select>
 	
-	<select id="queryQuestionPage" resultType="UserQuestions">
+	<select id="queryQuestionPage" resultMap="BaseQuestion">
 	select * from user_questions order by user_question_pultime desc limit #{startIndex},#{pagesize}
 	</select>
 	
 	<select id="queryAnswerPage" resultMap="AnswerBase">
-	select * from question_answers order by question_answer_pultime desc limit #{startIndex},#{pagesize}
+	select * from question_answers where answer_parent_id IS Null order by question_answer_pultime desc limit #{startIndex},#{pagesize}
 	</select>
 	
 	
@@ -64,7 +129,7 @@
 	select count(*) from user_questions
 	</select>
 	
-	<select id="queryQuestionById" resultType="UserQuestions">
+	<select id="queryQuestionById" resultMap="BaseQuestion">
 	select * from user_questions where user_question_id=#{question_id}
 	</select>
 	
@@ -75,20 +140,35 @@
 	</where>
 	</select>
 	
+	<select id="queryTags" resultType="PsychoLabel">
+	select * from psycho_label where psycho_label_parentid IS Null
+	</select>
+	
+	<select id= "querySubTags" resultType="PsychoLabel">
+	select * from psycho_label where psycho_label_parentid IS NOT Null
+	</select>
+	
 	<!-- <select id="queryQuestionAnswerPage" resultType="QuestionAnswer">
 	select * from question_answers where question_id=#{questionId} order by question_answer_pultime desc limit #{startIndex},#{pagesize}
 	</select> -->
 	
 	<select id="queryQuestionAnswerPage" resultMap="questionAnswerBase">
-	select * from question_answers where question_id=#{questionId} order by question_answer_pultime desc limit #{startIndex},#{pagesize}
+	select * from question_answers where question_id=#{questionId} and answer_parent_id IS Null order by question_answer_pultime desc limit #{startIndex},#{pagesize}
 	</select>
 	
-	<insert id="addQuestionAnswer" parameterType="QuestionAnswer">
+	<insert id="addQuestionAnswer" parameterType="map">
+	<choose>
+		<when test="parentanswerid!=null">
+		insert into question_answers
+		(question_id,answerer_id,question_answer_content,question_answer_pultime,answer_parent_id)
+		values(#{questionId},#{userid},#{content},#{pultime},#{parentanswerid})
+		</when>
+		<otherwise>
 		insert into question_answers
 		(question_id,answerer_id,question_answer_content,question_answer_pultime)
-		values(#{question_id},#{answerUser.psychouser_id},#{question_answer_content},#{question_answer_pultime})
-		<selectKey keyProperty="question_answer_id" resultType="int"> select
-			@@identity </selectKey>
+		values(#{questionId},#{userid},#{content},#{pultime})
+		</otherwise>
+		</choose>
 	</insert>
 
 </mapper>

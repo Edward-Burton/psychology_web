@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.xhu.softwareengineering.bean.ArticleComments;
 import cn.xhu.softwareengineering.bean.PsychoArticle;
@@ -142,7 +141,7 @@ public class ArticleController {
 			commentList = articleService.queryComment(paramMap);
 			for (ArticleComments pc : commentList) {
 				System.out.println(
-						
+
 						"分类: " + pc.getArticle_comment_pulcontent() + pc.getComment_user().getPsychouser_name());
 			}
 			result.setData(commentList);
@@ -182,7 +181,7 @@ public class ArticleController {
 				e.printStackTrace();
 				result.setMessage("查询数据失败！");
 			}
-		}else {
+		} else {
 			result.setSuccess(false);
 			result.setMessage("请登录！！！");
 		}
@@ -224,7 +223,9 @@ public class ArticleController {
 			}
 
 			page = articleService.queryArticlePage(paramMap);
-
+			for (PsychoArticle pa : page.getData()) {
+				System.out.println("文章图片路劲: " + pa.getArticleImg());
+			}
 			// List<PsychoArticle> ls = page.getData();
 			/* System.out.println("时间："+ls.get(0).getPubTime()); */
 			result.setPage(page);
@@ -275,7 +276,8 @@ public class ArticleController {
 
 	@ResponseBody
 	@RequestMapping(value = "/doAddComment", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	public Object doAddComment(Integer articleid, String inputValue,@RequestParam(value="pcommentid",required = false)Integer pcommentid, HttpSession session) {
+	public Object doAddComment(Integer articleid, String inputValue,
+			@RequestParam(value = "pcommentid", required = false) Integer pcommentid, HttpSession session) {
 		AjaxResult result = new AjaxResult();
 		PsychoUser loginuser = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		if (loginuser != null) {
@@ -284,16 +286,17 @@ public class ArticleController {
 				Map<String, Object> paramMap = new HashMap<String, Object>();
 				paramMap.put("articleid", articleid);
 				paramMap.put("inputValue", inputValue);
-				if(pcommentid!=null) {
+				if (pcommentid != null) {
 					paramMap.put("pcommentid", pcommentid);
 				}
 				paramMap.put("userid", loginuser.getPsychouser_id());
 				paramMap.put("curtime", new Date());
-				if(articleService.addComment(paramMap)>0) {
+				if (articleService.addComment(paramMap) > 0) {
 					result.setSuccess(true);
 				}
 			} catch (Exception e) {
 				result.setSuccess(false);
+				e.printStackTrace();
 				result.setMessage("评论添加失败！！！");
 			}
 		} else {
@@ -311,63 +314,82 @@ public class ArticleController {
 
 	}
 
-	/* @ResponseBody */
+	@ResponseBody
 	@RequestMapping("/doAddArticle")
-	public String addArticle(PsychoArticle pa, HttpSession session, HttpServletRequest request) {
-
-		MultipartHttpServletRequest mreq = (MultipartHttpServletRequest) request;
-
-		MultipartFile attach = mreq.getFile("indexImg");// 临时目录下的文件
-
-		String sqlPath = null;
-		String path = request.getSession().getServletContext().getRealPath("img" + File.separator + "articleimages");
-
-		String oldFileName = attach.getOriginalFilename();
-		String prefix = FilenameUtils.getExtension(oldFileName);
-		int filesize = 5000000;
-		if (attach.getSize() > filesize) {
-			request.setAttribute("uploadFileError", "上传文件不得超过5000KB");
-			return "addarticle";
-		} else if (prefix.equalsIgnoreCase("jpg") || prefix.equalsIgnoreCase("png") || prefix.equalsIgnoreCase("jpeg")
-				|| prefix.equalsIgnoreCase("pneg")) {
-			String fileName = System.currentTimeMillis() + "_Article.jpg";
-			File targetFile = new File(path, fileName);
-			if (!targetFile.exists()) {
-				targetFile.mkdirs();
-			}
-			try {
-				attach.transferTo(targetFile);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-				request.setAttribute("uploadFileError", "上传失败！");
+	public Object addArticle(@RequestParam(value = "articleImg", required = true) MultipartFile attach,
+			@RequestParam(value = "articleTitle", required = true) String articleTitle,
+			@RequestParam(value = "content", required = true) String content,
+			@RequestParam(value = "tags", required = false) String[] tags, HttpSession session,
+			HttpServletRequest request) {
+		System.out.println(tags);
+		AjaxResult result = new AjaxResult();
+		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user != null) {
+			/*
+			 * MultipartHttpServletRequest mreq = (MultipartHttpServletRequest) request;
+			 * 
+			 * MultipartFile attach = mreq.getFile(articleImg);// 临时目录下的文件
+			 */
+			String sqlPath = null;
+			String path = request.getSession().getServletContext()
+					.getRealPath("img" + File.separator + "articleimages");
+			System.out.println("path----------------" + path);
+			System.out.println("path----------------" + request.getRequestURL().toString());
+			String oldFileName = attach.getOriginalFilename();
+			String prefix = FilenameUtils.getExtension(oldFileName);
+			int filesize = 5000000;
+			if (attach.getSize() > filesize) {
+				request.setAttribute("uploadFileError", "上传文件不得超过5000KB");
 				return "addarticle";
-			} catch (IOException e) {
-				e.printStackTrace();
-				request.setAttribute("uploadFileError", "上传失败！");
-				return "addarticle";
+			} else if (prefix.equalsIgnoreCase("jpg") || prefix.equalsIgnoreCase("png")
+					|| prefix.equalsIgnoreCase("jpeg") || prefix.equalsIgnoreCase("pneg")) {
+				String fileName = System.currentTimeMillis() + "_Article.jpg";
+				File targetFile = new File(path, fileName);
+				if (!targetFile.exists()) {
+					targetFile.mkdirs();
+				}
+				try {
+					attach.transferTo(targetFile);
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+					request.setAttribute("uploadFileError", "上传失败！");
+					return "addarticle";
+				} catch (IOException e) {
+					e.printStackTrace();
+					request.setAttribute("uploadFileError", "上传失败！");
+					return "addarticle";
+				}
+				sqlPath = path + File.separator + fileName;
+			} else {
+				request.setAttribute("uploadFileError", "*上传图片格式不正确");
+				return "article/addarticle";
 			}
-			sqlPath = path + File.separator + fileName;
+			PsychoArticle pa = new PsychoArticle();
+			pa.setArticleTitle(articleTitle);
+			pa.setContent(content);
+			pa.setArticleUser(user);
+			/*
+			 * PsychoUser pu = new PsychoUser(); pu.setPsychouser_id(2);
+			 * pa.setArticleUser(pu);
+			 */
+			pa.setPubTime(new Date());
+			pa.setArticleImg(sqlPath);
+			System.out.println(pa.getArticleImg());
+			System.out.println(pa.getPubTime());
+
+			if (articleService.addArticle(pa) > 0) {
+				result.setSuccess(true);
+				result.setMessage("添加成功");
+				/* return "article/index"; */
+			}
 		} else {
-			request.setAttribute("uploadFileError", "*上传图片格式不正确");
-			return "article/addarticle";
-		}
-		pa.setArticleUser((PsychoUser) session.getAttribute(Const.LOGIN_USER));
-		PsychoUser pu = new PsychoUser();
-		pu.setPsychouser_id(2);
-		pa.setArticleUser(pu);
-		pa.setPubTime(new Date());
-		pa.setArticleImg(sqlPath);
-		System.out.println(pa.getArticleImg());
-		System.out.println(pa.getPubTime());
-
-		if (articleService.addArticle(pa) > 0) {
-			request.setAttribute("uploadFileError", "添加成功");
-			return "article/index";
+			result.setSuccess(false);
+			result.setMessage("请登录！！！");
 		}
 
 		// model.addAttribute("msag", "添加成功");
-		return "article/addarticle";
-
+		/* return "article/addarticle"; */
+		return result;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.xhu.softwareengineering.bean.PsychoLabel;
 import cn.xhu.softwareengineering.bean.QuestionAnswer;
 import cn.xhu.softwareengineering.bean.UserQuestions;
 import cn.xhu.softwareengineering.potal.dao.QuestionMapper;
@@ -20,8 +21,11 @@ public class QuestionServiceImpl implements QuestionService {
 	QuestionMapper questionMapper;
 
 	@Override
-	public int insertQuestion(UserQuestions question) {
-		return questionMapper.insertQuestion(question);
+	public int insertQuestion(Map<String, Object> parammap) {
+		if(questionMapper.insertQuestion(parammap)>0) {
+			return questionMapper.addQuestionLabel(parammap);
+		}
+		return 0;
 	}
 
 	@Override
@@ -64,8 +68,8 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public Integer addQuestionAnswer(QuestionAnswer questionAnswer) {
-		return questionMapper.addQuestionAnswer(questionAnswer);
+	public Integer addQuestionAnswer(Map<String, Object> parammap) {
+		return questionMapper.addQuestionAnswer(parammap);
 	}
 
 	@Override
@@ -77,6 +81,37 @@ public class QuestionServiceImpl implements QuestionService {
 		Integer totalsize = questionMapper.queryAnswerCount(new HashMap<String,Object>());
 		page.setTotalsize(totalsize);
 		return page;
+	}
+
+	@Override
+	public int updateReadNum(Integer questionid) {
+		int cur = queryReadCount(questionid);
+		cur+=1;
+		Map<String, Object> parammap = new HashMap<String, Object>();
+		parammap.put("questionid", questionid);
+		parammap.put("viewnum", cur);
+		return questionMapper.updatequestion(parammap);
+	}
+
+	@Override
+	public int queryReadCount(Integer questionid) {
+		return questionMapper.queryReadCount(questionid);
+	}
+
+	@Override
+	public List<Integer> queryCollectusers(Integer questionid) {
+		
+		return questionMapper.querycollectuserById(questionid);
+	}
+
+	@Override
+	public List<PsychoLabel> querySubTags() {
+		return questionMapper.querySubTags();
+	}
+
+	@Override
+	public List<PsychoLabel> queryTags() {
+		return questionMapper.queryTags();
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class PsychoCourse {
 	private int course_id;
-	private int course_instructorid;
+	private CourseTeacher instructor;
 	private String course_name;
 	private int professionid;
 	private String description;
@@ -15,18 +15,22 @@ public class PsychoCourse {
 	private Date created_time;
 	private Date updated_time;
 	private int status;
+	private int type;
 	
 	public PsychoCourse() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PsychoCourse(int course_id, int course_instructorid, String course_name, int professionid,
+
+
+
+	public PsychoCourse(int course_id, CourseTeacher instructor, String course_name, int professionid,
 			String description, String cover_img, String course_info, float course_price, int join_number,
-			Date created_time, Date updated_time, int status) {
+			Date created_time, Date updated_time, int status, int type) {
 		super();
 		this.course_id = course_id;
-		this.course_instructorid = course_instructorid;
+		this.instructor = instructor;
 		this.course_name = course_name;
 		this.professionid = professionid;
 		this.description = description;
@@ -37,7 +41,43 @@ public class PsychoCourse {
 		this.created_time = created_time;
 		this.updated_time = updated_time;
 		this.status = status;
+		this.type = type;
 	}
+
+
+
+
+
+
+
+
+	public int getType() {
+		return type;
+	}
+
+
+
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+
+
+
+	public CourseTeacher getInstructor() {
+		return instructor;
+	}
+
+
+
+
+	public void setInstructor(CourseTeacher instructor) {
+		this.instructor = instructor;
+	}
+
+
+
 
 	public int getCourse_id() {
 		return course_id;
@@ -45,14 +85,6 @@ public class PsychoCourse {
 
 	public void setCourse_id(int course_id) {
 		this.course_id = course_id;
-	}
-
-	public int getCourse_instructorid() {
-		return course_instructorid;
-	}
-
-	public void setCourse_instructorid(int course_instructorid) {
-		this.course_instructorid = course_instructorid;
 	}
 
 	public String getCourse_name() {
@@ -80,7 +112,7 @@ public class PsychoCourse {
 	}
 
 	public String getCover_img() {
-		return cover_img;
+		return cover_img.substring(cover_img.indexOf("img")).replaceAll("\\\\", "/");
 	}
 
 	public void setCover_img(String cover_img) {

@@ -819,7 +819,7 @@ a {
 				<div class="article-body-m">
 					<div class="cover-con">
 						<img class="article-cover"
-							src="https://ossimg.xinli001.com/20200316/312e9f6d25129cee1014e5295e31a428.jpeg?x-oss-process=image/quality,Q_80"
+							src="${APP_PATH}/${pa.articleImg}"
 							alt="文章封面">
 						<%-- ${pa.articleImg } --%>
 					</div>
@@ -849,7 +849,7 @@ a {
 					<div class="reply-area">
 						<div class="author-info">
 						<!-- pa.articleUser.psychouser_head_portrait -->
-							<img src="/article_img/1584265340768_Article.jpg" alt="作者头像" 
+							<img src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }" alt="作者头像" 
 								class="author-avatar">
 							<p class="author-name" data-id="${pa.articleUser.psychouser_id }">${pa.articleUser.psychouser_name}</p>
 						</div>
@@ -876,8 +876,8 @@ a {
 							<div class="item-content">
 
 								<!-- 头像 -->
-								<a target="_blank" href="#" class="content-left"> <img
-									v-bind:src="comment.comment_user.psychouser_head_portrait" />
+								<a target="_blank" href="#" class="content-left"> 
+								<img v-bind:src="'${APP_PATH }/'+comment.comment_user.psychouser_head_portrait" />
 								</a>
 
 
@@ -948,7 +948,7 @@ a {
 			<div class="base-info-m white-bg">
 				<div class="top">
 					<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid=${pa.articleUser.psychouser_id }" @click="" class="avatar-con"> 
-					<img class="avatar" src="/article_img/1584265340768_Article.jpg" alt="个人头像">
+					<img class="avatar" src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }" alt="个人头像">
 					</a>
 					<p class="name">${pa.articleUser.psychouser_name}</p>
 					<p class="desc">${pa.articleUser.psychouser_intro }</p>

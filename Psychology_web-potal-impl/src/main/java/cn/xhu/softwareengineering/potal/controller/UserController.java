@@ -126,11 +126,15 @@ public class UserController {
 				paramMap.put("curUserId", user.getPsychouser_id());
 				if(userService.doFollow(paramMap,action)>0) {
 					result.setSuccess(true);
+				}else {
+					result.setSuccess(false);
+					result.setMessage("关注失败！");
 				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				result.setSuccess(false);
-				result.setMessage("文章查询失败！！！");
+				result.setMessage("关注失败！！！");
 			}
 			}else {
 				result.setSuccess(false);
