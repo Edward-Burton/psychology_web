@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="cn.xhu.softwareengineering.potal.dao.GoodMapper">
+	
+	<resultMap type="GoodType" id="BaseType">
+		<id property="sale_type_id" column="sale_type_id"/>
+		<result property="sale_type_name" column="sale_type_name"/>
+		<result property="sale_type_image" column="sale_type_image"/>
+		<collection property="sub_type_list" column="sale_type_id" ofType="GoodType" select="selectsubtypebyid"/>
+	</resultMap>
+	
+	<resultMap type="PsychoGood" id="BaseGood">
+		<id property="good_id" column="good_id"/>
+		<result property="good_name" column="good_name"/>
+		<result property="good_description" column="good_description"/>
+		<result property="good_price" column="good_price"/>
+		<result property="good_sale_time" column="good_sale_time"/>
+		<collection property="goodFeatureList" column="good_id" ofType="GoodAttribute" select="selectfeaturebyid"/>
+		<collection property="goodPicList" column="good_id" ofType="String" select="selectpicbyid"/>
+	</resultMap>
+	
+	<select id="selectsubtypebyid" resultType="GoodType">
+		select * from sale_type where sale_parent_typeid=#{sale_type_id}
+	</select>
+	
+	<select id="selectfeaturebyid" resultType="GoodAttribute">
+		select * from good_attribute where goodid=#{good_id}
+	</select>
+	
+	<select id="selectpicbyid" resultType="String">
+		select sale_pic_addr from good_pic where sale_good_id=#{good_id}
+	</select>
+	
+	<select id="queryTypeList" resultType="BaseType">
+		select * from sale_type
+	</select>
+	
+	<select id="querySlideList" resultType="SaleTheme">
+		select * from sale_theme where sale_theme_type=3
+	</select>
+	
+	<select id="queryGoodList" resultMap="BaseGood">
+		<if test="theme_typeid!=null">
+			<if test="theme_typeid==1">
+				select * from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by good_sale_time desc limit #{startIndex},#{pagesize}
+			</if>
+			<if test="theme_typeid==2">
+				select * from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by (select count(*) from good_cart where cart_good_id=good_id) desc limit #{startIndex},#{pagesize}
+			</if>
+		</if>
+	</select>
+	
+	<select id="queryGoodListCount" resultType="Integer">
+		<if test="theme_typeid!=null">
+			<if test="theme_typeid==1">
+				select count(*) from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by good_sale_time desc limit #{startIndex},#{pagesize}
+			</if>
+			<if test="theme_typeid==2">
+				select count(*) from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by (select count(*) from good_cart where cart_good_id=good_id) desc limit #{startIndex},#{pagesize}
+			</if>
+		</if>
+	</select>
+	
+</mapper>

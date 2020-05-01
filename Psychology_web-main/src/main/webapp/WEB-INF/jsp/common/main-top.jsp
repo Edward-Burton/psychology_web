@@ -65,9 +65,10 @@
 				<li class="active"><a href="${APP_PATH }/index.htm">首页</a></li>
 				<li><a href="${APP_PATH }/article/index.htm">阅读</a></li>
 				<li><a href="${APP_PATH }/question/index.htm">论坛</a></li>
-				<li><a target="_blank" href="http://localhost:8083/#/test">电台</a></li>
-				<li><a class="blog-nav-item"
-					href="${APP_PATH }/course/index.htm">解忧杂货店</a></li>
+				<li><a target="_blank" href="http://localhost:8083/#">电台</a></li>
+				<li><a target="_blank" href="${APP_PATH }/course/index.htm">课程</a></li>
+				<li><a target="_blank" class="blog-nav-item"
+					href="${APP_PATH }/good/index.htm">解忧杂货店</a></li>
 			</ul>
 		</div>
 		<div class="cssmenu">
