@@ -143,6 +143,7 @@ public class DispatcherController {
 				result.setData(iscollect);
 				result.setSuccess(true);
 			} catch (Exception e) {
+				e.printStackTrace();
 				result.setSuccess(false);
 				result.setMessage("点赞失败！！！");
 			}
@@ -172,6 +173,7 @@ public class DispatcherController {
 				result.setData(collectstatus);
 				result.setSuccess(true);
 			} catch (Exception e) {
+				e.printStackTrace();
 				result.setSuccess(false);
 				if(iscollect==0) {
 					result.setMessage("点赞失败！！！");

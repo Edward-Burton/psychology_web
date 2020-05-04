@@ -18,9 +18,23 @@
 		<result property="good_description" column="good_description"/>
 		<result property="good_price" column="good_price"/>
 		<result property="good_sale_time" column="good_sale_time"/>
-		<collection property="goodFeatureList" column="good_id" ofType="GoodAttribute" select="selectfeaturebyid"/>
-		<collection property="goodPicList" column="good_id" ofType="String" select="selectpicbyid"/>
+		<collection property="goodPicList" column="good_id" ofType="GoodPic" select="selectpicbyid"/>
 	</resultMap>
+	
+	<resultMap type="PsychoGood" id="GoodIndex">
+		<id property="good_id" column="good_id"/>
+		<result property="good_name" column="good_name"/>
+		<result property="good_description" column="good_description"/>
+		<result property="good_price" column="good_price"/>
+		<result property="good_sale_time" column="good_sale_time"/>
+		<collection property="goodFeatureList" column="good_id" ofType="GoodAttribute" select="selectfeaturebyid"/>
+		<collection property="goodPicList" column="good_id" ofType="GoodPic" select="selectpicbyid"/>
+		<collection property="productList" column="good_id" ofType="Product" select="selectproduct"/>
+	</resultMap>
+	
+	<select id="selectproduct" resultType="Product">
+		select * from product where of_goodid=#{good_id}
+	</select>
 	
 	<select id="selectsubtypebyid" resultType="GoodType">
 		select * from sale_type where sale_parent_typeid=#{sale_type_id}
@@ -30,12 +44,24 @@
 		select * from good_attribute where goodid=#{good_id}
 	</select>
 	
-	<select id="selectpicbyid" resultType="String">
-		select sale_pic_addr from good_pic where sale_good_id=#{good_id}
+	<select id="selectpicbyid" resultType="GoodPic">
+		select * from good_pic where sale_good_id=#{good_id}
 	</select>
 	
-	<select id="queryTypeList" resultType="BaseType">
-		select * from sale_type
+	<select id="queryTypeList" resultMap="BaseType">
+		<choose>
+			<when test="typeid!=null">
+				<if test="level==0">
+					select * from sale_type where sale_parent_typeid=#{typeid}
+				</if>
+				<if test="level==1">
+					select * from sale_type where sale_parent_typeid=(select sale_parent_typeid from sale_type where sale_type_id=#{typeid})
+				</if>
+			</when>
+			<otherwise>
+				select * from sale_type where sale_parent_typeid IS NULL
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="querySlideList" resultType="SaleTheme">
@@ -51,6 +77,41 @@
 				select * from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by (select count(*) from good_cart where cart_good_id=good_id) desc limit #{startIndex},#{pagesize}
 			</if>
 		</if>
+		
+		<if test="searchValue!=null">
+			<if test="sortid==0">
+				select * from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_sale_time desc limit #{startIndex},#{pagesize}
+			</if>
+			<if test="sortid==1">
+				select * from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_price limit #{startIndex},#{pagesize}
+			</if>
+		</if>
+		
+		<if test="typeid!=null">
+			select * from psycho_good
+			<where>
+				<if test="level==0">
+					good_id in (select good_id from good_type where type_id in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid}))
+				</if>
+				<if test="level==1">
+					good_id in (select good_id from good_type where type_id=#{typeid})
+				</if>
+			</where>
+			<if test="sortid==1">
+				order by good_price
+				<if test="isup==0">desc</if>
+			</if>
+			
+			<if test="sortid==2">
+				order by good_sale_time
+				<if test="isup==0">desc</if>
+			</if>
+			
+			
+			 limit #{startIndex},#{pagesize}
+			 
+		</if>
+		
 	</select>
 	
 	<select id="queryGoodListCount" resultType="Integer">
@@ -62,6 +123,67 @@
 				select count(*) from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by (select count(*) from good_cart where cart_good_id=good_id) desc limit #{startIndex},#{pagesize}
 			</if>
 		</if>
+		<if test="searchValue!=null">
+			<if test="sortid==0">
+				select count(*) from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_sale_time desc limit #{startIndex},#{pagesize}
+			</if>
+			<if test="sortid==1">
+				select count(*) from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_price limit #{startIndex},#{pagesize}
+			</if>
+		</if>
+		
+		<!-- <if test="typeid!=null">
+			<if test="level==0">
+				select count(*) from psycho_good where good_id in (select good_id from good_type where type_id in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid})) limit #{startIndex},#{pagesize}
+			</if>
+			<if test="level==1">
+				select count(*) from psycho_good where good_id in (select good_id from good_type where type_id=#{typeid}) limit #{startIndex},#{pagesize}
+			</if>
+		</if> -->
+		
+		<if test="typeid!=null">
+			select count(*) from psycho_good
+			<where>
+				<if test="level==0">
+					good_id in (select good_id from good_type where type_id in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid}))
+				</if>
+				<if test="level==1">
+					good_id in (select good_id from good_type where type_id=#{typeid})
+				</if>
+			</where>
+			<if test="sortid==1">
+				order by good_price
+				<if test="isup==1">desc</if>
+			</if>
+			
+			<if test="sortid==2">
+				order by good_sale_time
+				<if test="isup==1">desc</if>
+			</if>
+			
+			 limit #{startIndex},#{pagesize}
+			 
+		</if>
+		
+	</select>
+	
+	<select id="queryGoodById" resultMap="GoodIndex">
+		select * from psycho_good where good_id=#{goodid}
+	</select>
+	
+	<select id="queryParentType" resultMap="BaseType">
+	select * from sale_type
+	<where>
+		<choose>
+			<when test="level==0">
+				sale_type_id=#{typeid}
+			</when>
+			<otherwise>
+				sale_type_id=(select sale_parent_typeid from sale_type where sale_type_id=#{typeid})
+			</otherwise>
+		</choose>
+	</where>
+	
 	</select>
 	
 </mapper>

@@ -13,6 +13,14 @@ body, html {
 	height: 100%;
 }
 
+a {
+	color: #000000;
+}
+
+a, a:hover {
+	text-decoration: none;
+}
+
 .main-container-bg {
 	position: relative;
 	min-height: 100%;
@@ -126,15 +134,16 @@ body, h1, h2, h3, h4, h5, h6, img, li, ol, p, ul {
 }
 
 .sale-list {
-	height: 712px;
-	/* background: #f3f4f5; */
+	background: #f3f4f5;
 	margin-bottom: 40px;
 	margin-top: 50px;
 	cursor: pointer;
 	position: relative;
 	border: none;
 	z-index: 0;
-	padding: 0 10px 0
+	padding: 0 10px 0;
+	display: table;
+	clear: both
 }
 
 .m-product {
@@ -147,6 +156,8 @@ body, h1, h2, h3, h4, h5, h6, img, li, ol, p, ul {
 	text-align: center;
 	font-size: 13px;
 	float: left;
+	padding-top: 30px;
+	height: 380px;
 }
 
 .m-product .hd {
@@ -292,29 +303,15 @@ ul li {
 			<div class="tab-content">
 				<ul class="tab">
 					<li v-for="(type,index) in typeList" :key="index"><el-dropdown
-							@command="handleCommand">
-						<span class="el-dropdown-link"> {{type.sale_type_name}} </span> 
-						<el-dropdown-menu
-							slot="dropdown"> 
-							<el-dropdown-item v-for="(sub,index) in type.sub_type_list" :command="sub.sale_type_id">{{sub.sale_type_name}}</el-dropdown-item>
-							<el-dropdown-item command="a">黄金糕</el-dropdown-item>
-						    <el-dropdown-item command="b">狮子头</el-dropdown-item>
-						    <el-dropdown-item command="c">螺蛳粉</el-dropdown-item>
-						    <el-dropdown-item command="d" disabled>双皮奶</el-dropdown-item>
-						    <el-dropdown-item command="e" divided>蚵仔煎</el-dropdown-item>
-						</el-dropdown-menu> 
-					</el-dropdown>
-					</li>
+							@command="handleCommand"> <span
+							class="el-dropdown-link"> {{type.sale_type_name}} </span> <el-dropdown-menu
+							slot="dropdown"> <el-dropdown-item
+							v-for="(sub,index) in type.sub_type_list"
+							:command="sub.sale_type_id">{{sub.sale_type_name}}</el-dropdown-item>
+						</el-dropdown-menu> </el-dropdown></li>
 				</ul>
-				<!-- <ul class="sub-tab">
-						<li>二级分类</li>
-						<li>二级分类</li>
-						<li>二级分类</li>
-						<li>二级分类</li>
-						<li>二级分类</li>
-					</ul> -->
 				<div class="search-tab">
-					<input type="text" /> <span class="search-bnt">搜索</span>
+					<input type="text" v-model="inputValue"/> <span class="search-bnt" @click="search()">搜索</span>
 				</div>
 			</div>
 		</div>
@@ -328,7 +325,8 @@ ul li {
 			</div>
 
 		</div> --%>
-		<el-carousel :interval="5000" arrow="always" style="
+		<el-carousel :interval="5000" arrow="always"
+			style="
     margin-top: 1px;"> <el-carousel-item
 			v-for="(slide,index) in saleTheme" :key="index"> <img
 			:src="'${APP_PATH}/'+slide.sale_theme_pic" /> <!-- <h3>{{ item }}</h3> -->
@@ -353,10 +351,11 @@ ul li {
 					<div class="sale-list">
 						<div class="m-product" v-for="(product,index) in newSaleList">
 							<div class="hd">
-								<a class="imgWrap">
+								<a class="imgWrap"
+									:href="'${APP_PATH }/good/good.htm?id='+product.good_id">
 									<div style="width: 100%; height: 100%;">
-										<%-- <img class="img" v-for="(pic,index) in product.goodPicList"
-											:src="'${APP_PATH }/'+pic.subString(pic.indexOf('img'))" /> --%>
+										<img class="img" v-for="(pic,index) in product.goodPicList"
+											:src="'${APP_PATH }'+pic.sale_pic_addr" v-if="index==1" />
 									</div>
 								</a>
 							</div>
@@ -367,7 +366,8 @@ ul li {
 								</div>
 
 								<h4 class="name">
-									<a> <span>{{product.good_name}}</span>
+									<a :href="'${APP_PATH }/good/good.htm?id='+product.good_id">
+										<span>{{product.good_name}}</span>
 									</a>
 								</h4>
 
@@ -378,32 +378,7 @@ ul li {
 
 						</div>
 
-						<div class="m-product">
-							<div class="hd">
-								<a class="imgWrap">
-									<div style="width: 100%; height: 100%;">
-										<img class="img"
-											src="https://yanxuan-item.nosdn.127.net/0b3b9026931efe0ff2c1ad8ea21ca387.png?type=webp&quality=95&thumbnail=265x265&imageView" />
-									</div>
-								</a>
-							</div>
 
-							<div class="bd">
-								<div class="prdtTags">
-									<span class="m-itemTag">新人特价包邮</span>
-								</div>
-
-								<h4 class="name">
-									<a> <span>商品名称很长很长很长</span>
-									</a>
-								</h4>
-
-								<p class="price">
-									<span class="retailPrice">¥69</span>
-								</p>
-							</div>
-
-						</div>
 					</div>
 				</div>
 			</div>
@@ -426,10 +401,11 @@ ul li {
 					<div class="sale-list">
 						<div class="m-product" v-for="(product,index) in recommendList">
 							<div class="hd">
-								<a class="imgWrap">
+								<a class="imgWrap"
+									:href="'${APP_PATH }/good/good.htm?id='+product.good_id">
 									<div style="width: 100%; height: 100%;">
-										<%-- <img class="img" v-for="(pic,index) in product.goodPicList"
-											:src="'${APP_PATH }/'+pic.subString(pic.indexOf('img'))" /> --%>
+										<img class="img" v-for="(pic,index) in product.goodPicList"
+											:src="'${APP_PATH }'+pic.sale_pic_addr" v-if="index==1" />
 									</div>
 								</a>
 							</div>
@@ -440,7 +416,8 @@ ul li {
 								</div>
 
 								<h4 class="name">
-									<a> <span>{{product.good_name}}</span>
+									<a :href="'${APP_PATH }/good/good.htm?id='+product.good_id">
+										<span>{{product.good_name}}</span>
 									</a>
 								</h4>
 								<p class="price">
@@ -456,16 +433,17 @@ ul li {
 			</div>
 		</div>
 	</div>
-	<%-- <script src="${APP_PATH }/js/vue.js"></script> --%>
+	<script src="${APP_PATH }/js/vue.js"></script>
 	<script src="${APP_PATH }/js/axios.js"></script>
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
 	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 	<script type="text/javascript">
-	var course = new Vue({
+	var index = new Vue({
 		  el: '.main-container-bg',
 		  data () {
 		    return {
+		    	inputValue:"",
 		    	typeList:[],
 		    	saleTheme:[],
 		    	newSaleList:[],
@@ -479,18 +457,29 @@ ul li {
 			  this.getRecommendList()
 		  },
 		  methods: {
+			  
+			  search(){
+				  if(this.inputValue.trim()==""){
+					  alert("请输入内容");
+				  }else{
+					  window.location.href="${APP_PATH}/good/toSearch.htm?inputValue="+encodeURI(encodeURI(this.inputValue.trim()));
+				  }
+			  },
 		  
 		  	handleCommand(command) {
         		this.$message('click on item ' + command);
+        		window.location.href="${APP_PATH}/good/toType.htm?level=1&typeid="+encodeURI(encodeURI(command));
+				 
       		},
 			  
-			  getTypeList(){
+			 /*  getTypeList(){
 				  axios({
 					  url: "${APP_PATH}/good/doTypeList.do",
 				      method: "GET",
 				    }).then(res=>
 						{ if(res.data.success){ this.typeList=res.data.data; }else{
-						alert(res.data.message); } }); }, getSaleTheme(){ axios({ url:
+						alert(res.data.message); } }); }, 
+				getSaleTheme(){ axios({ url:
 						"${APP_PATH}/good/dosaleTheme.do", method: "GET", }).then(res => {
 						if(res.data.success){ this.saleTheme=res.data.data; }else{
 						alert(res.data.message); } }); }, getNewSaleList(){ axios({ url:
@@ -501,6 +490,70 @@ ul li {
 						"${APP_PATH}/good/doSaleList.do", method: "GET", params:{
 						sale_theme_typeid:2, pageno:1, pagesize:8 } }).then(res => {
 						if(res.data.success){ this.recommendList=res.data.page.data;
-						}else{ alert(res.data.message); } }); } } }) </script>
+						}else{ alert(res.data.message); } }); } } })  */
+						
+			getTypeList() {
+				axios({
+					url: "${APP_PATH}/good/doTypeList.do",
+					method: "GET",
+				}).then(res => {
+					if (res.data.success) {
+						this.typeList = res.data.data;
+					} else {
+						alert(res.data.message);
+					}
+				});
+			},
+			getSaleTheme() {
+				axios({
+					url: "${APP_PATH}/good/dosaleTheme.do",
+					method: "GET",
+				}).then(res => {
+					if (res.data.success) {
+						this.saleTheme = res.data.data;
+					} else {
+						alert(res.data.message);
+					}
+				});
+			}, 
+			getNewSaleList() {
+				axios({
+					url: "${APP_PATH}/good/doSaleList.do",
+					method: "GET",
+					params: {
+						sale_theme_typeid: 1,
+						pageno: 1,
+						pagesize: 8
+					}
+				}).then(res => {
+					if (res.data.success) {
+						this.newSaleList = res.data.page.data;
+					} else {
+						alert(res.data.message);
+					}
+				});
+			}, 
+			getRecommendList() {
+				axios({
+					url: "${APP_PATH}/good/doSaleList.do",
+					method: "GET",
+					params: {
+						sale_theme_typeid: 2,
+						pageno: 1,
+						pagesize: 8
+					}
+				}).then(res => {
+					if (res.data.success) {
+						this.recommendList = res.data.page.data;
+					} else {
+						alert(res.data.message);
+					}
+				});
+			}
+		}
+	})
+	
+	
+	</script>
 </body>
 </html>

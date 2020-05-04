@@ -10,10 +10,14 @@ import cn.xhu.softwareengineering.util.Page;
 
 public interface GoodService {
 
-	List<GoodType> queryTypeList();
+	List<GoodType> queryTypeList(Map<String, Object> paramMap);
 
 	List<SaleTheme> querySlideList();
 
 	Page<PsychoGood> queryGoodList(Map<String, Object> paramMap);
+
+	PsychoGood queryGoodById(Integer goodid);
+
+	GoodType queryParentType(Map<String, Object> paramMap);
 
 }

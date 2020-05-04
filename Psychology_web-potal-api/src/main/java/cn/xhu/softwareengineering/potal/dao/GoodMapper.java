@@ -9,12 +9,16 @@ import cn.xhu.softwareengineering.bean.SaleTheme;
 
 public interface GoodMapper {
 
-	List<GoodType> queryTypeList();
+	List<GoodType> queryTypeList(Map<String, Object> paramMap);
 
 	List<SaleTheme> querySlideList();
 
 	List<PsychoGood> queryGoodList(Map<String, Object> paramMap);
 
 	Integer queryGoodListCount(Map<String, Object> paramMap);
+
+	PsychoGood queryGoodById(Integer goodid);
+
+	GoodType queryParentType(Map<String, Object> paramMap);
 
 }
