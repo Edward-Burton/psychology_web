@@ -1,12 +1,13 @@
 package cn.xhu.softwareengineering.bean;
 
+import java.util.List;
+
 public class GoodAttribute {
-	private int good_feature_id;
-	private int goodid;
-	private String good_feature_content;
-	private String good_feature_img;
-	private int good_feature_type;
-	private int good_feature_des_type;
+	private int good_attribute_id;
+	private String good_attribute_name;
+	private int of_good_id;
+	private int good_attribute_desc_type;
+	private List<GoodFeature> goodFeature;
 	
 	public GoodAttribute() {
 		super();
@@ -14,90 +15,62 @@ public class GoodAttribute {
 
 	
 
-	public GoodAttribute(int good_feature_id, int goodid, String good_feature_content, String good_feature_img,
-			int good_feature_type, int good_feature_des_type) {
+	public GoodAttribute(int good_attribute_id, String good_attribute_name, int of_good_id,
+			int good_attribute_desc_type, List<GoodFeature> goodFeature) {
 		super();
-		this.good_feature_id = good_feature_id;
-		this.goodid = goodid;
-		this.good_feature_content = good_feature_content;
-		this.good_feature_img = good_feature_img;
-		this.good_feature_type = good_feature_type;
-		this.good_feature_des_type = good_feature_des_type;
+		this.good_attribute_id = good_attribute_id;
+		this.good_attribute_name = good_attribute_name;
+		this.of_good_id = of_good_id;
+		this.good_attribute_desc_type = good_attribute_desc_type;
+		this.goodFeature = goodFeature;
 	}
+
+
+
+	public List<GoodFeature> getGoodFeature() {
+		return goodFeature;
+	}
+
+
+
+	public void setGoodFeature(List<GoodFeature> goodFeature) {
+		this.goodFeature = goodFeature;
+	}
+
+
+
+	public int getGood_attribute_id() {
+		return good_attribute_id;
+	}
+
+	public void setGood_attribute_id(int good_attribute_id) {
+		this.good_attribute_id = good_attribute_id;
+	}
+
+	public String getGood_attribute_name() {
+		return good_attribute_name;
+	}
+
+	public void setGood_attribute_name(String good_attribute_name) {
+		this.good_attribute_name = good_attribute_name;
+	}
+
+	public int getOf_good_id() {
+		return of_good_id;
+	}
+
+	public void setOf_good_id(int of_good_id) {
+		this.of_good_id = of_good_id;
+	}
+
+	public int getGood_attribute_desc_type() {
+		return good_attribute_desc_type;
+	}
+
+	public void setGood_attribute_desc_type(int good_attribute_desc_type) {
+		this.good_attribute_desc_type = good_attribute_desc_type;
+	}
+
 	
-	
-
-
-
-	public String getGood_feature_img() {
-		if(good_feature_img==""||good_feature_img==null) {
-			return "";
-		}
-		return good_feature_img.replaceAll("\\\\", "/").substring(good_feature_img.indexOf("/img"));
-	}
-
-
-
-	public void setGood_feature_img(String good_feature_img) {
-		this.good_feature_img = good_feature_img;
-	}
-
-
-
-	public int getGood_feature_des_type() {
-		return good_feature_des_type;
-	}
-
-	
-	public void setGood_feature_des_type(int good_feature_des_type) {
-		this.good_feature_des_type = good_feature_des_type;
-	}
-
-
-	public int getGood_feature_id() {
-		return good_feature_id;
-	}
-
-
-
-	public void setGood_feature_id(int good_feature_id) {
-		this.good_feature_id = good_feature_id;
-	}
-
-
-
-	public int getGoodid() {
-		return goodid;
-	}
-
-
-
-	public void setGoodid(int goodid) {
-		this.goodid = goodid;
-	}
-
-
-
-	public String getGood_feature_content() {
-		return good_feature_content;
-	}
-
-
-
-	public void setGood_feature_content(String good_feature_content) {
-		this.good_feature_content = good_feature_content;
-	}
-
-
-
-	public int getGood_feature_type() {
-		return good_feature_type;
-	}
-
-
-
-	public void setGood_feature_type(int good_feature_type) {
-		this.good_feature_type = good_feature_type;
-	}
 	
 }

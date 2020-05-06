@@ -278,6 +278,12 @@
 			.u-selnum .less {
 			    border-right: 1px solid #ddd;
 			}
+			
+				
+			.u-selnum-cart .less, .u-selnum-cart .more{
+				cursor: pointer;
+			}
+			
 			.u-selnum .z-dis {
 			    cursor: not-allowed;
 			}
@@ -289,6 +295,7 @@
 			    line-height: 28px;
 			    background: #fff;
 			}
+		
 			
 			.u-selnum .z-dis .hx, .u-selnum .z-dis .sx {
 			    background: #d3d3d3;
@@ -525,7 +532,8 @@
 
 							<div style="display: block;">
 								<div class="cart-group">
-									<div class="cart-item f-cb cart-item-last">
+								<!-- <div class="cart-item f-cb cart-item-last"> -->
+									<div class="cart-item f-cb" v-for="(item,index) in cartList" class="{cart-item-last:index==cartList.length-1}">
 
 										<div class="item w7">
 											<div class="ck">
@@ -539,19 +547,30 @@
 
 											<div class="pic">
 												<a href="">
-													<img src="https://yanxuan-item.nosdn.127.net/372d7e16ebf49fc67ed984d4d4a870fc.png?type=webp&amp;quality=95&amp;thumbnail=200x200&amp;imageView"
-													 alt="">
+													<img :src="'${APP_PATH}'+pic.sale_pic_addr" alt="" v-for="(pic,index) in item.sku.ofGood.goodPicList" v-if="index==0">
 												</a>
 											</div>
 
 											<div class="nameCon">
 												<a class="pname f-word-break f-text-overflow" target="_blank" href="">
-													XXXXXXXXXX
+													{{item.sku.ofGood.good_name}}
 												</a>
 												<div class="spec">
 													<div class="specWrap" style="cursor:pointer;">
-														<span class="class=" f-text-overflow specText">
-															XXXXXXXX
+														<span class="f-text-overflow specText">
+															{{item.sku.ofGood.good_description}}
+														</span>
+													</div>
+												</div>
+												<div class="spec">
+													<div class="specWrap">
+														<span class="f-text-overflow specText">
+															<span v-for="(attr,index) in item.sku.attrList">
+																{{attr.good_attribute_name}}:
+																<span v-for="(fea,index) in item.sku.feaList" v-if="attr.good_attribute_id==fea.good_attr_id">
+																{{fea.good_feature_content}}
+																</span>
+															</span>
 														</span>
 													</div>
 												</div>
@@ -560,22 +579,26 @@
 										</div>
 										<div class="item item-1 w3">
 											<p class="price">
-												<span class="aprice"><span>¥</span><span>0.00</span></span>
+												<span class="aprice"><span>¥</span><span>{{item.sku.ofGood.good_price}}</span></span>
 											</p>
 										</div>
 										<div class="item item-2 w4">
 											<div class="u-selnum u-selnum-cart">
-												<span class="j-reduce less z-dis"><i class="hx"></i>
+												<span class="j-reduce less" :class="{'z-dis':item.cart_good_num==1}" @click="lessChooseNum(item.cart_good_num,item.cart_id)">
+												<i class="hx"></i>
 												</span>
-												<input class="j-input dis" type="text" disabled="disabled">
-												<span class="j-add more z-dis"><i class="hx"></i>
+												<!-- <input class="j-input dis" type="text" disabled="disabled"> -->
+												<input class="j-input" type="text" v-model="item.cart_good_num">
+												<!-- <span class="j-add more z-dis"> -->
+												<span class="j-add more" @click="moreChooseNum(item.cart_good_num,item.cart_id)">
+													<i class="hx"></i>
 													<i class="sx"></i>
 												</span>
 											</div>
 										</div>
 
 										<div class="item item-3 w5">
-											<p class="price sprice">¥0.00</p>
+											<p class="price sprice">¥{{item.sku.ofGood.good_price*item.cart_good_num}}</p>
 										</div>
 
 										<div class="item item-5 w6">
@@ -632,6 +655,86 @@
 				</div>
 			</div>
 		</div>
+		
+		<script src="${APP_PATH }/js/axios.js"></script>
+		<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
+		<script src="${APP_PATH }/js/vue.js"></script>
+		<!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
+		<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+		<script type="text/javascript">
+			
+			var goodDetail = new Vue({
+				  el: '.m-cart',
+				  data () {
+				    return {
+				    	cartList:[],
+				    	preOrderList:[]
+				    }
+				  },
+				  created() {
+					 this.getCartList();
+				  },
+				  methods: {
+					  
+					 getPreOrderList(){
+						 if(this.cartList.length!=0){
+							 this.cartList.forEach((item)=>{
+								 this.$set(this.preOrderList,this.preOrderList.length,item.cart_id);
+							 })
+						 }
+					 }
+					  
+					 getCartList(){
+						 axios({
+							  url:"${APP_PATH}/good/doCartList.do",
+							  method:"POST"
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.cartList=res.data.data;
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					 },
+					 lessChooseNum(num,cart_id){
+						 if(num>1){
+							 num=num-1;
+							 axios({
+								  url:"${APP_PATH}/good/doUpdateNum.do",
+								  method:"POST",
+								  params:{
+									  fixednum:num,
+									  cartid:cart_id
+								  }
+							  }).then(res=>{
+								  if(res.data.success){
+									  this.getCartList();
+								  }else{
+									  alert(res.data.message);
+								  }
+							  })
+						 }
+					 },
+					 moreChooseNum(num,cart_id){
+						 num=num+1;
+						 axios({
+							  url:"${APP_PATH}/good/doUpdateNum.do",
+							  method:"POST",
+							  params:{
+								  fixednum:num,
+								  cartid:cart_id
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.getCartList();
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					 }
+				  }
+			})
+		</script>
 	</body>
 </html>
     

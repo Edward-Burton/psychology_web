@@ -4,58 +4,131 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="cn.xhu.softwareengineering.potal.dao.GoodMapper">
-	
+
 	<resultMap type="GoodType" id="BaseType">
-		<id property="sale_type_id" column="sale_type_id"/>
-		<result property="sale_type_name" column="sale_type_name"/>
-		<result property="sale_type_image" column="sale_type_image"/>
-		<collection property="sub_type_list" column="sale_type_id" ofType="GoodType" select="selectsubtypebyid"/>
+		<id property="sale_type_id" column="sale_type_id" />
+		<result property="sale_type_name" column="sale_type_name" />
+		<result property="sale_type_image" column="sale_type_image" />
+		<collection property="sub_type_list" column="sale_type_id"
+			ofType="GoodType" select="selectsubtypebyid" />
 	</resultMap>
-	
+
 	<resultMap type="PsychoGood" id="BaseGood">
-		<id property="good_id" column="good_id"/>
-		<result property="good_name" column="good_name"/>
-		<result property="good_description" column="good_description"/>
-		<result property="good_price" column="good_price"/>
-		<result property="good_sale_time" column="good_sale_time"/>
-		<collection property="goodPicList" column="good_id" ofType="GoodPic" select="selectpicbyid"/>
+		<id property="good_id" column="good_id" />
+		<result property="good_name" column="good_name" />
+		<result property="good_description" column="good_description" />
+		<result property="good_price" column="good_price" />
+		<result property="good_sale_time" column="good_sale_time" />
+		<collection property="goodPicList" column="good_id"
+			ofType="GoodPic" select="selectpicbyid" />
 	</resultMap>
-	
+
 	<resultMap type="PsychoGood" id="GoodIndex">
-		<id property="good_id" column="good_id"/>
-		<result property="good_name" column="good_name"/>
-		<result property="good_description" column="good_description"/>
-		<result property="good_price" column="good_price"/>
-		<result property="good_sale_time" column="good_sale_time"/>
-		<collection property="goodFeatureList" column="good_id" ofType="GoodAttribute" select="selectfeaturebyid"/>
-		<collection property="goodPicList" column="good_id" ofType="GoodPic" select="selectpicbyid"/>
-		<collection property="productList" column="good_id" ofType="Product" select="selectproduct"/>
+		<id property="good_id" column="good_id" />
+		<result property="good_name" column="good_name" />
+		<result property="good_description" column="good_description" />
+		<result property="good_price" column="good_price" />
+		<result property="good_sale_time" column="good_sale_time" />
+		<collection property="goodAttrList" column="good_id"
+			ofType="GoodAttribute" select="selectattrbyid" />
+		<collection property="goodPicList" column="good_id"
+			ofType="GoodPic" select="selectpicbyid" />
+		<collection property="accessListSKU" column="good_id"
+			ofType="Integer" select="selectaccessSKU" />
+	</resultMap>
+
+	<resultMap type="GoodAttribute" id="BaseAttr">
+		<id property="good_attribute_id" column="good_attribute_id" />
+		<result property="good_attribute_name"
+			column="good_attribute_name" />
+		<result property="of_good_id" column="of_good_id" />
+		<result property="good_attribute_desc_type"
+			column="good_attribute_desc_type" />
+		<collection property="goodFeature"
+			column="good_attribute_id" ofType="GoodFeature"
+			select="selectfeaturebyatrrid" />
+	</resultMap>
+
+	<resultMap type="SKU" id="BaseSku">
+		<id property="sku_id" column="sku_id" />
+		<result property="sku_num" column="sku_num" />
+		<association property="ofGood" column="of_goodid"
+			javaType="PsychoGood" select="selectgoodinpro" />
+		<collection property="feaList" column="sku_id"
+			ofType="GoodFeature" select="selectfeaturelist" />
+		<collection property="attrList" column="of_goodid"
+			ofType="GoodAttribute" select="selectattrlist" />
 	</resultMap>
 	
-	<select id="selectproduct" resultType="Product">
-		select * from product where of_goodid=#{good_id}
+	<resultMap type="CartGood" id="BaseCartGood">
+		<id property="cart_id" column="cart_id" />
+		<result property="cart_user_id" column="cart_user_id" />
+		<result property="cart_good_num" column="cart_good_num" />
+		<association property="sku" column="cart_sku_id"
+			javaType="SKU" select="selectSKU" />
+	</resultMap>
+	
+	<select id="selectSKU" resultMap="BaseSku">
+		select * from sku
+		where sku_id=#{cart_sku_id}
+	</select>
+
+	<select id="selectfeaturelist" resultType="GoodFeature">
+		select good_feature_id,good_attr_id,good_feature_content from
+		good_feature inner join sku_feature on good_feature_id=feature_id
+		where skuid=#{sku_id}
 	</select>
 	
+	<select id="selectattrlist" resultType="GoodAttribute">
+		select good_attribute_id,good_attribute_name from good_attribute
+		where of_good_id=#{of_goodid}
+	</select>
+
+	<select id="selectgoodinpro" resultMap="BaseGood">
+		select * from psycho_good
+		where good_id=#{of_goodid}
+	</select>
+	
+	<select id="queryCartList" resultMap="BaseCartGood">
+		select * from good_cart where cart_user_id=#{userid}
+	</select>
+
+	<select id="selectfeaturebyatrrid" resultType="GoodFeature">
+		select * from
+		good_feature where good_attr_id=#{good_attribute_id}
+	</select>
+
+	<select id="selectattrbyid" resultMap="BaseAttr">
+		select * from
+		good_attribute where of_good_id=#{good_id}
+	</select>
+
+	<select id="selectaccessSKU" resultType="Integer">
+		select feature_id from
+		sku_feature inner join sku on sku_id=skuid where sku_num>0 and
+		of_goodid=#{good_id}
+	</select>
+
 	<select id="selectsubtypebyid" resultType="GoodType">
-		select * from sale_type where sale_parent_typeid=#{sale_type_id}
+		select * from
+		sale_type where sale_parent_typeid=#{sale_type_id}
 	</select>
-	
-	<select id="selectfeaturebyid" resultType="GoodAttribute">
-		select * from good_attribute where goodid=#{good_id}
-	</select>
-	
+
 	<select id="selectpicbyid" resultType="GoodPic">
-		select * from good_pic where sale_good_id=#{good_id}
+		select * from good_pic
+		where sale_good_id=#{good_id}
 	</select>
-	
+
 	<select id="queryTypeList" resultMap="BaseType">
 		<choose>
 			<when test="typeid!=null">
 				<if test="level==0">
-					select * from sale_type where sale_parent_typeid=#{typeid}
+					select * from sale_type where
+					sale_parent_typeid=#{typeid}
 				</if>
 				<if test="level==1">
-					select * from sale_type where sale_parent_typeid=(select sale_parent_typeid from sale_type where sale_type_id=#{typeid})
+					select * from sale_type where sale_parent_typeid=(select
+					sale_parent_typeid from sale_type where sale_type_id=#{typeid})
 				</if>
 			</when>
 			<otherwise>
@@ -63,127 +136,215 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="querySlideList" resultType="SaleTheme">
-		select * from sale_theme where sale_theme_type=3
+		select * from sale_theme
+		where sale_theme_type=3
 	</select>
-	
+
 	<select id="queryGoodList" resultMap="BaseGood">
 		<if test="theme_typeid!=null">
 			<if test="theme_typeid==1">
-				select * from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by good_sale_time desc limit #{startIndex},#{pagesize}
+				select * from psycho_good where good_id in (select
+				theme_goodid from good_theme INNER JOIN sale_theme ON
+				theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order
+				by good_sale_time desc limit #{startIndex},#{pagesize}
 			</if>
 			<if test="theme_typeid==2">
-				select * from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by (select count(*) from good_cart where cart_good_id=good_id) desc limit #{startIndex},#{pagesize}
+				select * from psycho_good where good_id in (select
+				theme_goodid from good_theme INNER JOIN sale_theme ON
+				theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order
+				by (select count(*) from good_cart where cart_id=good_id) desc
+				limit #{startIndex},#{pagesize}
 			</if>
 		</if>
-		
+
 		<if test="searchValue!=null">
 			<if test="sortid==0">
-				select * from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_sale_time desc limit #{startIndex},#{pagesize}
+				select * from psycho_good where good_name LIKE
+				concat("%",#{searchValue},"%") or good_description LIKE
+				concat("%",#{searchValue},"%") order by good_sale_time desc limit
+				#{startIndex},#{pagesize}
 			</if>
 			<if test="sortid==1">
-				select * from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_price limit #{startIndex},#{pagesize}
+				select * from psycho_good where good_name LIKE
+				concat("%",#{searchValue},"%") or good_description LIKE
+				concat("%",#{searchValue},"%") order by good_price limit
+				#{startIndex},#{pagesize}
 			</if>
 		</if>
-		
+
 		<if test="typeid!=null">
 			select * from psycho_good
 			<where>
 				<if test="level==0">
-					good_id in (select good_id from good_type where type_id in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid}))
+					good_id in (select good_id from good_type where type_id
+					in (select sale_type_id from sale_type where
+					sale_parent_typeid=#{typeid}))
 				</if>
 				<if test="level==1">
-					good_id in (select good_id from good_type where type_id=#{typeid})
+					good_id in (select good_id from good_type where
+					type_id=#{typeid})
 				</if>
 			</where>
 			<if test="sortid==1">
 				order by good_price
 				<if test="isup==0">desc</if>
 			</if>
-			
+
 			<if test="sortid==2">
 				order by good_sale_time
 				<if test="isup==0">desc</if>
 			</if>
-			
-			
-			 limit #{startIndex},#{pagesize}
-			 
+
+
+			limit #{startIndex},#{pagesize}
+
 		</if>
-		
+
 	</select>
-	
+
 	<select id="queryGoodListCount" resultType="Integer">
 		<if test="theme_typeid!=null">
 			<if test="theme_typeid==1">
-				select count(*) from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by good_sale_time desc limit #{startIndex},#{pagesize}
+				select count(*) from psycho_good where good_id in (select
+				theme_goodid from good_theme INNER JOIN sale_theme ON
+				theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order
+				by good_sale_time desc limit #{startIndex},#{pagesize}
 			</if>
 			<if test="theme_typeid==2">
-				select count(*) from psycho_good where good_id in (select theme_goodid from good_theme INNER JOIN sale_theme ON theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order by (select count(*) from good_cart where cart_good_id=good_id) desc limit #{startIndex},#{pagesize}
+				select count(*) from psycho_good where good_id in (select
+				theme_goodid from good_theme INNER JOIN sale_theme ON
+				theme_id=sale_theme_id WHERE sale_theme_type=#{theme_typeid}) order
+				by (select count(*) from good_cart where cart_id=good_id) desc
+				limit #{startIndex},#{pagesize}
 			</if>
 		</if>
 		<if test="searchValue!=null">
 			<if test="sortid==0">
-				select count(*) from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_sale_time desc limit #{startIndex},#{pagesize}
+				select count(*) from psycho_good where good_name LIKE
+				concat("%",#{searchValue},"%") or good_description LIKE
+				concat("%",#{searchValue},"%") order by good_sale_time desc limit
+				#{startIndex},#{pagesize}
 			</if>
 			<if test="sortid==1">
-				select count(*) from psycho_good where good_name LIKE concat("%",#{searchValue},"%") or good_description LIKE concat("%",#{searchValue},"%") order by good_price limit #{startIndex},#{pagesize}
+				select count(*) from psycho_good where good_name LIKE
+				concat("%",#{searchValue},"%") or good_description LIKE
+				concat("%",#{searchValue},"%") order by good_price limit
+				#{startIndex},#{pagesize}
 			</if>
 		</if>
-		
-		<!-- <if test="typeid!=null">
-			<if test="level==0">
-				select count(*) from psycho_good where good_id in (select good_id from good_type where type_id in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid})) limit #{startIndex},#{pagesize}
-			</if>
-			<if test="level==1">
-				select count(*) from psycho_good where good_id in (select good_id from good_type where type_id=#{typeid}) limit #{startIndex},#{pagesize}
-			</if>
-		</if> -->
-		
+
+		<!-- <if test="typeid!=null"> <if test="level==0"> select count(*) from 
+			psycho_good where good_id in (select good_id from good_type where type_id 
+			in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid})) 
+			limit #{startIndex},#{pagesize} </if> <if test="level==1"> select count(*) 
+			from psycho_good where good_id in (select good_id from good_type where type_id=#{typeid}) 
+			limit #{startIndex},#{pagesize} </if> </if> -->
+
 		<if test="typeid!=null">
 			select count(*) from psycho_good
 			<where>
 				<if test="level==0">
-					good_id in (select good_id from good_type where type_id in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid}))
+					good_id in (select good_id from good_type where type_id
+					in (select sale_type_id from sale_type where
+					sale_parent_typeid=#{typeid}))
 				</if>
 				<if test="level==1">
-					good_id in (select good_id from good_type where type_id=#{typeid})
+					good_id in (select good_id from good_type where
+					type_id=#{typeid})
 				</if>
 			</where>
 			<if test="sortid==1">
 				order by good_price
 				<if test="isup==1">desc</if>
 			</if>
-			
+
 			<if test="sortid==2">
 				order by good_sale_time
 				<if test="isup==1">desc</if>
 			</if>
-			
-			 limit #{startIndex},#{pagesize}
-			 
+
+			limit #{startIndex},#{pagesize}
+
 		</if>
-		
+
 	</select>
-	
+
 	<select id="queryGoodById" resultMap="GoodIndex">
-		select * from psycho_good where good_id=#{goodid}
+		select * from psycho_good
+		where good_id=#{goodid}
 	</select>
 	
+	<insert id="addCart">
+		insert into good_cart(cart_user_id,cart_sku_id,cart_good_num)values(#{userid},#{skuid},#{selectNum})
+	</insert>
+
 	<select id="queryParentType" resultMap="BaseType">
-	select * from sale_type
-	<where>
-		<choose>
-			<when test="level==0">
-				sale_type_id=#{typeid}
-			</when>
-			<otherwise>
-				sale_type_id=(select sale_parent_typeid from sale_type where sale_type_id=#{typeid})
-			</otherwise>
-		</choose>
-	</where>
-	
+		select * from sale_type
+		<where>
+			<choose>
+				<when test="level==0">
+					sale_type_id=#{typeid}
+				</when>
+				<otherwise>
+					sale_type_id=(select sale_parent_typeid from sale_type
+					where sale_type_id=#{typeid})
+				</otherwise>
+			</choose>
+		</where>
+
+	</select>
+	<select id="querySku" resultType="Integer">
+		SELECT index0.sku_id FROM
+		<foreach collection="fealist" separator="INNER JOIN" item="id" index="index">
+			(SELECT sku_id FROM sku INNER JOIN sku_feature ON
+			sku_id=skuid WHERE feature_id=#{id} and of_goodid=#{goodid}) AS index${index}
+			<if test="index!=0">
+				ON index${index-1}.sku_id=index${index}.sku_id
+			</if>
+		</foreach>
+	</select>
+
+	<select id="querySaleOutfeaList" resultType="Integer">
+		<foreach collection="fealist" separator="UNION ALL"
+			index="index">
+			SELECT DISTINCT(feature_id) FROM sku_feature INNER JOIN good_feature
+			ON good_feature_id=feature_id INNER JOIN sku ON sku_id=skuid WHERE
+			of_goodid=#{goodid}
+			AND good_attr_id NOT IN (SELECT good_attr_id FROM
+			good_feature WHERE
+			good_feature_id
+			IN
+			<foreach collection="fealist.subList(0,index+1)" open="("
+				separator="," close=")" item="id">
+				#{id}
+			</foreach>
+			) AND feature_id NOT IN (SELECT feature_id FROM sku_feature
+			INNER JOIN
+			good_feature ON good_feature_id=feature_id INNER JOIN sku ON
+			sku_id=skuid
+			WHERE of_goodid=#{goodid} AND good_attr_id NOT IN (SELECT
+			good_attr_id FROM
+			good_feature WHERE good_feature_id IN
+			<foreach collection="fealist.subList(0,index+1)" open="("
+				separator="," close=")" item="id"> #{id} </foreach>
+			) AND skuid in(SELECT
+			sku_id FROM (
+			<foreach collection="fealist.subList(0,index+1)"
+				separator="UNION ALL" item="id">
+				SELECT sku_id,sku_num,feature_id FROM sku
+				INNER JOIN sku_feature ON
+				sku_id=skuid
+				WHERE feature_id=#{id}
+			</foreach>
+			)sk GROUP BY sku_id HAVING COUNT(sku_id)>=${index+1})AND
+			sku_num>0)
+		</foreach>
 	</select>
 	
+	<update id="UpdateCartNum">
+		update good_cart set cart_good_num=#{fixednum} where cart_id=#{cartid}
+	</update>
+
 </mapper>

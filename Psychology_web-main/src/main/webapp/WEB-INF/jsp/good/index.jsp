@@ -326,8 +326,7 @@ ul li {
 
 		</div> --%>
 		<el-carousel :interval="5000" arrow="always"
-			style="
-    margin-top: 1px;"> <el-carousel-item
+			style="margin-top: 1px;"> <el-carousel-item
 			v-for="(slide,index) in saleTheme" :key="index"> <img
 			:src="'${APP_PATH}/'+slide.sale_theme_pic" /> <!-- <h3>{{ item }}</h3> -->
 		</el-carousel-item> </el-carousel>

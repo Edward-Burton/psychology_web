@@ -10,19 +10,17 @@ public class PsychoGood {
 	private float good_price;
 	private Date good_sale_time;
 	private int good_num;
-	private List<GoodAttribute> goodFeatureList;
+	private List<GoodAttribute> goodAttrList;
 	private List<GoodPic> goodPicList;
-	private List<GoodFeature> feaList;
-	private List<Product> productList;
+	private List<Integer> accessListSKU;
 
 	public PsychoGood() {
 		super();
 	}
-	
+
 
 	public PsychoGood(int good_id, String good_name, String good_description, float good_price, Date good_sale_time,
-			int good_num, List<GoodAttribute> goodFeatureList, List<GoodPic> goodPicList, List<GoodFeature> feaList,
-			List<Product> productList) {
+			int good_num, List<GoodAttribute> goodAttrList, List<GoodPic> goodPicList, List<Integer> accessListSKU) {
 		super();
 		this.good_id = good_id;
 		this.good_name = good_name;
@@ -30,23 +28,32 @@ public class PsychoGood {
 		this.good_price = good_price;
 		this.good_sale_time = good_sale_time;
 		this.good_num = good_num;
-		this.goodFeatureList = goodFeatureList;
+		this.goodAttrList = goodAttrList;
 		this.goodPicList = goodPicList;
-		this.feaList = feaList;
-		this.productList = productList;
+		this.accessListSKU = accessListSKU;
 	}
 
 
 
-
-	public List<Product> getProductList() {
-		return productList;
+	public List<Integer> getAccessListSKU() {
+		return accessListSKU;
 	}
 
 
 
-	public void setProductList(List<Product> productList) {
-		this.productList = productList;
+	public void setAccessListSKU(List<Integer> accessListSKU) {
+		this.accessListSKU = accessListSKU;
+	}
+
+
+	public List<GoodAttribute> getGoodAttrList() {
+		return goodAttrList;
+	}
+
+
+
+	public void setGoodAttrList(List<GoodAttribute> goodAttrList) {
+		this.goodAttrList = goodAttrList;
 	}
 
 
@@ -55,15 +62,6 @@ public class PsychoGood {
 		return good_num;
 	}
 
-	
-
-	public List<GoodFeature> getFeaList() {
-		return feaList;
-	}
-
-	public void setFeaList(List<GoodFeature> feaList) {
-		this.feaList = feaList;
-	}
 
 	public void setGood_num(int good_num) {
 		this.good_num = good_num;
@@ -107,14 +105,6 @@ public class PsychoGood {
 
 	public void setGood_sale_time(Date good_sale_time) {
 		this.good_sale_time = good_sale_time;
-	}
-
-	public List<GoodAttribute> getGoodFeatureList() {
-		return goodFeatureList;
-	}
-
-	public void setGoodFeatureList(List<GoodAttribute> goodFeatureList) {
-		this.goodFeatureList = goodFeatureList;
 	}
 
 	public List<GoodPic> getGoodPicList() {

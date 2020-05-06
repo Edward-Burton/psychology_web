@@ -5,6 +5,8 @@
 <head>
 <meta charset="utf-8">
 <title></title>
+<link rel="stylesheet"
+	href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 <style>
 body {
 	min-height: 100%;
@@ -985,26 +987,22 @@ body.tabFixed .tabContent {
 						<div>
 							<div class="m-parampicker" style="margin-top: 20px;">
 
-								<div class="specProp" v-for="(feature,findex) in good.feaList">
+								<div class="specProp" v-for="(attr,aindex) in good.goodAttrList">
 									<span class="type"
-										:class="{'type-1':feature.feature_des_type==1,'type-2':feature.feature_des_type==2}">
-										<span v-if="feature.feature_type==1">尺寸</span> <span
-										v-if="feature.feature_type==2">颜色</span> <span
-										v-if="feature.feature_type==3">款式</span> <span
-										v-if="feature.feature_type==4">规格</span> <span
-										v-if="feature.feature_type==5">高度</span>
+										:class="{'type-1':attr.good_attribute_desc_type==1,'type-2':attr.good_attribute_desc_type==2}">
+										<span>{{attr.good_attribute_name}}</span>
 									</span>
 									<div class="cont">
 										<ul class="tabs">
-											<li class="tab-con" v-for="(attr,aindex) in feature.attrList">
+											<li class="tab-con" v-for="(feature,findex) in attr.goodFeature">
 												<a href="javascript:;" class="tab"
-												:class="{'tab-txt':attr.good_feature_des_type==1,'tab-pic':attr.good_feature_des_type==2,'tab-sel':selected.indexOf(attr.good_feature_id)>=0}"
-												:data-id="attr.good_feature_id" @click="select($event,aindex,feature.feature_type)"> 
-												<img v-if="attr.good_feature_des_type==2" :src="'${APP_PATH}'+attr.good_feature_img">
-												<span v-if="attr.good_feature_des_type==1" class="txt" v-text="attr.good_feature_content"></span>
+												:class="{'tab-txt':attr.good_attribute_desc_type==1,'tab-pic':attr.good_attribute_desc_type==2,'tab-sel':selected.indexOf(feature.good_feature_id)>=0,'tab-dis':saleoutList.indexOf(feature.good_feature_id)>=0}"
+												:data-id="feature.good_feature_id" @click="select($event,attr.good_attribute_id)"> 
+												<img v-if="attr.good_attribute_desc_type==2" :src="'${APP_PATH}'+feature.good_feature_img">
+												<span v-if="attr.good_attribute_desc_type==1" class="txt" v-text="feature.good_feature_content"></span>
 													<div class="dis"></div> 
 													<i class="w-icon-normal icon-normal-spec-arrow sel"></i>
-													<div v-if="attr.good_feature_des_type==2" class="title" v-text="attr.good_feature_content"></div>
+													<div v-if="attr.good_attribute_desc_type==2" class="title" v-text="feature.good_feature_content"></div>
 											    </a>
 											</li>
 										</ul>
@@ -1171,12 +1169,25 @@ body.tabFixed .tabContent {
 						</div>
 					</div>
 				</div>
+				<el-dialog
+				  title="提示"
+				  :visible.sync="DialogVisible"
+				  width="30%"
+				  center>
+					  <span>去购物车看看？</span>
+					  <span slot="footer" class="dialog-footer">
+					    <el-button @click="DialogVisible = false">取 消</el-button>
+					    <el-button type="primary" @click="goCart()">确 定</el-button>
+					  </span>
+				</el-dialog>
 			</div>
 		</div>
 	</div>
+	
 	<script src="${APP_PATH }/js/axios.js"></script>
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="${APP_PATH }/js/vue.js"></script>
+	<!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
 	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 	<script type="text/javascript">
 		
@@ -1193,10 +1204,14 @@ body.tabFixed .tabContent {
 			    	selected:[],
 			    	selectNum:1,
 			    	selectedList:[],
+			    	saleoutList:[],
 			    	colorList:[],
 			    	sizeList:[],
 			    	styleList:[],
-			    	iscollected:0
+			    	iscollected:0,
+			    	isselectdone:1,
+			    	choosedsku:0,
+			    	DialogVisible:false
 			    }
 			  },
 			  created() {
@@ -1206,17 +1221,54 @@ body.tabFixed .tabContent {
 			  },
 			  methods: {
 				  
-				  select(e,index,typeid){
-					  let i=0;
-					  this.selectedList.map(product=>{
-							if(product.type==typeid){
-								product.attrid=e.currentTarget.dataset.id;
-							}
-							this.$set(this.selected,i,product.attrid);
-							i++;
-							alert("--->"+this.selected);
-							alert(product.type+"---"+product.attrid);
-						});
+				  goCart(){
+					  window.location.href="${APP_PATH}/good/toCart.htm";
+					  //+encodeURI(encodeURI(command));
+				  },
+				  
+				  select(e,attrid){
+					  if(this.saleoutList.indexOf(parseInt(e.currentTarget.dataset.id))<0){
+						  let i=0;
+						  this.selectedList.map(product=>{
+								if(product.attrid==attrid){
+									product.feature_id=e.currentTarget.dataset.id;
+								}
+								/* this.$set(this.selected,i,product.feature_id); */
+								this.$set(this.selected,i,parseInt(product.feature_id));
+								i++;
+							});
+						   
+						  /* alert(JSON.stringify(this.selectedList));
+						  alert(JSON.stringify(this.selected));
+						  console.log(JSON.stringify(this.selected)); */
+						  axios({
+							  url:"${APP_PATH}/good/doSaleOutfeaList.do",
+							  method:"POST",
+							  params:{
+								  goodid:parseInt(goodid),
+								  selected:this.selected.toLocaleString()
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.saleoutList=res.data.data;
+								  this.saleoutList.forEach((item) => {
+									  if(this.selected.indexOf(item)>=0){
+										  this.selected.splice(this.selected.indexOf(item),1);
+									  }
+									  this.selectedList.map(product=>{
+										  if(item==product.feature_id){
+											  product.feature_id=0;
+										  }
+									  })
+								  });
+								  /* console.log(JSON.stringify(this.selected));
+								  console.log(JSON.stringify(this.selectedList));
+								  alert(JSON.stringify(this.saleoutList)); */
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					  }
 				  },
 				  
 				  iscollect(){
@@ -1259,20 +1311,55 @@ body.tabFixed .tabContent {
 				  },
 				  
 				  addCart(){
-					  axios({
-						  url:"${APP_PATH}/good/doAddCart.do",
-						  method:"GET",
-						  params:{
-							  id:parseInt(goodid)
-						  }
-					  }).then(res=>{
-						  if(res.data.success){
-							  this.good=res.data.data;
-							  
-						  }else{
-							  this.$message(res.data.message);
+					  let attrname="";
+					  this.selectedList.map(product=>{
+						  if(product.feature_id==0){
+							  this.isselectdone=0;
+							  if(this.good!=null){
+								  this.good.goodAttrList.forEach((item) => {
+									  if(item.good_attribute_id==product.attrid){
+										  attrname=item.good_attribute_name;
+									  }
+								  })
+							  }
 						  }
 					  })
+					  if(attrname!=""){
+						  alert("请选择"+attrname);
+					  }
+					  if(this.isselectdone==1){
+						  axios({
+							  url:"${APP_PATH}/good/doSkuId.do",
+							  method:"POST",
+							  params:{
+								  goodid:parseInt(goodid),
+								  selected:this.selected.toLocaleString()
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.choosedsku=res.data.data;
+								  alert(this.choosedsku);
+									  axios({
+										  url:"${APP_PATH}/good/doAddCart.do",
+										  method:"GET",
+										  params:{
+											  skuid:this.choosedsku,
+										      selectNum:this.selectNum
+										  }
+									  }).then(res=>{
+										  if(res.data.success){
+											  this.DialogVisible=true;
+											  this.$message(this.DialogVisible);
+										  }else{
+											  this.$message(res.data.message);
+										  }
+									  })
+							  }else{
+								  /* this.$message(res.data.message); */
+								  alert(res.data.message);
+							  }
+						  })
+					  }
 				  },
 				  
 				  showPic(e,index){
@@ -1307,8 +1394,11 @@ body.tabFixed .tabContent {
 							  if(this.good!=null){
 								  let _good=this.good;
 								  this.bigPic=_good.goodPicList[0].sale_pic_addr;
-								  _good.feaList.forEach((item) => {
+								 /* _good.feaList.forEach((item) => {
 									  this.$set(this.selectedList,this.selectedList.length,{type:item.feature_type,attrid:0})
+					              }); */
+								 _good.goodAttrList.forEach((item) => {
+									  this.$set(this.selectedList,this.selectedList.length,{attrid:item.good_attribute_id,feature_id:0})
 					              });
 								  
 							  }
