@@ -41,7 +41,7 @@
 		<collection property="qustion_labels" ofType="PsychoLabel" column="user_question_id" select="querylableById"></collection>
 	</resultMap>
 	
-	<resultMap type="PsychoUser" id="BaseArticleUser">
+	<resultMap type="PsychoUser" id="BaseUser">
 		<id column="psychouser_id" property="psychouser_id" />
 		<result column="psychouser_name" property="psychouser_name" />
 		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />

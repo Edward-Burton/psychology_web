@@ -15,10 +15,7 @@
 		<result column="psycho_article_source" property="source" />
 		<result column="psycho_article_originaltitle"
 			property="originalTitle" />
-		<!-- <result column="psycho_article_comments_num" property="commentsNum" 
-			/> -->
 		<result column="psycho_article_reads_num" property="readsNum" />
-		<result column="psycho_article_likes_num" property="likesNum" />
 		<result column="psycho_article_content" property="content" />
 		<association property="articleUser" javaType="PsychoUser"
 			column="psycho_article_id" select="selectUserbyArticleId" />

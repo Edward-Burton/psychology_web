@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.xhu.softwareengineering.bean.CartGood;
+import cn.xhu.softwareengineering.bean.CustomerAddr;
 import cn.xhu.softwareengineering.bean.GoodType;
+import cn.xhu.softwareengineering.bean.Order;
 import cn.xhu.softwareengineering.bean.PsychoGood;
 import cn.xhu.softwareengineering.bean.SaleTheme;
 import cn.xhu.softwareengineering.potal.dao.GoodMapper;
@@ -74,6 +76,48 @@ public class GoodServiceImpl implements GoodService {
 	@Override
 	public int UpdateCartNum(Map<String, Object> paramMap) {
 		return goodMapper.UpdateCartNum(paramMap);
+	}
+
+	@Override
+	public int delCartList(Map<String, Object> paramMap) {
+		return goodMapper.delCartList(paramMap);
+	}
+
+	@Override
+	public List<Integer> queryColGoodList(Map<String, Object> paramMap) {
+		return goodMapper.queryColGoodList(paramMap);
+	}
+
+	@Override
+	public List<CustomerAddr> queryAddrList(Map<String, Object> parammap) {
+		return goodMapper.queryAddrList(parammap);
+	}
+
+	@Override
+	public int AddCustomerAddr(CustomerAddr addr) {
+		if(goodMapper.AddCustomerAddr(addr)>0) {
+			return addr.getCustomer_addr_id();
+		}
+		return 0;
+	}
+
+	@Override
+	public int updateCustomerAddr(CustomerAddr addr) {
+		if(goodMapper.updateCustomerAddr(addr)>0) {
+			return addr.getCustomer_addr_id();
+		}
+		return 0;
+	}
+
+	@Override
+	public Order addOrder(Order order) {
+		if(goodMapper.addOrder(order)>0) {
+			System.out.println(order.getOrder_id());
+			if(goodMapper.addOrder_sku(order.getOrder_id(),order.getObjList())>0) {
+				return order;
+			}
+		}
+		return null;
 	}
 	
 }

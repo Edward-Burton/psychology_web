@@ -19,6 +19,7 @@ public class PsychoArticle {
 	private int commentsNum;
 	private int readsNum;
 	private int likesNum;
+	private String desc;
 	private String content;
 	private PsychoCategory psychoCategory;
 	private List<PsychoLabel> articleLabels;
@@ -29,10 +30,11 @@ public class PsychoArticle {
 		super();
 	}
 
-
+	
+	
 	public PsychoArticle(int articleId, String articleTitle, String articleImg, Date pubTime, PsychoUser articleUser,
 			String author, String source, String originalTitle, int commentsNum, int readsNum, int likesNum,
-			String content, PsychoCategory psychoCategory, List<PsychoLabel> articleLabels,
+			String desc, String content, PsychoCategory psychoCategory, List<PsychoLabel> articleLabels,
 			List<ArticleComments> articleComments) {
 		super();
 		this.articleId = articleId;
@@ -46,10 +48,23 @@ public class PsychoArticle {
 		this.commentsNum = commentsNum;
 		this.readsNum = readsNum;
 		this.likesNum = likesNum;
+		this.desc = desc;
 		this.content = content;
 		this.psychoCategory = psychoCategory;
 		this.articleLabels = articleLabels;
 		this.articleComments = articleComments;
+	}
+
+
+
+	public String getDesc() {
+		return desc;
+	}
+
+
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 

@@ -43,6 +43,110 @@
 			column="psycho_article_id" select="selectLabelsbyArticleId" />
 	</resultMap>
 	
+	<resultMap type="UserCollection" id="BaseUserCollectionArticle">
+		<id column="user_collection_id" property="user_collection_id" />
+		<result column="user_collection_from_user_id" property="user_collection_from_user_id" />
+		<result column="user_collection_type" property="user_collection_type" />
+		<collection property="user_collection_obj" ofType="Object"
+			column="{user_collection_type=user_collection_type,user_collection_from_user_id=user_collection_from_user_id}" select="selectCollectionArticle" />
+	</resultMap>
+	
+	<resultMap type="UserCollection" id="BaseUserCollectionQustionA">
+		<id column="user_collection_id" property="user_collection_id" />
+		<result column="user_collection_from_user_id" property="user_collection_from_user_id" />
+		<result column="user_collection_type" property="user_collection_type" />
+		<collection property="user_collection_obj" ofType="Object"
+			column="{user_collection_type=user_collection_type,user_collection_from_user_id=user_collection_from_user_id}" select="selectCollectionQustionA" />
+	</resultMap>
+	
+	<resultMap type="UserCollection" id="BaseUserCollectionFM">
+		<id column="user_collection_id" property="user_collection_id" />
+		<result column="user_collection_from_user_id" property="user_collection_from_user_id" />
+		<result column="user_collection_type" property="user_collection_type" />
+		<collection property="user_collection_obj" ofType="Object"
+			column="{user_collection_type=user_collection_type,user_collection_from_user_id=user_collection_from_user_id}" select="selectCollectionFM" />
+	</resultMap>
+	
+	<resultMap type="PsychoArticle" id="BaseArticle">
+		<id column="psycho_article_id" property="articleId" />
+		<result column="psycho_article_title" property="articleTitle" />
+		<result column="psycho_article_img" property="articleImg" />
+		<result column="psycho_article_pubtime" property="pubTime" />
+		<result column="psycho_article_desc" property="desc" />
+		<result column="psycho_article_reads_num" property="readsNum" />
+	</resultMap>
+	
+	
+	<resultMap type="UserQuestions" id="BaseQuestion">
+		<id column="user_question_id" property="user_question_id" />
+		<result column="user_question_title" property="user_question_title" />
+		<result column="user_question_content" property="user_question_content" />
+		<result column="user_question_pultime" property="user_question_pultime" />
+		<result column="user_anonym" property="user_anonym" />
+		<association column="user_question_id" property="answer_count" javaType="Integer" select="queryanswercountById" />
+		<association column="question_master_id" property="question_master" javaType="PsychoUser" select="queryQuestionUserById" />
+	</resultMap>
+	
+	<resultMap type="PsychoUser" id="BaseUser">
+		<id column="psychouser_id" property="psychouser_id" />
+		<result column="psychouser_name" property="psychouser_name" />
+		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />
+	</resultMap>
+	
+	<resultMap type="PsychoRadio" id="BaseRadio">
+		<id column="psycho_radio_id" property="psycho_radio_id" />
+		<result column="psycho_radio_title"
+			property="psycho_radio_title" />
+		<result column="psycho_radio_description"
+			property="psycho_radio_description" />
+		<result column="psycho_radio_audio"
+			property="psycho_radio_audio" />
+		<result column="psycho_radio_backgroud"
+			property="psycho_radio_backgroud" />
+		<result column="psycho_radio_pultime"
+			property="psycho_radio_pultime" />
+		<association property="radioAnchor" javaType="RadioAnchor"
+			column="psycho_radio_anchor_id" select="selectanchorbyid" />
+	</resultMap>
+	
+	<select id="selectanchorbyid" resultType="RadioAnchor">
+		select * from
+		radio_anchor where radio_anchor_id=#{psycho_radio_anchor_id}
+	</select>
+	
+	<select id="queryanswercountById" resultType="Integer">
+		SELECT COUNT(*) FROM question_answers WHERE  answer_parent_id IS Null and question_id=#{user_question_id}
+	</select>
+	
+	<select id="queryQuestionUserById" resultMap="BaseUser">
+		SELECT psychouser_id,psychouser_acct,psychouser_name,psychouser_head_portrait FROM psycho_user WHERE psychouser_id = #{question_master_id}	
+	</select>
+	
+	<select id="selectCollectionArticle" resultMap="BaseArticle">
+		select * from psycho_article where psycho_article_id in (select user_collectioin_to_id from user_collection where user_collection_from_user_id=#{user_collection_from_user_id} and user_collection_type=#{user_collection_type})
+	</select>
+	
+	<select id="selectCollectionQustionA" resultMap="BaseQuestion">
+		select * from user_questions where user_question_id in (select user_collectioin_to_id from user_collection where user_collection_from_user_id=#{user_collection_from_user_id} and user_collection_type=#{user_collection_type})
+	</select>
+	
+	<select id="selectCollectionFM" resultMap="BaseRadio">
+		select * from psycho_radio where psycho_radio_id in (select user_collectioin_to_id from user_collection where user_collection_from_user_id=#{user_collection_from_user_id} and user_collection_type=#{user_collection_type})
+	</select>
+	
+	
+	<select id="queryUserCollectArticle" resultMap="BaseUserCollectionArticle">
+		select * from user_collection where user_collection_from_user_id=#{userid} and user_collection_type=#{typeid} limit 0,1
+	</select>
+	
+	<select id="queryUserCollectQustionA" resultMap="BaseUserCollectionQustionA">
+		select * from user_collection where user_collection_from_user_id=#{userid} and user_collection_type=#{typeid} limit 0,1
+	</select>
+	
+	<select id="queryUserCollectFM" resultMap="BaseUserCollectionFM">
+		select * from user_collection where user_collection_from_user_id=#{userid} and user_collection_type=#{typeid} limit 0,1
+	</select>
+	
 	<!-- 获取文章心理学分类 -->
 	<select id="selectCategorybyArticleId"
 		resultType="PsychoCategory">

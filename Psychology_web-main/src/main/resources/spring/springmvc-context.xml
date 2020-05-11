@@ -8,9 +8,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan
-		base-package="cn.xhu.softwareengineering.*"
-		use-default-filters="false">
+	<context:component-scan base-package="cn.xhu.softwareengineering.*" use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
@@ -70,8 +68,6 @@
 		<!-- <mvc:interceptor></mvc:interceptor> -->
 	</mvc:interceptors>
 	
-	<!-- <mvc:resources location="/simditor/" mapping="/simditor/**"/> -->
-
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
 		p:defaultEncoding="UTF-8">

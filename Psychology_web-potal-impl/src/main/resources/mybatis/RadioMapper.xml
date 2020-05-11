@@ -60,9 +60,17 @@
 					RIGHT JOIN radio_type ON radioid=psycho_radio_id WHERE typeid=#{typeid}
 				</when>
 				
-				<when test="anchorid">
+				<when test="anchorid!=null">
 					where psycho_radio_anchor_id=#{anchorid}
 				</when>
+			</choose>
+			<choose>
+				<when test="(typeid!=null or anchorid!=null) and id!=null">
+					or psycho_radio_id=#{id}
+				</when>
+				<otherwise>
+					where psycho_radio_id=#{id}
+				</otherwise>
 			</choose>
 		order by psycho_radio_pultime desc
 	</select>

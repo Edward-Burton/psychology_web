@@ -44,13 +44,15 @@ public class RadioController{
     @RequestMapping ( value = "/doRadioList",method = RequestMethod.GET)
     @ResponseBody
     @CrossOrigin
-    public AjaxResult doIndexRadioList (@RequestParam(value="typeid", required=false) Integer typeid, @RequestParam(value="anchorid", required=false)Integer anchorid) {
+    public AjaxResult doIndexRadioList (@RequestParam(value="typeid", required=false) Integer typeid, @RequestParam(value="anchorid", required=false)Integer anchorid,@RequestParam(value="id", required=false)Integer id) {
         AjaxResult result = new AjaxResult();
         Map<String,Object> paramMap = new HashMap<String, Object>();
         if(typeid!=null) {
         	paramMap.put("typeid", typeid);
         }else if(anchorid!=null){
         	paramMap.put("anchorid", anchorid);
+        }else if(id!=null) {
+        	paramMap.put("id", id);
         }
         
         try {

@@ -1273,7 +1273,7 @@ body.tabFixed .tabContent {
 				  
 				  iscollect(){
 					  axios({
-						  url:"${APP_PATH}/doIsCollect.do",
+						  url:"${APP_PATH}/user/doIsCollect.do",
 						  method:"GET",
 						  params:{
 							  toid:parseInt(goodid),
@@ -1292,7 +1292,7 @@ body.tabFixed .tabContent {
 				  docollect(){
 					  alert(this.iscollected);
 					  axios({
-						  url:"${APP_PATH}/doCollect.do",
+						  url:"${APP_PATH}/user/doCollect.do",
 						  method:"POST",
 						  params:{
 							  toid:parseInt(goodid),

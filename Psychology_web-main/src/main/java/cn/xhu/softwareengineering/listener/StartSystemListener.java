@@ -4,6 +4,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import cn.xhu.softwareengineering.util.PropertiesConfig;
+
 public class StartSystemListener implements ServletContextListener {
 
 	//在服务器启动时,创建application对象时需要执行的方法.
@@ -13,6 +15,7 @@ public class StartSystemListener implements ServletContextListener {
 		ServletContext application = sce.getServletContext();
 		String contextPath = application.getContextPath();
 		application.setAttribute("APP_PATH", contextPath);
+		PropertiesConfig.init(); 
 		System.out.println("APP_PATH...");
 		
 		//2.加载所有许可路径

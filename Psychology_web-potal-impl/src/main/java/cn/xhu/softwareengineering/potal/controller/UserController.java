@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
+import cn.xhu.softwareengineering.bean.UserCollection;
 import cn.xhu.softwareengineering.potal.service.UserService;
 import cn.xhu.softwareengineering.util.AjaxResult;
 import cn.xhu.softwareengineering.util.Const;
@@ -24,6 +25,169 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	
+	@ResponseBody
+	@RequestMapping("/doLike")
+	public Object doLike(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "mainid", required = false)Integer mainid, @RequestParam(value = "maintype", required = false)Integer maintype, @RequestParam(value = "typeid")Integer typeid, @RequestParam(value = "action")Integer action) {
+		System.out.println(toid);
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user != null) {
+			Integer fromuserid=user.getPsychouser_id();
+			try {
+				Map<String, Integer> paramMap = new HashMap<String, Integer>();
+				paramMap.put("userid", fromuserid);
+				paramMap.put("toid", toid);
+				paramMap.put("typeid", typeid);
+				if (mainid != null) {
+					paramMap.put("mainid", mainid);
+				}
+				if (maintype != null) {
+					paramMap.put("maintype", maintype);
+				}
+				int likenum = userService.handleUserLike(paramMap, action);
+				System.out.println("likenum："+likenum);
+				result.setData(likenum);
+				result.setSuccess(true);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setMessage("点赞失败！！！");
+			}
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doUserId")
+	public Object doUserId(HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user != null) {
+			Integer userid=user.getPsychouser_id();
+			result.setData(userid);
+			result.setSuccess(true);
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doUser")
+	public Object doUser(HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		System.out.println(user);
+		if (user != null) {
+			result.setData(user);
+			result.setSuccess(true);
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/doIsCollect")
+	public Object doIsCollect(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "typeid")Integer typeid) {
+		System.out.println(toid);
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user != null) {
+			Integer fromuserid=user.getPsychouser_id();
+			try {
+				Map<String, Integer> paramMap = new HashMap<String, Integer>();
+				paramMap.put("userid", fromuserid);
+				paramMap.put("toid", toid);
+				paramMap.put("typeid", typeid);
+				int iscollect = userService.queryIsCollect(paramMap);
+				System.out.println("iscollect："+iscollect);
+				result.setData(iscollect);
+				result.setSuccess(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.setSuccess(false);
+				result.setMessage("获取是否收藏失败！！！");
+			}
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doUserCollect")
+	public Object doUserCollect(HttpSession session,@RequestParam(value = "typeid")Integer typeid) {
+		System.out.println("typeid:"+typeid);
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user != null) {
+			Integer fromuserid=user.getPsychouser_id();
+			try {
+				Map<String, Integer> paramMap = new HashMap<String, Integer>();
+				paramMap.put("userid", fromuserid);
+				paramMap.put("typeid", typeid);
+				UserCollection userCollect = userService.queryUserCollect(paramMap);
+				System.out.println("userCollect："+userCollect);
+				result.setData(userCollect);
+				result.setSuccess(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.setSuccess(false);
+				result.setMessage("获取用户收藏失败！！！");
+			}
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doCollect")
+	public Object doCollect(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "typeid")Integer typeid, @RequestParam(value = "iscollect")Integer iscollect) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user != null) {
+			Integer fromuserid=user.getPsychouser_id();
+			try {
+				Map<String, Integer> paramMap = new HashMap<String, Integer>();
+				paramMap.put("userid", fromuserid);
+				paramMap.put("toid", toid);
+				paramMap.put("typeid", typeid);
+				int collectstatus = userService.handleUserCollect(paramMap, iscollect);
+				System.out.println("collectstatus："+collectstatus);
+				result.setData(collectstatus);
+				result.setSuccess(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.setSuccess(false);
+				if(iscollect==0) {
+					result.setMessage("收藏失败！！！");
+				}else {
+					result.setMessage("取消收藏失败！！！");
+				}
+			}
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+
 
 	@RequestMapping("/toUserIndex")
 	public String toUserIndex(@RequestParam(value = "userid", required = true) Integer userid,
@@ -68,7 +232,30 @@ public class UserController {
 		return result;
 	}
 
+	@ResponseBody
+	@RequestMapping("/doContent")
+	public Object doContent(HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		if (user!= null) {
+			try {
+				int count = userService.queryLikeByUserId(user.getPsychouser_id());
+				result.setSuccess(true);
+				result.setData(count);
+			}catch (Exception e) {
+				e.printStackTrace();
+				result.setSuccess(false);
+				result.setMessage("查询用户获赞失败！！！");
+			}
+		}
+		return result;
+	}
 
+	@RequestMapping("/toContent")
+	public String toContent() {
+		return "user/content_m";
+	}
+	
 	@ResponseBody
 	@RequestMapping("/doUserArticle")
 	public Object doUserArticle(@RequestParam(value = "userid", required = true) Integer userid) {

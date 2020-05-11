@@ -1,3 +1,4 @@
+package main;
 import javax.activation.DataSource;
 
 import org.junit.Test;

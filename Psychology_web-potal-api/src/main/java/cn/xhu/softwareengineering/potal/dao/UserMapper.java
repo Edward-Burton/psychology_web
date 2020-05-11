@@ -5,6 +5,7 @@ import java.util.Map;
 
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
+import cn.xhu.softwareengineering.bean.UserCollection;
 
 public interface UserMapper {
 
@@ -35,5 +36,11 @@ public interface UserMapper {
 	int cancelFollow(Map<String, Object> paramMap);
 
 	int queryLikeByUserId(Integer userid);
+
+	UserCollection queryUserCollectArticle(Map<String, Integer> paramMap);
+
+	UserCollection queryUserCollectQustionA(Map<String, Integer> paramMap);
+
+	UserCollection queryUserCollectFM(Map<String, Integer> paramMap);
 
 }

@@ -380,19 +380,21 @@
 			    display: table;
 			}
 			
-			.m-cart .cart-total-fixed {
-			    position: fixed;
-			    z-index: 2;
-			    bottom: 0;
-			    width: 100%;
-			    max-width: 1090px;
-			}
 			.m-cart .cart-total {
 			    font-size: 14px;
 			    position: relative;
 			    background-color: #f5f5f5;
 			    border: 1px solid #ddd;
 			    height: 70px;
+			}
+			
+			
+			.m-cart .cart-total-fixed {
+			    position: fixed;
+			    z-index: 2;
+			    bottom: 0;
+			    width: 100%;
+			    max-width: 1090px;
 			}
 			
 			.m-cart .cart-total .w-chkbox {
@@ -512,146 +514,161 @@
 		<div class="cart">
 			<div class="g-row">
 				<div class="m-cart">
-					<div style="position: relative;">
-						<div>
-							<div style="display: block;">
-								<div class="tt">
-									<div class="w w1 left">
-										<div class="w-chkbox">
-											<input type="checkbox" checked="">
-											<span class="all">全选</span>
+					<div v-if="cartList.length>0">
+						<div style="position: relative;">
+							<div>
+								<div style="display: block;">
+									<div class="tt">
+										<div class="w w1 left">
+											<div class="w-chkbox">
+												<input type="checkbox" v-model="checkedAll" @click="doCheckAll">
+												<span class="all">全选</span>
+											</div>
 										</div>
+										<div class="w w2 left">商品信息</div>
+										<div class="w w3">单价</div>
+										<div class="w w4">数量</div>
+										<div class="w w-2 w5">小计</div>
+										<div class="w w-1 w6">操作</div>
 									</div>
-									<div class="w w2 left">商品信息</div>
-									<div class="w w3">单价</div>
-									<div class="w w4">数量</div>
-									<div class="w w-2 w5">小计</div>
-									<div class="w w-1 w6">操作</div>
 								</div>
-							</div>
-
-							<div style="display: block;">
-								<div class="cart-group">
-								<!-- <div class="cart-item f-cb cart-item-last"> -->
-									<div class="cart-item f-cb" v-for="(item,index) in cartList" class="{cart-item-last:index==cartList.length-1}">
-
-										<div class="item w7">
-											<div class="ck">
-												<div class="w-chkbox">
-													<input type="checkbox" class="" title="" checked="">
-												</div>
-											</div>
-										</div>
-
-										<div class="item w8">
-
-											<div class="pic">
-												<a href="">
-													<img :src="'${APP_PATH}'+pic.sale_pic_addr" alt="" v-for="(pic,index) in item.sku.ofGood.goodPicList" v-if="index==0">
-												</a>
-											</div>
-
-											<div class="nameCon">
-												<a class="pname f-word-break f-text-overflow" target="_blank" href="">
-													{{item.sku.ofGood.good_name}}
-												</a>
-												<div class="spec">
-													<div class="specWrap" style="cursor:pointer;">
-														<span class="f-text-overflow specText">
-															{{item.sku.ofGood.good_description}}
-														</span>
+	
+								<div style="display: block;">
+									<div class="cart-group">
+									<!-- <div class="cart-item f-cb cart-item-last"> -->
+										<div class="cart-item f-cb" v-for="(item,index) in cartList" class="{cart-item-last:index==cartList.length-1}">
+	
+											<div class="item w7">
+												<div class="ck">
+													<div class="w-chkbox">
+														<input type="checkbox" class="" title="" v-model="choseList" :value="item.cart_id">
 													</div>
 												</div>
-												<div class="spec">
-													<div class="specWrap">
-														<span class="f-text-overflow specText">
-															<span v-for="(attr,index) in item.sku.attrList">
-																{{attr.good_attribute_name}}:
-																<span v-for="(fea,index) in item.sku.feaList" v-if="attr.good_attribute_id==fea.good_attr_id">
-																{{fea.good_feature_content}}
+											</div>
+	
+											<div class="item w8">
+	
+												<div class="pic">
+													<a href="">
+														<img :src="'${APP_PATH}'+pic.sale_pic_addr" alt="" v-for="(pic,index) in item.sku.ofGood.goodPicList" v-if="index==0">
+													</a>
+												</div>
+	
+												<div class="nameCon">
+													<a class="pname f-word-break f-text-overflow" target="_blank" href="">
+														{{item.sku.ofGood.good_name}}
+													</a>
+													<div class="spec">
+														<div class="specWrap" style="cursor:pointer;">
+															<span class="f-text-overflow specText">
+																{{item.sku.ofGood.good_description}}
+															</span>
+														</div>
+													</div>
+													<div class="spec">
+														<div class="specWrap">
+															<span class="f-text-overflow specText">
+																<span v-for="(attr,index) in item.sku.attrList">
+																	{{attr.good_attribute_name}}:
+																	<span v-for="(fea,index) in item.sku.feaList" v-if="attr.good_attribute_id==fea.good_attr_id">
+																	{{fea.good_feature_content}}
+																	</span>
 																</span>
 															</span>
-														</span>
+														</div>
 													</div>
 												</div>
+	
 											</div>
-
-										</div>
-										<div class="item item-1 w3">
-											<p class="price">
-												<span class="aprice"><span>¥</span><span>{{item.sku.ofGood.good_price}}</span></span>
-											</p>
-										</div>
-										<div class="item item-2 w4">
-											<div class="u-selnum u-selnum-cart">
-												<span class="j-reduce less" :class="{'z-dis':item.cart_good_num==1}" @click="lessChooseNum(item.cart_good_num,item.cart_id)">
-												<i class="hx"></i>
-												</span>
-												<!-- <input class="j-input dis" type="text" disabled="disabled"> -->
-												<input class="j-input" type="text" v-model="item.cart_good_num">
-												<!-- <span class="j-add more z-dis"> -->
-												<span class="j-add more" @click="moreChooseNum(item.cart_good_num,item.cart_id)">
+											<div class="item item-1 w3">
+												<p class="price">
+													<span class="aprice"><span>¥</span><span>{{item.sku.ofGood.good_price}}</span></span>
+												</p>
+											</div>
+											<div class="item item-2 w4">
+												<div class="u-selnum u-selnum-cart">
+													<span class="j-reduce less" :class="{'z-dis':item.cart_good_num==1}" @click="lessChooseNum(item.cart_good_num,item.cart_id)">
 													<i class="hx"></i>
-													<i class="sx"></i>
-												</span>
+													</span>
+													<!-- <input class="j-input dis" type="text" disabled="disabled"> -->
+													<input class="j-input" type="text" v-model="item.cart_good_num">
+													<!-- <span class="j-add more z-dis"> -->
+													<span class="j-add more" @click="moreChooseNum(item.cart_good_num,item.cart_id)">
+														<i class="hx"></i>
+														<i class="sx"></i>
+													</span>
+												</div>
 											</div>
-										</div>
-
-										<div class="item item-3 w5">
-											<p class="price sprice">¥{{item.sku.ofGood.good_price*item.cart_good_num}}</p>
-										</div>
-
-										<div class="item item-5 w6">
-											<div class="operate">
-												<a href="javascript:void(0);">移入收藏夹</a>
+	
+											<div class="item item-3 w5">
+												<p class="price sprice">¥{{item.sku.ofGood.good_price*item.cart_good_num}}</p>
 											</div>
-											<div class="operate">
-												<a class="del" href="javascript:void(0);">删除</a>
+	
+											<div class="item item-5 w6">
+												<div class="operate">
+													<a href="javascript:void(0);" @click="docollect(item.sku.ofGood.good_id)" v-if="colList.indexOf(item.sku.ofGood.good_id)<0">移入收藏夹</a>
+												</div>
+												<div class="operate">
+													<a class="del" href="javascript:void(0);" @click="deleteCartItem(item.cart_id)">删除</a>
+												</div>
 											</div>
+	
 										</div>
-
+									</div>
+								</div>
+								
+								<!-- <div style="display: block;">
+									<div class="cart-empty">
+										<div class="m-emptyStatus " style="margin-top:200px;">
+											<div class="w-icon-empty icon-empty-cart"></div>
+											<div class="emptyText">购物车还是空滴</div>
+											<p class="btnLine">
+												<span class="log-bnt f-hide" >登录</span>
+												<a class="lian-button" href="/">继续逛</a></p>
+										</div>
+									</div>
+								</div> -->
+	
+							</div>
+						</div>
+						
+						<!-- <div class="cart-total cart-total-fixed" style="display: block;"> -->
+						<div class="cart-total" style="display: block;">
+							<div class="w-chkbox"><input type="checkbox" v-model="choseList.length>0" @click="doCheckAll()">
+								<span><span>已选（</span><span>{{choseList.length}}</span>
+									<span>）</span></span>
+								<a class="mgl30" href="javascript:;" @click="removeCartList">批量删除</a>
+								<a class="mgl30" href="javascript:;">清空失效商品</a>
+							</div>
+							<div class="info f-fr">
+								<button type="button" class="f-button" @click="createOrder">下单</button>
+							</div>
+	
+							<div class="info mgr140" data-reactid=".2.0.1.1.2">
+								<div class="f-right" style="padding:0 30px;height:94px;">
+									<div class="shouldPayMoney">
+										<span class="f-ib f-fz14" style="margin-right:20px;">应付总额：</span>
+										<span class="moneyInfo">
+											<span class="priceNum"><span>¥&nbsp;</span><span>{{totalPrice}}</span></span>
+										</span>
 									</div>
 								</div>
 							</div>
-							
-							<!-- <div style="display: block;">
-								<div class="cart-empty">
-									<div class="m-emptyStatus " style="margin-top:200px;">
-										<div class="w-icon-empty icon-empty-cart"></div>
-										<div class="emptyText">购物车还是空滴</div>
-										<p class="btnLine">
-											<span class="log-bnt f-hide" >登录</span>
-											<a class="lian-button" href="/">继续逛</a></p>
-									</div>
-								</div>
-							</div> -->
-
 						</div>
+						
 					</div>
-					
-					<div class="cart-total cart-total-fixed" style="display: block;">
-						<div class="w-chkbox"><input type="checkbox">
-							<span><span>已选（</span><span>4</span>
-								<span>）</span></span>
-							<a class="mgl30" href="javascript:;">批量删除</a>
-							<a class="mgl30" href="javascript:;">清空失效商品</a>
-						</div>
-						<div class="info f-fr">
-							<button type="button" class="f-button">下单</button>
-						</div>
-
-						<div class="info mgr140" data-reactid=".2.0.1.1.2">
-							<div class="f-right" style="padding:0 30px;height:94px;">
-								<div class="shouldPayMoney">
-									<span class="f-ib f-fz14" style="margin-right:20px;">应付总额：</span>
-									<span class="moneyInfo">
-										<span class="priceNum"><span>¥&nbsp;</span><span>1076.00</span></span>
-									</span>
-								</div>
+				
+					<div v-if="cartList.length==0" style="display: block;">
+						<div class="cart-empty">
+							<div class="m-emptyStatus " style="margin-top:200px;">
+								<div class="w-icon-empty icon-empty-cart"></div>
+								<div class="emptyText">购物车还是空滴</div>
+								<p class="btnLine">
+									<!-- <span class="log-bnt f-hide" >登录</span> -->
+									<a class="lian-button" href="/">继续逛</a></p>
 							</div>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		</div>
@@ -663,34 +680,177 @@
 		<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
 		<script type="text/javascript">
 			
-			var goodDetail = new Vue({
+			var cart = new Vue({
 				  el: '.m-cart',
 				  data () {
 				    return {
 				    	cartList:[],
-				    	preOrderList:[]
+				    	choseList:[],
+				    	checkedAll:true,
+				    	totalPrice:parseFloat(0),
+				    	colList:[]
 				    }
 				  },
 				  created() {
-					 this.getCartList();
+					 this.initail();
+					 
+				  },
+				  
+				  watch:{
+					  choseList:function(){
+						  this.getTotalPrice();
+					  }
 				  },
 				  methods: {
 					  
-					 getPreOrderList(){
+					  createOrder(){
+						  /* axios({
+							  url:"${APP_PATH}/good/toConfirm.do",
+							  method:"POST",
+							  params:{
+								  /* choseList:JSON.stringify(this.choseList) */
+								  /* choseList:this.choseList.toLocaleString() 
+								  choseList:JSON.stringify(this.choseList)
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+							  }else{
+								  alert(res.data.message);
+							  }
+						  }) */
+						  window.location.href="${APP_PATH}/good/toConfirm.htm?choseList="+this.choseList.toLocaleString();
+					  },
+					  
+					  
+					  initail(){
+						 axios({
+							  url:"${APP_PATH}/good/doCartList.do",
+							  method:"GET"
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.cartList=res.data.data;
+								  this.docheckedAll();
+								  this.getCollectList();
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+						 
+					  },
+					  
+					  deleteCartItem(cart_id){
+						  axios({
+							  url:"${APP_PATH}/good/doRemoveCartList.do",
+							  method:"POST",
+							  params:{
+								  cartid:cart_id
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.getCartList();
+								  this.choseList.splice(this.choseList.indexOf(cart_id),1);
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					  },
+					  
+
+					  docollect(toid){
+						  axios({
+							  url:"${APP_PATH}/user/doCollect.do",
+							  method:"POST",
+							  params:{
+								  toid:toid,
+								  typeid:4,
+								  iscollect:0
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+								  if(res.data.data>0){
+									  this.getCollectList();
+								  }
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					  },
+					  
+					  getCollectList(){
+						  axios({
+							  url:"${APP_PATH}/good/doCollectList.do",
+							  method:"GET"
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.colList=res.data.data;
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					  },
+					  
+					  removeCartList(){
+						  axios({
+							  url:"${APP_PATH}/good/doRemoveCartList.do",
+							  method:"POST",
+							  params:{
+								  cartList:this.choseList.toLocaleString()
+							  }
+						  }).then(res=>{
+							  if(res.data.success){
+								  this.getCartList();
+								  this.choseList=[];
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+					  },
+					  
+					  getTotalPrice(){
+						  this.totalPrice=parseFloat(0);
+						  if(this.cartList.length!=0){
+								 this.cartList.forEach((item)=>{
+									if(this.choseList.indexOf(item.cart_id)>=0){
+										this.totalPrice=this.totalPrice+parseFloat(item.sku.ofGood.good_price*item.cart_good_num);
+									}	 
+								 })
+							 }
+					  },
+					  
+					  doCheckAll(){
+						  if(this.checkedAll){
+							  this.checkedAll=false;
+							  this.cancelCheckAll();
+						  }else{
+							  this.checkedAll=true;
+							  this.docheckedAll();
+						  }
+					  },
+					  
+					 docheckedAll(){
 						 if(this.cartList.length!=0){
 							 this.cartList.forEach((item)=>{
-								 this.$set(this.preOrderList,this.preOrderList.length,item.cart_id);
+								 this.$set(this.choseList,this.choseList.length,item.cart_id);
 							 })
 						 }
-					 }
+						/*  this.getTotalPrice(); */
+					 },
+					 
+					 cancelCheckAll(){
+						 this.choseList=[];
+						 this.checkedAll=false;
+						 this.totalPrice=parseFloat(0);
+					 },
 					  
 					 getCartList(){
 						 axios({
 							  url:"${APP_PATH}/good/doCartList.do",
-							  method:"POST"
+							  method:"GET"
 						  }).then(res=>{
 							  if(res.data.success){
 								  this.cartList=res.data.data;
+								  this.getTotalPrice();
+								  /* alert(JSON.stringify(this.choseList)); */
 							  }else{
 								  alert(res.data.message);
 							  }

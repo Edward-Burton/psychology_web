@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
+import cn.xhu.softwareengineering.bean.UserCollection;
 import cn.xhu.softwareengineering.exception.LoginFailException;
 import cn.xhu.softwareengineering.potal.dao.UserMapper;
 import cn.xhu.softwareengineering.potal.service.UserService;
@@ -97,6 +98,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int queryLikeByUserId(Integer userid) {
 		return userMapper.queryLikeByUserId(userid);
+	}
+
+	@Override
+	public UserCollection queryUserCollect(Map<String, Integer> paramMap) {
+		System.out.println("typeid-->"+paramMap.get("typeid"));
+		if(paramMap.get("typeid")==1) {
+			return userMapper.queryUserCollectArticle(paramMap);
+		}else if(paramMap.get("typeid")==2) {
+			return userMapper.queryUserCollectQustionA(paramMap);
+		}else if(paramMap.get("typeid")==5) {
+			return userMapper.queryUserCollectFM(paramMap);
+		}
+		return null;
 	}
 
 }

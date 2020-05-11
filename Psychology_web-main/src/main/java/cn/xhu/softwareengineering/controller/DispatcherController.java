@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xhu.softwareengineering.bean.PsychoUser;
@@ -55,140 +54,90 @@ public class DispatcherController {
 		return "register_success";
 	}
 
-	@ResponseBody
-	@RequestMapping("/doLike")
-	public Object doLike(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "mainid", required = false)Integer mainid, @RequestParam(value = "maintype", required = false)Integer maintype, @RequestParam(value = "typeid")Integer typeid, @RequestParam(value = "action")Integer action) {
-		System.out.println(toid);
-		AjaxResult result = new AjaxResult();
-		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
-		if (user != null) {
-			Integer fromuserid=user.getPsychouser_id();
-			try {
-				Map<String, Integer> paramMap = new HashMap<String, Integer>();
-				paramMap.put("userid", fromuserid);
-				paramMap.put("toid", toid);
-				paramMap.put("typeid", typeid);
-				if (mainid != null) {
-					paramMap.put("mainid", mainid);
-				}
-				if (maintype != null) {
-					paramMap.put("maintype", maintype);
-				}
-				int likenum = userService.handleUserLike(paramMap, action);
-				System.out.println("likenum："+likenum);
-				result.setData(likenum);
-				result.setSuccess(true);
-			} catch (Exception e) {
-				result.setSuccess(false);
-				result.setMessage("点赞失败！！！");
-			}
-		}else {
-			result.setSuccess(false);
-			result.setMessage("未登录，即将进入登录界面");
-		}
-		return result;
-
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/doLike") public Object doLike(HttpSession
+	 * session, @RequestParam(value = "toid")Integer toid, @RequestParam(value =
+	 * "mainid", required = false)Integer mainid, @RequestParam(value = "maintype",
+	 * required = false)Integer maintype, @RequestParam(value = "typeid")Integer
+	 * typeid, @RequestParam(value = "action")Integer action) {
+	 * System.out.println(toid); AjaxResult result = new AjaxResult(); PsychoUser
+	 * user =(PsychoUser) session.getAttribute(Const.LOGIN_USER); if (user != null)
+	 * { Integer fromuserid=user.getPsychouser_id(); try { Map<String, Integer>
+	 * paramMap = new HashMap<String, Integer>(); paramMap.put("userid",
+	 * fromuserid); paramMap.put("toid", toid); paramMap.put("typeid", typeid); if
+	 * (mainid != null) { paramMap.put("mainid", mainid); } if (maintype != null) {
+	 * paramMap.put("maintype", maintype); } int likenum =
+	 * userService.handleUserLike(paramMap, action);
+	 * System.out.println("likenum："+likenum); result.setData(likenum);
+	 * result.setSuccess(true); } catch (Exception e) { result.setSuccess(false);
+	 * result.setMessage("点赞失败！！！"); } }else { result.setSuccess(false);
+	 * result.setMessage("未登录，即将进入登录界面"); } return result;
+	 * 
+	 * }
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/doUserId") public Object doUserId(HttpSession session) {
+	 * AjaxResult result = new AjaxResult(); PsychoUser user =(PsychoUser)
+	 * session.getAttribute(Const.LOGIN_USER); if (user != null) { Integer
+	 * userid=user.getPsychouser_id(); result.setData(userid);
+	 * result.setSuccess(true); }else { result.setSuccess(false);
+	 * result.setMessage("未登录，即将进入登录界面"); } return result;
+	 * 
+	 * }
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/doUser") public Object doUser(HttpSession session) {
+	 * AjaxResult result = new AjaxResult(); PsychoUser user =(PsychoUser)
+	 * session.getAttribute(Const.LOGIN_USER); System.out.println(user); if (user !=
+	 * null) { result.setData(user); result.setSuccess(true); }else {
+	 * result.setSuccess(false); result.setMessage("未登录，即将进入登录界面"); } return result;
+	 * 
+	 * }
+	 * 
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/doIsCollect") public Object doIsCollect(HttpSession
+	 * session, @RequestParam(value = "toid")Integer toid, @RequestParam(value =
+	 * "typeid")Integer typeid) { System.out.println(toid); AjaxResult result = new
+	 * AjaxResult(); PsychoUser user =(PsychoUser)
+	 * session.getAttribute(Const.LOGIN_USER); if (user != null) { Integer
+	 * fromuserid=user.getPsychouser_id(); try { Map<String, Integer> paramMap = new
+	 * HashMap<String, Integer>(); paramMap.put("userid", fromuserid);
+	 * paramMap.put("toid", toid); paramMap.put("typeid", typeid); int iscollect =
+	 * userService.queryIsCollect(paramMap);
+	 * System.out.println("iscollect："+iscollect); result.setData(iscollect);
+	 * result.setSuccess(true); } catch (Exception e) { e.printStackTrace();
+	 * result.setSuccess(false); result.setMessage("点赞失败！！！"); } }else {
+	 * result.setSuccess(false); result.setMessage("未登录，即将进入登录界面"); } return result;
+	 * 
+	 * }
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/doCollect") public Object doCollect(HttpSession
+	 * session, @RequestParam(value = "toid")Integer toid, @RequestParam(value =
+	 * "typeid")Integer typeid, @RequestParam(value = "iscollect")Integer iscollect)
+	 * { System.out.println(toid); AjaxResult result = new AjaxResult(); PsychoUser
+	 * user =(PsychoUser) session.getAttribute(Const.LOGIN_USER); if (user != null)
+	 * { Integer fromuserid=user.getPsychouser_id(); try { Map<String, Integer>
+	 * paramMap = new HashMap<String, Integer>(); paramMap.put("userid",
+	 * fromuserid); paramMap.put("toid", toid); paramMap.put("typeid", typeid); int
+	 * collectstatus = userService.handleUserCollect(paramMap, iscollect);
+	 * System.out.println("collectstatus："+collectstatus);
+	 * result.setData(collectstatus); result.setSuccess(true); } catch (Exception e)
+	 * { e.printStackTrace(); result.setSuccess(false); if(iscollect==0) {
+	 * result.setMessage("点赞失败！！！"); }else { result.setMessage("取消点赞失败！！！"); } }
+	 * }else { result.setSuccess(false); result.setMessage("未登录，即将进入登录界面"); } return
+	 * result;
+	 * 
+	 * }
+	 */
 	
-	@ResponseBody
-	@RequestMapping("/doUserId")
-	public Object doUserId(HttpSession session) {
-		AjaxResult result = new AjaxResult();
-		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
-		if (user != null) {
-			Integer userid=user.getPsychouser_id();
-			result.setData(userid);
-			result.setSuccess(true);
-		}else {
-			result.setSuccess(false);
-			result.setMessage("未登录，即将进入登录界面");
-		}
-		return result;
-
-	}
-	
-	@ResponseBody
-	@RequestMapping("/doUser")
-	public Object doUser(HttpSession session) {
-		AjaxResult result = new AjaxResult();
-		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
-		System.out.println(user);
-		if (user != null) {
-			result.setData(user);
-			result.setSuccess(true);
-		}else {
-			result.setSuccess(false);
-			result.setMessage("未登录，即将进入登录界面");
-		}
-		return result;
-
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping("/doIsCollect")
-	public Object doIsCollect(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "typeid")Integer typeid) {
-		System.out.println(toid);
-		AjaxResult result = new AjaxResult();
-		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
-		if (user != null) {
-			Integer fromuserid=user.getPsychouser_id();
-			try {
-				Map<String, Integer> paramMap = new HashMap<String, Integer>();
-				paramMap.put("userid", fromuserid);
-				paramMap.put("toid", toid);
-				paramMap.put("typeid", typeid);
-				int iscollect = userService.queryIsCollect(paramMap);
-				System.out.println("iscollect："+iscollect);
-				result.setData(iscollect);
-				result.setSuccess(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-				result.setSuccess(false);
-				result.setMessage("点赞失败！！！");
-			}
-		}else {
-			result.setSuccess(false);
-			result.setMessage("未登录，即将进入登录界面");
-		}
-		return result;
-
-	}
-	
-	@ResponseBody
-	@RequestMapping("/doCollect")
-	public Object doCollect(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "typeid")Integer typeid, @RequestParam(value = "iscollect")Integer iscollect) {
-		System.out.println(toid);
-		AjaxResult result = new AjaxResult();
-		PsychoUser user =(PsychoUser) session.getAttribute(Const.LOGIN_USER);
-		if (user != null) {
-			Integer fromuserid=user.getPsychouser_id();
-			try {
-				Map<String, Integer> paramMap = new HashMap<String, Integer>();
-				paramMap.put("userid", fromuserid);
-				paramMap.put("toid", toid);
-				paramMap.put("typeid", typeid);
-				int collectstatus = userService.handleUserCollect(paramMap, iscollect);
-				System.out.println("collectstatus："+collectstatus);
-				result.setData(collectstatus);
-				result.setSuccess(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-				result.setSuccess(false);
-				if(iscollect==0) {
-					result.setMessage("点赞失败！！！");
-				}else {
-					result.setMessage("取消点赞失败！！！");
-				}
-			}
-		}else {
-			result.setSuccess(false);
-			result.setMessage("未登录，即将进入登录界面");
-		}
-		return result;
-
-	}
-
 	// 异步请求
 	// @ResponseBody 结合Jackson组件，将返回结果转换为字符串，将JSON串以流的形式返回给客户端。
 	@ResponseBody

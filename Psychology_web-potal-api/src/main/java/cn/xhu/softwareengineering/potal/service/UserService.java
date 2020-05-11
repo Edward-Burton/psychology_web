@@ -5,6 +5,7 @@ import java.util.Map;
 
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
+import cn.xhu.softwareengineering.bean.UserCollection;
 
 public interface UserService {
 	/* Ctrl + t :找到实现类 */
@@ -27,5 +28,7 @@ public interface UserService {
 	int doFollow(Map<String, Object> paramMap, Integer action);
 
 	int queryLikeByUserId(Integer userId);
+
+	UserCollection queryUserCollect(Map<String, Integer> paramMap);
 
 }

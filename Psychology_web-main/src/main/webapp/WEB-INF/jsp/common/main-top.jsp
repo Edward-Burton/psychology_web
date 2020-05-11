@@ -69,6 +69,8 @@
 				<li><a target="_blank" href="${APP_PATH }/course/index.htm">课程</a></li>
 				<li><a target="_blank" class="blog-nav-item"
 					href="${APP_PATH }/good/index.htm">解忧杂货店</a></li>
+				<li><a target="_blank" class="blog-nav-item"
+					href="${APP_PATH }/user/toContent.htm">内容管理</a></li>
 			</ul>
 		</div>
 		<div class="cssmenu">

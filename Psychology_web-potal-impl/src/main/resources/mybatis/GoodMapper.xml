@@ -90,7 +90,16 @@
 	</select>
 	
 	<select id="queryCartList" resultMap="BaseCartGood">
-		select * from good_cart where cart_user_id=#{userid}
+		<if test="userid!=null">
+			select * from good_cart where cart_user_id=#{userid}
+		</if>
+		<if test="choseList!=null">
+			select * from good_cart where cart_id in
+			<foreach collection="choseList" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
 	</select>
 
 	<select id="selectfeaturebyatrrid" resultType="GoodFeature">
@@ -234,14 +243,6 @@
 				#{startIndex},#{pagesize}
 			</if>
 		</if>
-
-		<!-- <if test="typeid!=null"> <if test="level==0"> select count(*) from 
-			psycho_good where good_id in (select good_id from good_type where type_id 
-			in (select sale_type_id from sale_type where sale_parent_typeid=#{typeid})) 
-			limit #{startIndex},#{pagesize} </if> <if test="level==1"> select count(*) 
-			from psycho_good where good_id in (select good_id from good_type where type_id=#{typeid}) 
-			limit #{startIndex},#{pagesize} </if> </if> -->
-
 		<if test="typeid!=null">
 			select count(*) from psycho_good
 			<where>
@@ -346,5 +347,46 @@
 	<update id="UpdateCartNum">
 		update good_cart set cart_good_num=#{fixednum} where cart_id=#{cartid}
 	</update>
-
+	
+	<delete id="delCartList" parameterType = "java.util.List">
+	delete from good_cart where cart_id in
+		<foreach collection="delList"  item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryColGoodList" resultType="Integer">
+		select user_collectioin_to_id from user_collection where user_collection_from_user_id=#{userid} and user_collection_type=#{typeid}
+	</select>
+	
+	<select id="queryAddrList" resultType="CustomerAddr">
+		select * from customer_addr where customer_user_id=#{userid}
+	</select>
+	
+	<insert id="AddCustomerAddr" parameterType="CustomerAddr">
+		insert into customer_addr(customer_user_id,province,city,district,address,is_default,modified_time,accept_customer_name,phone_num)
+		values(#{customer_user_id},#{province},#{city},#{district},#{address},#{is_default},#{modified_time},#{accept_customer_name},#{phone_num})
+		<selectKey keyProperty="customer_addr_id" resultType="int"> select
+			@@identity </selectKey>
+	</insert>
+	
+	<update id="updateCustomerAddr">
+		update customer_addr set province=#{province},city=#{city},district=#{district},address=#{address},is_default=#{is_default},modified_time=#{modified_time},accept_customer_name=#{accept_customer_name},phone_num=#{phone_num}
+		where customer_addr_id=#{customer_addr_id}
+	</update>
+	
+	<insert id="addOrder" parameterType="Order">
+		insert into orderlist(order_userid,order_level,order_type,order_addr,out_trade_no,order_total_amount)
+		values(#{user.psychouser_id},#{order_level},#{type},#{addr.customer_addr_id},#{out_trade_no},#{order_total_amount})
+		<selectKey keyProperty="order_id" resultType="int"> select
+			@@identity </selectKey>
+	</insert>
+	
+	<insert id="addOrder_sku">
+		insert into order_sku (orderid,sku_id) values
+		 <foreach collection="objList" item="item" index="index" separator=",">
+	        (#{order_id},#{item})
+	    </foreach>
+	</insert>
+	
 </mapper>
