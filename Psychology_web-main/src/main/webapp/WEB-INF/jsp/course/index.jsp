@@ -248,7 +248,7 @@ a:link {
 </head>
 <body>
 	<div>
-		<jsp:include page="/WEB-INF/jsp/common/main-top.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
 	</div>
 
 	<div id="main">

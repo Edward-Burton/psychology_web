@@ -92,7 +92,6 @@ public class UserController {
 			result.setMessage("未登录，即将进入登录界面");
 		}
 		return result;
-
 	}
 	
 	

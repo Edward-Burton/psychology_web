@@ -2,6 +2,7 @@ package cn.xhu.softwareengineering.potal.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -282,10 +283,10 @@ public class ArticleController {
 		PsychoUser loginuser = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		if (loginuser != null) {
 			try {
-				System.out.println("inputValue: " + inputValue);
+				System.out.println("inputValue: " + URLDecoder.decode(inputValue, "utf-8"));
 				Map<String, Object> paramMap = new HashMap<String, Object>();
 				paramMap.put("articleid", articleid);
-				paramMap.put("inputValue", inputValue);
+				paramMap.put("inputValue",URLDecoder.decode(inputValue, "utf-8"));
 				if (pcommentid != null) {
 					paramMap.put("pcommentid", pcommentid);
 				}
@@ -318,10 +319,13 @@ public class ArticleController {
 	@RequestMapping("/doAddArticle")
 	public Object addArticle(@RequestParam(value = "articleImg", required = true) MultipartFile attach,
 			@RequestParam(value = "articleTitle", required = true) String articleTitle,
+			@RequestParam(value = "articleDesc", required = true) String articleDesc,
 			@RequestParam(value = "content", required = true) String content,
-			@RequestParam(value = "tags", required = false) String[] tags, HttpSession session,
+			@RequestParam(value = "articleLabels", required = false) String[] tags, HttpSession session,
 			HttpServletRequest request) {
-		System.out.println(tags);
+		for(String tag:tags) {
+			System.out.println(tag);
+		}
 		AjaxResult result = new AjaxResult();
 		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		if (user != null) {
@@ -366,6 +370,7 @@ public class ArticleController {
 			}
 			PsychoArticle pa = new PsychoArticle();
 			pa.setArticleTitle(articleTitle);
+			pa.setDesc(articleDesc);
 			pa.setContent(content);
 			pa.setArticleUser(user);
 			/*

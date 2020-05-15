@@ -68,9 +68,9 @@
 				<when test="(typeid!=null or anchorid!=null) and id!=null">
 					or psycho_radio_id=#{id}
 				</when>
-				<otherwise>
+				<when test="(typeid==null and anchorid==null) and id!=null">
 					where psycho_radio_id=#{id}
-				</otherwise>
+				</when>
 			</choose>
 		order by psycho_radio_pultime desc
 	</select>

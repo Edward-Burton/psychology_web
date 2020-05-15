@@ -81,6 +81,65 @@
 				text-decoration: none;
 				color: inherit;
 			}
+			
+			.content .content_wrap .right_div .tab_item.active {
+			    display: block;
+			}
+			
+			.content .content_wrap .right_div .right_div_content, .content .content_wrap .right_div .right_div_content ul {
+			    overflow: auto;
+			}
+			
+			.content .content_wrap .right_div .right_div_content ul li {
+			    display: flex;
+			    position: relative;
+			    overflow: auto;
+			    padding: 38px 20px 38px 30px;
+			    margin-bottom: 20px;
+			    background: #fff;
+			    border-radius: 10px;
+			}
+			
+			.content .content_wrap .right_div .right_div_content ul li .li_item_img {
+			    height: 48px;
+			    width: 48px;
+			    border-radius: 50%;
+			    overflow: hidden;
+			    background-size: cover;
+			    background-repeat: no-repeat;
+			    background-position: 50%;
+			}
+			.content .content_wrap .right_div .right_div_content ul li .li_item_c {
+			    width: 496px;
+			    margin-left: 20px;
+			}
+			
+			.content .content_wrap .right_div .right_div_content ul li .li_item_c .li_item_c_title {
+			    font-size: 16px;
+			    color: #333;
+			    line-height: 16px;
+			}
+			
+			.content .content_wrap .right_div .right_div_content ul li .li_item_c .li_item_c_title span {
+			    margin-left: 10px;
+			    font-size: 14px;
+			    color: #999;
+			}
+			
+			.content .content_wrap .right_div .right_div_content ul li .li_item_c .li_item_c_title .notice_span {
+			    margin-left: 0;
+			    margin-right: 10px;
+			    font-size: 16px;
+			    color: #666;
+			}
+			
+			.content .content_wrap .right_div .right_div_content ul li .li_item_c .li_item_c_text {
+			    margin-top: 18px;
+			    font-size: 14px;
+			    color: #666;
+			    line-height: 22px;
+			    word-break: break-all;
+			}
 
 			.content .content_wrap .right_div .right_div_title {
 				margin-bottom: 20px;
@@ -386,18 +445,33 @@
 		</style>
 	</head>
 	<body>
+		<div>
+			<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+		</div>
 		<div class="content">
 			<div class="content_wrap">
 				<div class="left_div">
 					<ul>
-						<div class="ul_title">内容管理</div>
-						<li :class="{active:tag==0}" @click="collect">
-							<a href="javacript:">我的收藏</a>
+						<div class="ul_title">消息通知</div>
+						<li :class="{active:tag==0}">
+							<a href="javacript:" @click="message($event)">私信</a>
 						</li>
 						<li :class="{active:tag==1}">
-							<a href="javacript:">课程管理</a>
+							<a href="javacript:" @click="comment($event)">评论回答</a>
 						</li>
 						<li :class="{active:tag==2}">
+							<a href="javacript:">系统通知</a>
+						</li>
+					</ul>
+					<ul>
+						<div class="ul_title">内容管理</div>
+						<li :class="{active:tag==10}">
+							<a href="javacript:" @click="collect($event)">我的收藏</a>
+						</li>
+						<li :class="{active:tag==11}">
+							<a href="javacript:">课程管理</a>
+						</li>
+						<li :class="{active:tag==12}">
 							<a href="javacript:">电台管理</a>
 						</li>
 					</ul>
@@ -405,9 +479,9 @@
 				</div>
 				<div class="right_div">
 					<div class="right_div_title">
-						<p>我的收藏</p>
+						<p>{{tab}}</p>
 					</div>
-					<div class="right_div_ct">
+					<div class="right_div_ct" v-if="tag>=10">
 						
 						<div class="right_div_tab">
 							<ul>
@@ -506,6 +580,48 @@
 						</div>
 
 					</div>
+					<div class="tab_item  privateLetter active" v-if="tag<10">
+						<div class="right_div_content">
+							<ul>
+								<li>
+									<a href="//www.xinli001.com/user/271509828">
+										<div class="li_item_img" style="background-image: url(https://image.xinli001.com/20151104/130127/177215.png!80)"></div>
+									</a>
+									<div class="li_item_c">
+										<a href="//www.xinli001.com/user/setting/message-chat/271509828">
+											<div class="li_item_c_title">
+												<span class="notice_span"> 林晋毅</span>
+												<span>2020年05月12日 17:54:06</span>
+											</div>
+											<div class="li_item_c_text">
+												我：
+												谢谢您文章总是难以拒绝别人？三个方法帮你树立界限的指导
+											</div>
+										</a>
+									</div>
+
+								</li>
+								<li>
+									<a href="//www.xinli001.com/user/1005750138">
+										<div class="li_item_img" style="background-image: url(http://ossimg.xinli001.com/20180904/7d140117ca45904f429b2d44a1a42ba1.jpg!80)"></div>
+									</a>
+									<div class="li_item_c">
+										<a href="//www.xinli001.com/user/setting/message-chat/1005750138">
+											<div class="li_item_c_title">
+												<span class="notice_span"> 思维升级</span>
+												<span>2020年05月12日 09:14:12</span>
+											</div>
+											<div class="li_item_c_text">
+												我：
+												老师，我现在高三，感觉不知道怎么创建待办事项列表的事项维度，后面就关键事情都一件一件往后面堆，
+											</div>
+										</a>
+									</div>
+
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -523,18 +639,32 @@
 			      questionA:[],
 			      articleList:[],
 			      FMList:[],
-			      readMore:[]
+			      readMore:[],
+			      tab:"私信"
+			      
 			    }
 			  },
 			  created() {
-			     this.collect();
+			     this.message();
 			  },
 			  watch: {
 				 
 			  },
 			  methods: {
-				  collect(){
+				  
+				  message(e){
 					  this.tag=0;
+					  this.tab=e.currentTarget.innerHTML;
+				  },
+				  
+				  comment(e){
+					  this.tag=1;
+					  this.tab=e.currentTarget.innerHTML;
+				  },
+				  
+				  collect(e){
+					  this.tab=e.currentTarget.innerHTML;
+					  this.tag=10;
 					  axios({
 						  url: "${APP_PATH}/user/doUserCollect.do",
 					      method: "GET",

@@ -9,6 +9,9 @@
 <link href="${APP_PATH }/css/video-js.min.css" rel="stylesheet">
 <link href="${APP_PATH }/css/course.css" rel="stylesheet" />
 <body>
+	<div>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+	</div>
 	<div class="main-container" id="main">
 		<div class="main-left">
 			<div class="video-player-container"

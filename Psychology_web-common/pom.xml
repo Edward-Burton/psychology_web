@@ -3,9 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>Psychology_web-common</artifactId>
-	<!-- <dependencies> <dependency> <groupId>cn.xhu.softwareengineering</groupId> 
-		<artifactId>Psychology_web-bean</artifactId> <version>0.0.1-SNAPSHOT</version> 
-		</dependency> </dependencies> -->
 	<parent>
 		<groupId>cn.xhu.softwareengineering</groupId>
 		<artifactId>Psychology_web-parent</artifactId>

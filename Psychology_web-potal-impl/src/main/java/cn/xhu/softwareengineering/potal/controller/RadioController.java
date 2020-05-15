@@ -54,7 +54,6 @@ public class RadioController{
         }else if(id!=null) {
         	paramMap.put("id", id);
         }
-        
         try {
         	List<PsychoRadio> radioList = radioService.queryRadioIndexList(paramMap);
         	result.setSuccess(true);

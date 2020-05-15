@@ -540,7 +540,9 @@
 		<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
 	</head>
 	<body style="font-size: 12px;">
-
+		<div>
+			<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+		</div>
 		<!-- 公共头部 -->
 		<div class="common-header" xmlns="http://www.w3.org/1999/html">
 			<div class="header-content"></div>

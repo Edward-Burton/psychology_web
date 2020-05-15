@@ -157,6 +157,16 @@ a {
 	color: #333;
 }
 
+.article-edit-container .article-desc-text {
+	width: 100%;
+    outline: 0;
+    border: none;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px dashed;
+    margin-bottom: 30px;
+}
+
 .article-edit-container .article-tags {
 	padding-bottom: 36px;
 }
@@ -345,8 +355,9 @@ input[type=file] {
 </head>
 <body>
 	<header class="global-head">
-		<div class="global-head-left">
-			<!-- 首页链接 -->
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+		<!-- <div class="global-head-left">
+			首页链接
 			<a href="#" class="index-link"> <img src="#" alt="心理logo">
 			</a>
 		</div>
@@ -355,14 +366,14 @@ input[type=file] {
 
 			<div class="user-avatar-img-wrap">
 				<div class="user-avatar-img">
-					<!-- 用户个人主页 -->
-					<a href="#" class="user-center-link"> <!-- 用户头像 --> <img
+					用户个人主页
+					<a href="#" class="user-center-link"> 用户头像 <img
 						src="https://ossimg.xinli001.com/20200222/19d1695be26b091c2d752e338f1e9b0c.jpg"
 						alt="" class="user-avatar">
 					</a>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</header>
 
 
@@ -387,6 +398,12 @@ input[type=file] {
 		<div class="article-title">
 			<input type="text" placeholder="点击输入文章标题" id="article-title-text"
 				class="article-title-text" autocomplete="off">
+
+		</div>
+		
+		<div class="article-desc">
+			<input type="text" placeholder="点击输入文章简介" id="article-desc-text"
+				class="article-desc-text" autocomplete="off">
 
 		</div>
 		<div class="article-tags">
@@ -441,7 +458,7 @@ input[type=file] {
 			<div class="article-body-m">
 				<div class="cover-con">
 					<img class="article-cover"
-						:src="https://ossimg.xinli001.com/20200316/312e9f6d25129cee1014e5295e31a428.jpeg?x-oss-process=image/quality,Q_80"
+						:src=""
 						alt="文章封面">
 				</div>
 				<div class="yxl-editor">
@@ -603,6 +620,9 @@ input[type=file] {
 
 			// 获取标题
 			var title = $("#article-title-text").val();
+			
+			// 获取文章简介
+			var desc = $("#article-desc-text").val();
 
 			// 获取内容
 			var content = $('#summernote').summernote('code');
@@ -613,19 +633,15 @@ input[type=file] {
 			// 获取标签
 			var tags = [];
 			for (i = 0; i < num; i++) {
-				tags[i] = $(".article-tag").eq(i).find(".article-tag-input")
-						.val();
+				tags[i] = $(".article-tag").eq(i).find(".article-tag-input").val();
 			}
-
-			alert(indeximg);
 			
 		    var  data = new FormData();  
 		    data.append("articleImg", indeximg); 
 		    data.append("articleTitle", title);
+		    data.append("articleDesc", desc);
 		    data.append("content", content);
 		    data.append("articleLabels", tags);
-		    
-		    alert(data);
 		    
 			$.ajax({
 				type : "POST",
@@ -700,7 +716,7 @@ input[type=file] {
 		}
 
 		$(".article-cover-replace-btn").click(function() {
-			$("#img").trigger('click')
+			$("#articleImg").trigger('click');
 		})
 
 		$(".article-cover-remove-btn").click(function() {
@@ -715,12 +731,14 @@ input[type=file] {
 
 			var title = $("#article-title-text").val();
 			var content = $('#summernote').summernote('code');
+			var img = $("#articleImg")[0].files[0];
+			alert(JSON.stringify(img));
 
 			$(".title").html(title);
 			$(".yxl-editor-article").html(content);
 			$(".article-edit-container").css('display', 'none');
 			$(".article-pre").css('display', 'block');
-
+			$(".article-cover").attr('src',img); 
 		})
 	</script>
 

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +10,11 @@
 <link href="${APP_PATH }/css/elementui.css" rel="stylesheet"/>
 <title></title>
 <style>
+body {
+    color: #111;
+    background: #fff;
+    font-size: 12px;
+}
 a {
 	text-decoration: none;
 }
@@ -779,10 +786,127 @@ a {
 	background-image:
 		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAVVJREFUOBGlk7FKA0EURXcTQSFYmcIiGEJQwVjnAwJ+RGqxsjG/YWedOpAm+AGaSn9AUFkNiGBlYamdrueub2TI7qwJPji8N/feNxNIEkUllaZpFa6Makk0qpSZeH34NDQvX3yKCiTQMzT/9XD+IZb6cO0czdLceaHOQh3u4MAtaDat7jS/r2BuIhzBLmzDDqQwjeP4gp6VZrL3HB7psTrM4AGGMeIpQw/OQMaMpTd6sNjZwNSj4gSmEWIbXkCfaqnSju22s0UOuuwZjhe9SVnb+bnELSI24QkGTgt1ZSzbLMxgNuAdtgoDiPIs0whlFKrBBwR/ePIsU/Mvml/Yw0z41r78kD+bl6Ap+1vzF+3j3DqXl7twaXSdbpmOd879abOLWOzAOcEJjI2JNHmc9ZiyxUVoBDfwCvpmVl2Sec00ecqMnJfrmC04hPWcaYI8y7RCmX/p3+fBJ87PqZKIAAAAAElFTkSuQmCC);
 }
+
+.letter-modal-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.letter-modal-box .letter-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.4);
+}
+
+.letter-modal-box .letter-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.letter-modal-box .letter-modal .letter-header {
+    position: relative;
+    height: 70px;
+    line-height: 70px;
+    border-bottom: 1px solid #ccc;
+}
+
+.letter-modal-box .letter-modal .letter-header .header-txt {
+    font-size: 22px;
+    color: #333;
+    font-weight: 700;
+    padding-left: 30px;
+}
+
+.letter-modal-box .letter-modal .letter-header .icon-add {
+    position: absolute;
+    top: 0;
+    right: 30px;
+    color: #999;
+    transform: rotate(45deg);
+    cursor: pointer;
+}
+
+.letter-modal-box .letter-modal .box-cont {
+    padding: 40px 30px;
+}
+
+.letter-modal-box .letter-modal .box-cont .label {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #999;
+    font-weight: 700;
+}
+
+.letter-modal-box .letter-modal .box-cont .label .name {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #0b8bff;
+}
+
+.letter-modal-box .letter-modal .box-cont .letter-content {
+    box-sizing: border-box;
+    width: 540px;
+    height: 170px;
+    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    resize: none;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+}
+
+.letter-modal-box .letter-modal .box-cont .opt-btns {
+    margin-top: 20px;
+    clear: both;
+    overflow: hidden;
+}
+
+.letter-modal-box .letter-modal .box-cont .opt-btns .send-btn:hover {
+    opacity: .8;
+    filter: Alpha(opacity=80);
+}
+
+.letter-modal-box .letter-modal .box-cont .opt-btns .send-btn {
+    float: right;
+    width: 120px;
+    height: 40px;
+    margin-left: 44px;
+    border-radius: 100px;
+    background-color: #0b8bff;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+	border: none;
+	outline: none;
+}
+
+.letter-modal-box .letter-modal .box-cont .opt-btns .cancel-btn {
+    float: right;
+    font-size: 16px;
+    color: #666;
+    line-height: 40px;
+    cursor: pointer;
+}
 </style>
 </head>
 <body>
-
+	<div>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+	</div>
 	<div class="main-container" id="article">
 		<div class="main-left-container">
 			<div class="article-content">
@@ -809,7 +933,9 @@ a {
 					</div>
 
 					<div class="info">
-						<span>发布时间：${pa.pubTime }</span> <span class="like">${likecount}赞</span>
+						<span>发布时间：
+						<fmt:formatDate value="${pa.pubTime}" pattern="yyyy-MM-dd"/>
+						</span> <span class="like">${likecount}赞</span>
 						<span class="comment">${pa.commentsNum}评论</span> <span
 							class="read">{{commentnum}}阅读</span>
 					</div>
@@ -900,8 +1026,8 @@ a {
 									</div>
 
 									<div class="right-bottom">
-										<span>{{comment.article_comment_pultime}}</span> <a href="#"
-											class="ico-jubao" data-pk="3568501">举报</a>
+										<span>{{comment.article_comment_pultime}}</span> 
+										<!-- <a href="#" class="ico-jubao" data-pk="3568501">举报</a> -->
 									</div>
 								</div>
 
@@ -947,19 +1073,19 @@ a {
 			<!-- 作者基本信息 -->
 			<div class="base-info-m white-bg">
 				<div class="top">
-					<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid=${pa.articleUser.psychouser_id }" @click="" class="avatar-con"> 
+					<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid=${pa.articleUser.psychouser_id}" @click="" class="avatar-con"> 
 					<img class="avatar" src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }" alt="个人头像">
 					</a>
 					<p class="name">${pa.articleUser.psychouser_name}</p>
 					<p class="desc">${pa.articleUser.psychouser_intro }</p>
 					<div class="tool-m">
 						<a id="btn-follow" data-userid="${pa.articleUser.psychouser_id }" :class="{selected:isfollow=='已关注'}" href="javascript:;" @click="dofollow($event)">{{isfollow}}ta</a>
-						<a id="btn-message" href="javascript:;" loading="" @click="">私信</a>
+						<a id="btn-message" href="javascript:;" @click="message=1">私信</a>
 					</div>
 				</div>
 				<div class="statistics">
-					<a target="_blank" href="#wz">文章 532</a> <a target="_blank"
-						href="#hd2">问答 501</a> <a target="_blank" href="#">获赞 1635</a>
+					<a target="_blank" href="#wz">文章 ${pa.articleUser.articleNum}</a> <a target="_blank"
+						href="#hd2">问答 ${pa.articleUser.questionAnswerNum}</a> <a target="_blank" href="#">获赞 ${pa.articleUser.zanNum}</a>
 				</div>
 			</div>
 
@@ -1042,7 +1168,23 @@ a {
 			</div>
 		</div>
 
-
+		<div class="letter-modal-box" v-show="message==1">
+		    <div class="letter-mask"></div>
+		    <div class="letter-modal">
+		        <div class="letter-header">
+		            <h4 class="header-txt">私信</h4>
+		            <i class="iconfont icon-add" id="letter-close-btn"></i>
+		        </div>
+		        <div class="box-cont">
+		            <p class="label">给<span class="name">${pa.articleUser.psychouser_name}</span>一条私信</p>
+		            <textarea class="letter-content"></textarea>
+		            <div class="opt-btns">
+		                <button class="send-btn" data-id="${pa.articleUser.psychouser_id}" @click="sendMessage">发送</button>
+		                <span class="cancel-btn" @click="message=0">取消</span>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 
 	</div>
 
@@ -1070,6 +1212,7 @@ a {
 		      likecomment:[],
 		      curuserid:0,
 		      isfollow:"关注",
+		      message:0
 		    }
 		  },
 		  created() {
@@ -1080,6 +1223,10 @@ a {
 		      this.isFollow();
 		    },
 		    methods: {
+		    	
+		    	sendMessage(){
+		    		
+		    	},
 		    	
 		    	dofollow(e){
 					  let action=0;
@@ -1125,7 +1272,7 @@ a {
 				  },
 		    	getuserid(){
 		    		axios({
-					      url: "${APP_PATH}/doUserId.do",
+					      url: "${APP_PATH}/user/doUserId.do",
 					      method: "get",
 					      params:{
 					    	  articleid:articleid
@@ -1169,7 +1316,7 @@ a {
 		    	/* 获取当前用户对当前文章的是否收藏状态 */
 		    	getCollectStatus(){
 		    		axios({
-					      url: "${APP_PATH}/doIsCollect.do",
+					      url: "${APP_PATH}/user/doIsCollect.do",
 					      method: "get",
 					      params:{
 					    	  toid:articleid,
@@ -1187,7 +1334,7 @@ a {
 		    	/* 收藏功能通过vue处理如此的简单，手动泪目 */
 		    	doClickCollect(){
 		    		axios({
-					      url: "${APP_PATH}/doCollect.do",
+					      url: "${APP_PATH}/user/doCollect.do",
 					      method: "get",
 					      params:{
 					    	  toid:articleid,
@@ -1212,7 +1359,7 @@ a {
 		            }else{
 			    		var params={
 			    				articleid:articleid,
-						    	inputValue:this.inputValue.trim()
+						    	inputValue:encodeURI(this.inputValue.trim())
 			    		};
 			    		if(e.target.dataset.pid!=null){
 			    			params.pcommentid=e.target.dataset.pid;
@@ -1243,7 +1390,7 @@ a {
 		    			action=1;
 		    		}
 		    		axios({
-					      url: "${APP_PATH}/doLike.do",
+					      url: "${APP_PATH}/user/doLike.do",
 					      method: "post",
 					      params:{
 					    	  mainid:articleid,
@@ -1326,7 +1473,7 @@ a {
 					action=1;
 				}
 			    axios({
-				      url: "${APP_PATH}/doLike.do",
+				      url: "${APP_PATH}/user/doLike.do",
 				      method: "post",
 				      params:{
 				    	  toid:articleid,
@@ -1406,46 +1553,6 @@ a {
 					}
 				})
 
-		// 评论的点赞按钮
-		/* $(".like-btn").click(function() {
-			if ($(this).hasClass("like-btn-selected")) {
-				$(this).removeClass("like-btn-selected");
-				var count = $(this).find("span").html();
-				alert(count);
-			} else {
-				$(this).addClass("like-btn-selected");
-				var count = $(this).find("span").html();
-				count = parseInt(count) + 1;
-				$(this).find("span").html(count);
-				alert(count);
-			}
-
-		}) */
-
-
-		// window.onbeforeunload = function(){
-		//     var scrollPos;    
-		//     if (typeof window.pageYOffset != 'undefined') {
-		//         scrollPos = window.pageYOffset;
-		//     }
-		//     else if (typeof document.compatMode != 'undefined' &&
-		//         document.compatMode != 'BackCompat') {
-		//         scrollPos = document.documentElement.scrollTop;
-		//     }
-		//     else if (typeof document.body != 'undefined') {
-		//         scrollPos = document.body.scrollTop;
-		//     }
-		//     document.cookie="scrollTop="+scrollPos; //存储滚动条位置到cookies中
-		// }
-
-		// window.onload = function()
-		// { 
-		//     if(document.cookie.match(/scrollTop=([^;]+)(;|$)/)!=null){
-		//         var arr=document.cookie.match(/scrollTop=([^;]+)(;|$)/); //cookies中不为空，则读取滚动条位置
-		//         document.documentElement.scrollTop=parseInt(arr[1]);
-		//         document.body.scrollTop=parseInt(arr[1]);
-		//     }
-		// }
 	</script>
 </body>
 </html>

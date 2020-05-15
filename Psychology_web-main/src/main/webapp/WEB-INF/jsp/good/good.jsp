@@ -925,6 +925,9 @@ body.tabFixed .tabContent {
 </style>
 </head>
 <body style="overflow: auto; margin-right: 0px;">
+	<div>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+	</div>
 	<div id="main">
 		<div class="g-bd">
 			<div class="m-crumb">

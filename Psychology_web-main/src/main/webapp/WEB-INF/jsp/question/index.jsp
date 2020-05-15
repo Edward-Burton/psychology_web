@@ -485,6 +485,10 @@
 		</style>
 	</head>
 	<body>
+		<div>
+			<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+		</div>
+	
 		<div id="main" style="padding: 0px;">
 
 

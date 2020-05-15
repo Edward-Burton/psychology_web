@@ -298,6 +298,9 @@ ul li {
 </style>
 </head>
 <body>
+	<div>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+	</div>
 	<div class="main-container-bg">
 		<div class="sale-tab  white-bg">
 			<div class="tab-content">

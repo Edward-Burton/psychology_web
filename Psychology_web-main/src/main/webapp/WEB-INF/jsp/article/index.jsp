@@ -108,6 +108,7 @@ a {
 	height: 98px;
 	width: 98px;
 	max-width: 98px;
+	object-fit: cover;
 }
 
 a img, fieldset {
@@ -330,7 +331,9 @@ a img, fieldset {
 </style>
 </head>
 <body>
-
+	<div>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+	</div>
 
 	<div class="main-container">
 		<%-- <div>
@@ -600,7 +603,7 @@ a img, fieldset {
 															+ '\'">'
 															+ pa.articleTitle
 															+ '</a>';
-													content += '<a target="_blank" href="#" class="content"><p class="desc">'+pa.content+'</p></a>';
+													content += '<a target="_blank" href="#" class="content"><p class="desc">'+pa.desc+'</p></a>';
 													content += '<div class="info">';
 													content += '<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid='+pa.articleUser.psychouser_id+'"> <span>'
 															+ pa.articleUser.psychouser_name

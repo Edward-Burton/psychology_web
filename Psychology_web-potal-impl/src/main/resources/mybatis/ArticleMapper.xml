@@ -15,8 +15,9 @@
 		<result column="psycho_article_source" property="source" />
 		<result column="psycho_article_originaltitle"
 			property="originalTitle" />
-		<result column="psycho_article_reads_num" property="readsNum" />
+		<result column="psycho_article_reads_num" property="readsNum"/>
 		<result column="psycho_article_content" property="content" />
+		<result column="psycho_article_desc" property="desc" />
 		<association property="articleUser" javaType="PsychoUser"
 			column="psycho_article_id" select="selectUserbyArticleId" />
 		<!-- <association property="psychoCategory" javaType="PsychoCategory" resultMap="CategoryMap"/> -->
@@ -75,7 +76,22 @@
 		<result column="psychouser_name" property="psychouser_name" />
 		<result column="psychouser_head_portrait"
 			property="psychouser_head_portrait" />
+		<association property="articleNum" javaType="Integer" column="psychouser_id" select="selectUserArticleNum"></association>
+		<association property="questionAnswerNum" javaType="Integer" column="psychouser_id" select="selectUserAnswerNum"></association>
+		<association property="zanNum" javaType="Integer" column="psychouser_id" select="selectUserzanNum"></association>
 	</resultMap>
+	
+	<select id="selectUserArticleNum" resultType="Integer">
+		select count(*) from psycho_article where psycho_article_pubuserid=#{psychouser_id}
+	</select>
+	
+	<select id="selectUserAnswerNum" resultType="Integer">
+		select count(*) from question_answers where answerer_id=#{psychouser_id}
+	</select>
+	
+	<select id="selectUserzanNum" resultType="Integer">
+		select count(*) from user_like where (like_type=1 and like_to_id in(select psycho_article_id from psycho_article where psycho_article_pubuserid=#{psychouser_id})) OR (like_type=2 and like_to_id in(select question_answer_id from question_answers where answerer_id=#{psychouser_id}))
+	</select>
 	
 	<update id="updateArticle">
 		update psycho_article
@@ -115,9 +131,9 @@
 	</select>
 
 	<!-- 获取文章作者 -->
-	<select id="selectUserbyArticleId" resultType="PsychoUser">
+	<select id="selectUserbyArticleId" resultMap="BaseArticleUser">
 		select
-		pu.psychouser_id,pu.psychouser_name,psychouser_head_portrait
+		pu.*
 		from
 		psycho_user pu,psycho_article pa
 		where pa.psycho_article_id
@@ -190,7 +206,7 @@
 			from psycho_article -->
 		<!-- select * from psycho_article LEFT JOIN article_category ON psycho_article_id=article_id -->
 		select
-		psycho_article_id,psycho_article_title,psycho_article_pubtime,psycho_article_img,psycho_article_pubuserid,psycho_article_content,psycho_article_reads_num
+		psycho_article_id,psycho_article_title,psycho_article_pubtime,psycho_article_img,psycho_article_pubuserid,psycho_article_desc,psycho_article_reads_num
 		from psycho_article
 		<if test="categoryId!=null"> INNER JOIN article_category ON
 			psycho_article_id=article_id</if>
@@ -279,9 +295,9 @@ where pa.psycho_article_id = #{id} -->
 	<!-- 添加文章 -->
 	<insert id="addArticle" parameterType="PsychoArticle">
 		insert psycho_article
-		(psycho_article_title,psycho_article_pubtime,psycho_article_img,psycho_article_pubuserid,psycho_article_content)
+		(psycho_article_title,psycho_article_pubtime,psycho_article_img,psycho_article_pubuserid,psycho_article_content,psycho_article_desc)
 		values (
-		#{articleTitle},#{pubTime},#{articleImg},#{articleUser.psychouser_id},#{content}
+		#{articleTitle},#{pubTime},#{articleImg},#{articleUser.psychouser_id},#{content},#{desc}
 		)
 		<selectKey keyProperty="articleId" resultType="int"> select
 			@@identity </selectKey>

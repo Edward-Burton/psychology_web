@@ -156,7 +156,9 @@
 	rel="stylesheet">
 </head>
 <body>
-
+	<div>
+		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
+	</div>
 	<div id="main">
 		<div id="left">
 			<div class="content">

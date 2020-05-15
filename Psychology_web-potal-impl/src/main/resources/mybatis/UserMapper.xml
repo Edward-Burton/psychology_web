@@ -178,7 +178,7 @@
 	<select id="queryUserlogin" parameterType="map"
 		resultMap="BaseResultMap">
 		select psychouser_id, psychouser_acct, psychouser_password,
-		psychouser_name, psychouser_mail, psychouser_createtime
+		psychouser_name,psychouser_head_portrait, psychouser_mail, psychouser_createtime
 		from
 		psycho_user where psychouser_acct=#{psychouser_acct} and
 		psychouser_password=#{psychouser_password}

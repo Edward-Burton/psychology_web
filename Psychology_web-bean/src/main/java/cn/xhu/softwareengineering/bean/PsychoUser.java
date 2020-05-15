@@ -15,6 +15,9 @@ public class PsychoUser {
 	private String psychouser_phone_number;
 	private String psychouser_mail;
 	private String psychouser_acct;
+	private int articleNum;
+	private int questionAnswerNum;
+	private int zanNum;
 	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd HH:mm:ss")
 	private Date psychouser_createtime;
 	
@@ -40,6 +43,38 @@ public class PsychoUser {
 		this.psychouser_mail = psychouser_mail;
 		this.psychouser_acct = psychouser_acct;
 		this.psychouser_createtime = psychouser_createtime;
+	}
+	
+	
+
+
+	public int getArticleNum() {
+		return articleNum;
+	}
+
+
+	public void setArticleNum(int articleNum) {
+		this.articleNum = articleNum;
+	}
+
+
+	public int getQuestionAnswerNum() {
+		return questionAnswerNum;
+	}
+
+
+	public void setQuestionAnswerNum(int questionAnswerNum) {
+		this.questionAnswerNum = questionAnswerNum;
+	}
+
+
+	public int getZanNum() {
+		return zanNum;
+	}
+
+
+	public void setZanNum(int zanNum) {
+		this.zanNum = zanNum;
 	}
 
 
