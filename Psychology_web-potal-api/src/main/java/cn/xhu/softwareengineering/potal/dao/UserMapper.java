@@ -43,4 +43,6 @@ public interface UserMapper {
 
 	UserCollection queryUserCollectFM(Map<String, Integer> paramMap);
 
+	PsychoUser queryUserQaById(Integer userid);
+
 }

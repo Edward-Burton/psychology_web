@@ -23,6 +23,10 @@ a {
 	background-color: #ffffff;
 }
 
+.main-left #courseDetail{
+	overflow: hidden;
+}
+
 .lecturer-item .lecturer-uimg {
 	display: block;
 	width: 120px;

@@ -6,6 +6,7 @@ import java.util.Map;
 import cn.xhu.softwareengineering.bean.CourseCatalog;
 import cn.xhu.softwareengineering.bean.CourseProfession;
 import cn.xhu.softwareengineering.bean.CourseTeacher;
+import cn.xhu.softwareengineering.bean.Lesson;
 import cn.xhu.softwareengineering.bean.Order;
 import cn.xhu.softwareengineering.bean.PsychoCourse;
 import cn.xhu.softwareengineering.bean.SaleComment;
@@ -42,6 +43,8 @@ public interface CourseMapper {
 	int addQuestionAnswer(Map<String, Object> paramMap);
 
 	int deleteCourseQuestion(Integer Commentid);
+
+	List<Lesson> queryTryList(Integer courseid);
 
 
 }

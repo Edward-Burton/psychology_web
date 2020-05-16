@@ -8,9 +8,8 @@
 <title>课程首页</title>
 
 <!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/element-ui@1.4/lib/theme-default/index.css">
-<%-- <link rel="stylesheet" href="${APP_PATH}/bootstrap/css/bootstrap.css"> --%>
-<%-- <link rel="stylesheet" href="${APP_PATH}/css/course_index.css"> --%>
+<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui@1.4/lib/theme-default/index.css"> -->
+<link rel="stylesheet" href="${APP_PATH}/css/elementui.css">
 <style>
 * {
 	margin: 0px;
@@ -36,14 +35,14 @@ body {
 }
 
 .main-category {
-	width: 1200px;
-	height: 450px;
+	width: 100%;
+	height: 350px;
 }
 
 .main-bg {
 	position: absolute;
-	width: 1200px;
-	height: 450px;
+	width: 100%;
+	height: 350px;
 	z-index: 1;
 	float: left;
 }
@@ -55,9 +54,11 @@ a:link {
 .main-bg-item {
 	position: absolute;
 	top: 0;
-	width: 1200px;
-	height: 450px;
+	width: 100%;
+	height: 100%;
 	z-index: 1;
+	background-position: 50%;
+    background-size: 100% auto;
 }
 
 .f-nav-box {
@@ -71,18 +72,10 @@ a:link {
 	width: 200px;
 	height: 20px;
 	z-index: 10;
-	bottom: -330px;
+	bottom: -230px;
 	right: 0px;
 }
 
-.bg-nav {
-	position: absolute;
-	width: 200px;
-	height: 20px;
-	z-index: 10;
-	bottom: -330px;
-	right: 0px;
-}
 
 .bg-nav a {
 	width: 12px;
@@ -109,7 +102,6 @@ a:link {
 
 .recommend {
 	width: 1350px;
-	background-color: #e9eff0;
 }
 
 .recommend .main-title {
@@ -341,7 +333,7 @@ a:link {
 
 		</div>
 
-		<div class="main-container">
+		<!-- <div class="main-container">
 			<div class="recommend recommend-tearcher">
 				<div class="main-title">
 					<span class="course-category " style="float: left;">听书</span>
@@ -361,12 +353,12 @@ a:link {
 
 
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<script src="${APP_PATH }/js/vue.js"></script>
 	<script src="${APP_PATH }/js/axios.js"></script>
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="${APP_PATH }/js/elementui.js"></script>
 	<script type="text/javascript">
 		var course = new Vue({
 			  el: '#main',

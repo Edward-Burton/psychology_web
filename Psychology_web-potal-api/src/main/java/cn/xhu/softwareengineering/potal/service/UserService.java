@@ -31,4 +31,6 @@ public interface UserService {
 
 	UserCollection queryUserCollect(Map<String, Integer> paramMap);
 
+	PsychoUser queryUserQaById(Integer userid);
+
 }

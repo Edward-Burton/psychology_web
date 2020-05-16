@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.xhu.softwareengineering.bean.CourseCatalog;
 import cn.xhu.softwareengineering.bean.CourseProfession;
 import cn.xhu.softwareengineering.bean.CourseTeacher;
+import cn.xhu.softwareengineering.bean.Lesson;
 import cn.xhu.softwareengineering.bean.Order;
 import cn.xhu.softwareengineering.bean.PsychoCourse;
 import cn.xhu.softwareengineering.bean.PsychoUser;
@@ -71,7 +72,7 @@ public class CourseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				result.setSuccess(false);
-				result.setMessage("查找分类失败！！！！");
+				result.setMessage("查找课程失败！！！！");
 			}
 		}
 		return result;
@@ -88,7 +89,23 @@ public class CourseController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);
-			result.setMessage("主题分类查询失败");
+			result.setMessage("查询讲师失败");
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doTryList")
+	public Object doTryList(Integer courseid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			List<Lesson> instructorList = CourseService.queryTryList(courseid);
+			result.setSuccess(true);
+			result.setData(instructorList);
+		}catch(Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("查看试听列表失败");
 		}
 		return result;
 	}
@@ -131,7 +148,7 @@ public class CourseController {
 		}catch(Exception e) {
 			result.setSuccess(false);
 			e.printStackTrace();
-			result.setMessage("查询课程目录失败！！");
+			result.setMessage("查询评论失败！！");
 		}
 		return result;
 	}
@@ -151,7 +168,7 @@ public class CourseController {
 		}catch(Exception e) {
 			result.setSuccess(false);
 			e.printStackTrace();
-			result.setMessage("查询课程目录失败！！");
+			result.setMessage("查询问题失败！！");
 		}
 		return result;
 	}
@@ -191,7 +208,7 @@ public class CourseController {
 		}catch(Exception e) {
 			result.setSuccess(false);
 			e.printStackTrace();
-			result.setMessage("查询课程目录失败！！");
+			result.setMessage("添加评论失败！！");
 		}
 		return result;
 	}

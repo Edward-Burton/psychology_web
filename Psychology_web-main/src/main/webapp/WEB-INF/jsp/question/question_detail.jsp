@@ -5,8 +5,9 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-		<link href="${APP_PATH }/css/elementui.css" rel="stylesheet"/>
+		<link href="${APP_PATH}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="${APP_PATH}/css/summernote.min.css" rel="stylesheet">
+		<link href="${APP_PATH}/css/elementui.css" rel="stylesheet"/>
 		<title></title>
 		<style>
 			body {
@@ -27,12 +28,27 @@
 				padding: 0;
 			}
 			
-			button {
+			* {
+			    box-sizing: content-box;
+			}
+			
+			a {
+				text-decoration: none;
+				color: inherit;
+			}
+
+			#main {
+				width: 1180px;
+				margin: 0 auto;
+				padding-top: 20px;
+			}
+			
+			#main button {
 			    cursor: pointer;
 			    padding: 0;
 			}
 			
-			button {
+			#main button {
 			    width: 140px;
 			    height: 42px;
 			    background-color: #0b8bff;
@@ -43,29 +59,6 @@
 			    line-height: 42px;
 			    text-align: center;
 			    outline: 0;
-			}
-
-			.common-header {
-				width: 100%;
-				height: 72px;
-				background-color: #fff;
-				position: fixed;
-				z-index: 10;
-				border-bottom: 1px solid #ddd;
-			}
-
-			.common-header .header-content {
-				position: relative;
-				width: 980px;
-				min-width: 980px;
-				height: 72px;
-				margin: 0 auto;
-			}
-
-			#main {
-				width: 1180px;
-				margin: 0 auto;
-				padding-top: 40px;
 			}
 
 			#left {
@@ -151,13 +144,13 @@
 				overflow: hidden;
 			}
 
-			#left .content .label {
+			#left .content .qzlabel {
 				margin-left: 50px;
 				list-style-type: none;
 			}
 			
 
-			#left .content .label li {
+			#left .content .qzlabel li {
 				display: inline-block;
 				padding: 5px 10px;
 				margin-right: 20px;
@@ -168,25 +161,26 @@
 				color: #bababa;
 			}
 
-			#left .content .label .visit {
+			#left .content .qzlabel .visit {
 				background: #ddefff;
 				border: none;
 				color: #a1b3db;
 			}
 			
-			#left .content .label a:nth-child(1) li, #left .content .label li:hover{
+			#left .content .qzlabel a:nth-child(1) li, #left .content .qzlabel li:hover{
 				background: #ddefff;
 				border: none;
 				color: #a1b3db;
 			}
 			
-			#left .comment-reply {
+			#left #comment-reply {
 			    width: 800px;
 			    height: 94px;
 			    display: flex;
 			    background-color: #fff;
 			    border-radius: 10px;
 			    margin-bottom: 20px;
+				box-sizing: content-box;
 			}
 			
 			#left .comment-reply div {
@@ -298,19 +292,20 @@
 			    line-height: 14px;
 			}
 			
-			#left .content-ans li .label {
+			#left .content-ans li #label {
 			    margin-left: 78px;
 			    height: 24px;
-			    line-height: 24px;
+			    line-height: 24px;    
+			    display: block;
 			}
 			
-			#left .content-ans li .label p {
+			#left .content-ans li #label p {
 			    display: inline-block;
 			    color: #999;
 			    font-size: 14px;
 			}
 			
-			#left .content-ans li .label span {
+			#left .content-ans li #label span {
 			    float: left;
 			    margin-right: 60px;
 			    height: 18px;
@@ -318,7 +313,7 @@
 			    min-width: 18px;
 			}
 			
-			#left .content-ans li .label 
+			#left .content-ans li #label 
 			img {
 			    width: 18px;
 			    height: 18px;
@@ -339,17 +334,17 @@
 			    position: absolute!important;
 			}
 			
-			#left .content-ans li .label span a {
+			#left .content-ans li #label span a {
 			    font-size: 14px;
 			    color: #999;
 			    font-weight: 400;
 			}
 			
-			#left .content-ans li .label .created_time {
+			#left .content-ans li #label .created_time {
 			    margin-left: -30px;
 			}
 			
-			#left .content-ans li .label .edit_reply, #left .content-ans li .label .report_reply {
+			#left .content-ans li #label .edit_reply, #left .content-ans li #label .report_reply {
 			    margin-left: 30px;
 			    cursor: pointer;
 			}
@@ -416,6 +411,7 @@
 			    color: #999;
 			    text-indent: 16px;
 			    line-height: 36px;
+			    outline: none;
 			}
 			
 			#left .content-ans li .import .btn-comment {
@@ -441,6 +437,7 @@
 			    height: 150px;
 			    padding: 50px 30px;
 			    margin-bottom: 20px;
+				box-sizing: content-box;
 			}
 			
 			.contain {
@@ -479,6 +476,7 @@
 			    border-radius: 10px;
 			    width: 360px;
 			    padding: 30px 0 10px;
+				box-sizing: content-box;
 			}
 			
 			#right ul {
@@ -505,6 +503,7 @@
 			    width: 320px;
 			    background-color: #fff;
 			    margin-top: 20px;
+				box-sizing: content-box;
 			}
 			
 			#category p {
@@ -535,8 +534,6 @@
 			
 		</style>
 		
-		
-		<!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
 		<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
 	</head>
 	<body style="font-size: 12px;">
@@ -544,11 +541,8 @@
 			<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
 		</div>
 		<!-- 公共头部 -->
-		<div class="common-header" xmlns="http://www.w3.org/1999/html">
-			<div class="header-content"></div>
-		</div>
-		<div style="clear:both;overflow: hidden;padding-bottom: 72px;"></div>
-		<script>
+		<!-- <div style="clear:both;overflow: hidden;padding-bottom: 72px;"></div> -->
+		<!-- <script>
 			$(function() {
 				$('.search .search_a').on('click', function() {
 					$(this).parent().submit();
@@ -563,7 +557,7 @@
 			}
 		</script>
 
-
+ -->
 		<!-- 主体内容 -->
 		<div id="main">
 
@@ -605,7 +599,7 @@
 					</p>
 
 					<!-- 问题分类标签 -->
-					<ul class="label detail-tag">
+					<ul class="qzlabel detail-tag">
 						<c:forEach items="${question.qustion_labels}" var="label">
 						<a target="_blank" class="common-a" href="#h">
 							<li class="" data-id="${label.psycho_label_id }">${label.psycho_label_name }</li>
@@ -616,7 +610,7 @@
 				</div>
 
 				<!-- 互动 -->
-				<div class="comment-reply">
+				<div class="comment-reply" id="comment-reply">
 					<div class="hug" data-object-id="100597924">
 						<img src="//lapp.xinli001.com/images/website-www/v5/unhug.png">
 						<p>
@@ -679,7 +673,7 @@
 						<div class="text" v-html="reply.question_answer_content">
 						</div>
 						<div class="praise-number">赏金截止时获赞8个</div>
-						<div class="label">
+						<div id="label">
 							<span v-if="reply.user_follows.indexOf(userid)<0"  class="follow" >
 								<img src="//lapp.xinli001.com/images/website-www/v5/unfollow.png" data-tag="0" @click="dofollow($event)" :data-userid="reply.answerUser.psychouser_id">
 								<a>关注</a>
@@ -717,7 +711,7 @@
 							<span>
 								<font class="comment_num">{{reply.answercomment.length}}</font>条评论
 							</span>
-							<span>
+							<span style="float: right;">
 								<a @click="tag=0">收起</a>
 							</span>
 							<div class="comment-list">
@@ -753,7 +747,7 @@
 							<span>提问数</span>
 						</p>
 					</div>
-					<div class="btn">
+					<div class="qabtn">
 						<a href="${APP_PATH}/question/toAdd.htm">
 							<button class="ques-b">我要提问</button>
 						</a>
@@ -816,7 +810,7 @@
 				  addcomment(index){
 					  alert($(".content-ans li").eq(index).find(".import").attr("data-answer-id"));
 					  let answerpid = parseInt($(".content-ans li").eq(index).find(".import").attr("data-answer-id"));
-					  alert(answerpid);
+					  /* alert(answerpid); */
 					  if(this.userid!=0){
 					  if (this.inputValue == '') {
 			              // 提示用户
@@ -827,7 +821,7 @@
 				    				userid : this.userid,
 									questionId:questionid,
 									answerpid:answerpid,
-									content:this.inputValue.trim()
+									content:encodeURI(this.inputValue.trim())
 				    		};
 					  axios({
 						  	method: "GET",
@@ -907,7 +901,7 @@
 					  }
 				  let toid = parseInt($(".content-ans li").eq(index).find(".answer_zan").attr("data-answer-id"));
 				  axios({
-					  url: "${APP_PATH}/doLike.do",
+					  url: "${APP_PATH}/user/doLike.do",
 				      method: "GET",
 				      params:{
 				    	  toid:toid,
@@ -933,7 +927,7 @@
 							params:{
 								userid : this.userid,
 								questionId:questionid,
-								content:$('#summernote').summernote('code')
+								content:encodeURI($('#summernote').summernote('code'))
 							}
 					    }).then(res => {
 					    	if(res.data.success){
@@ -946,8 +940,6 @@
 					  
 				  },
 				  queryQuestionAnswer(){
-
-					  alert("--------");
 					  axios({
 						  	method: "get",
 							url : "${APP_PATH}/question/doQuestionAnswer.do",
@@ -984,7 +976,7 @@
 				  
 				  doCollect(){
 					  axios({
-					      url: "${APP_PATH}/doCollect.do",
+					      url: "${APP_PATH}/user/doCollect.do",
 					      method: "get",
 					      params:{
 					    	  toid:questionid,
@@ -1003,7 +995,7 @@
 				  
 				  getCollectStatus(){
 			    		axios({
-						      url: "${APP_PATH}/doIsCollect.do",
+						      url: "${APP_PATH}/user/doIsCollect.do",
 						      method: "get",
 						      params:{
 						    	  toid:questionid,
@@ -1035,7 +1027,7 @@
 			    },
 			    getuserid(){
 					axios({
-						  url: "${APP_PATH}/doUserId.do",
+						  url: "${APP_PATH}/user/doUserId.do",
 					      method: "GET",
 					    }).then(res => {
 					    	if(res.data.success){

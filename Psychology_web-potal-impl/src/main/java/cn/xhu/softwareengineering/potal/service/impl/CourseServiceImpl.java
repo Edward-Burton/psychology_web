@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import cn.xhu.softwareengineering.bean.CourseCatalog;
 import cn.xhu.softwareengineering.bean.CourseProfession;
 import cn.xhu.softwareengineering.bean.CourseTeacher;
+import cn.xhu.softwareengineering.bean.Lesson;
 import cn.xhu.softwareengineering.bean.Order;
 import cn.xhu.softwareengineering.bean.PsychoCourse;
 import cn.xhu.softwareengineering.bean.SaleComment;
@@ -95,6 +96,11 @@ public class CourseServiceImpl implements CourseService{
 	@Override
 	public int deleteCourseQuestion(Integer Commentid) {
 		return courseMapper.deleteCourseQuestion(Commentid);
+	}
+
+	@Override
+	public List<Lesson> queryTryList(Integer courseid) {
+		return courseMapper.queryTryList(courseid);
 	}
 
 	

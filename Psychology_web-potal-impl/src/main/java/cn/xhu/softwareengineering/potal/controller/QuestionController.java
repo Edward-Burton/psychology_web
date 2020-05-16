@@ -1,5 +1,8 @@
 package cn.xhu.softwareengineering.potal.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -171,24 +174,44 @@ public class QuestionController {
 
 	@ResponseBody
 	@RequestMapping("/doAdd")
-	public Object doAdd(@RequestParam(value = "anonym", required = false, defaultValue = "1")Integer anonym, @RequestParam(value = "tags", required = false)List<Integer> tags,String title, String content, HttpSession session) {
-		System.out.println("这里"+title+content);
+	public Object doAdd(@RequestParam(value = "anonym", required = false, defaultValue = "1")Integer anonym, @RequestParam(value = "tags", required = false)String tags,String title, String content, HttpSession session) {
+		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		AjaxResult result = new AjaxResult();
-		Map<String, Object> parammap = new HashMap<String, Object>();
-		parammap.put("title", title);
-		parammap.put("content", content);
-		parammap.put("pultime", new Date());
-		parammap.put("masterid", 1);
-		parammap.put("tags", tags);
-		parammap.put("anonym", anonym);
-		parammap.put("id", 0);
-		if (questionService.insertQuestion(parammap) > 0) {
-			result.setSuccess(true);
-//			return "question/myquestion";
-			return result;
+		if(user!=null) {
+			List<Integer> tagList=new ArrayList<Integer>();
+			try {
+				title=URLDecoder.decode(title,"utf-8");
+				content=URLDecoder.decode(content,"utf-8");
+				tags=URLDecoder.decode(tags,"utf-8");
+				for(String a:tags.split(",")) {
+					tagList.add(Integer.valueOf(a));
+				}
+				
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("这里"+title+content);
+			System.out.println(tags);
+			Map<String, Object> parammap = new HashMap<String, Object>();
+			parammap.put("title", title);
+			parammap.put("content", content);
+			parammap.put("pultime", new Date());
+			parammap.put("masterid", user.getPsychouser_id());
+			parammap.put("tags", tagList);
+			parammap.put("anonym", anonym);
+			parammap.put("id", 0);
+			try {
+				questionService.insertQuestion(parammap);
+				result.setSuccess(true);
+			}catch(Exception e) {
+				e.printStackTrace();
+				result.setSuccess(false);
+				result.setMessage("添加问题失败！！！");
+			}
+		}else {
+			result.setSuccess(false);
+			result.setMessage("未登录！！！");
 		}
-		result.setSuccess(false);
-		result.setMessage("添加问题失败！！！");
 		return result;
 	}
 
@@ -206,9 +229,6 @@ public class QuestionController {
 	public Object doQuestionAnswer(@RequestParam(value = "pageno", required = false, defaultValue = "1") Integer pageno,
 			@RequestParam(value = "pagesize", required = false, defaultValue = "5") Integer pagesize,
 			@RequestParam(value = "questionId", required = false) Integer questionId) {
-
-		System.out.println(questionId);
-
 		AjaxResult result = new AjaxResult();
 		try {
 			Map<String, Object> parammap = new HashMap<String, Object>();
@@ -217,12 +237,11 @@ public class QuestionController {
 			parammap.put("questionId", questionId);
 			Page<QuestionAnswer> questionAnswerPage = questionService.queryQuestionAnswerPage(parammap);
 			List<QuestionAnswer> list = (List<QuestionAnswer>) (questionAnswerPage.getData());
-			System.out.println("回复列表：");
-			for (QuestionAnswer a : list) {
-				System.out.println(a.getQuestion_answer_content());
-				System.out.println(a.getAnswerUser().getPsychouser_name());
-			}
-
+			/*
+			 * System.out.println("回复列表："); for (QuestionAnswer a : list) {
+			 * System.out.println(a.getQuestion_answer_content());
+			 * System.out.println(a.getAnswerUser().getPsychouser_name()); }
+			 */
 			System.out.println(questionAnswerPage.getTotalsize());
 			result.setPage(questionAnswerPage);
 			result.setSuccess(true);
@@ -243,7 +262,7 @@ public class QuestionController {
 			Map<String, Object> parammap = new HashMap<String, Object>();
 			parammap.put("userid", userid);
 			parammap.put("questionId", questionId);
-			parammap.put("content", content);
+			parammap.put("content", URLDecoder.decode(content,"utf-8"));
 			parammap.put("userid", userid);
 			parammap.put("pultime",new Date());
 			if(parentanswerid!=null) {

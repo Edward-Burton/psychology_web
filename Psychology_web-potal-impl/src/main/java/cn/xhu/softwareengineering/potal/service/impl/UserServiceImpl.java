@@ -113,4 +113,9 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
+	@Override
+	public PsychoUser queryUserQaById(Integer userid) {
+		return userMapper.queryUserQaById(userid);
+	}
+
 }

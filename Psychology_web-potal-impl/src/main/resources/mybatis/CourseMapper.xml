@@ -63,6 +63,10 @@
 	<collection property="answers" column="sales_question_id"  ofType="SalesAnswer"  select="selectanswers"/>
 	</resultMap>
 	
+	<select id="queryTryList" resultType="Lesson">
+		SELECT lesson_id,lesson_name,media_addr FROM lesson WHERE lesson_catalogid in (SELECT catalog_id FROM course_catalog WHERE catalog_course_id=#{courseid})
+	</select>
+	
 	<select id="selectanswers" resultType="SalesAnswer">
 		select * from sales_answer where sales_questionid=#{sales_question_id} order by sales_answer_pultime desc
 	</select>

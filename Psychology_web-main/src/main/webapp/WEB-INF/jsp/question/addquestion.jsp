@@ -110,6 +110,7 @@
 			    font-size: 14px;
 			    color: #999;
 			    margin-bottom: 20px;
+			    outline: none;
 			}
 			
 			#left .list span {
@@ -134,6 +135,7 @@
 			    border: 1px solid #e1ebf1;
 			    border-radius: 8px;
 			    font-size: 14px;
+			    outline: none;
 			}
 			
 			#left .label-ques {
@@ -339,7 +341,7 @@
 				  },
 				  
 				  dispatch(){
-					  window.location.href="${APP_PATH}/question/toMyquestion.htm";
+					  /* window.location.href="${APP_PATH}/question/toMyquestion.htm"; */
 					if (this.title == "") {
 						alert("标题不能为空！！！");
 					} else if (this.content == "") {
@@ -350,15 +352,15 @@
 						alert("是否匿名：" +this.isanonym + "\n" + "标题：" + this.title + "\n" + "内容：" + this.content + "\n" + "标签：" + JSON.stringify(this.tags));
 						let data={
 					    	  anonym:this.isanonym,
-					    	  title:this.title.trim(),
-					    	  content:this.content.trim(),
-					    	  tags:JSON.stringify(this.tags)
+					    	  title:encodeURI(this.title.trim()),
+					    	  content:encodeURI(this.content.trim()),
+					    	  tags:this.tags.toLocaleString()
 					      }
 						axios({
 							  url: "${APP_PATH}/question/doAdd.do",
 						      method: "POST",
-						      dataType: "json",
-						      contentType : 'application/json; charset=UTF-8',
+						      /* dataType: "json",
+						      contentType : 'application/json; charset=UTF-8', */
 						      params:data
 						    }).then(res => {
 						    	if(res.data.success){

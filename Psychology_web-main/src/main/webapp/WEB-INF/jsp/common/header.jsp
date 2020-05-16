@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
-<link rel="stylesheet" href="https://unpkg.com/element-ui@1.4/lib/theme-default/index.css">
+<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui@1.4/lib/theme-default/index.css"> -->
+<link rel="stylesheet" href="${APP_PATH}/css/elementui.css">
 		<style>
 			a {
 			    outline: 0;
@@ -366,7 +367,8 @@
 		<script src="${APP_PATH }/js/vue.js"></script>
 		<script src="${APP_PATH }/js/axios.js"></script>
 		<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
-		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="${APP_PATH }/js/elementui.js"></script>
+		<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
 		<script type="text/javascript">
 			let user="${loginUser}";
 			var header = new Vue({

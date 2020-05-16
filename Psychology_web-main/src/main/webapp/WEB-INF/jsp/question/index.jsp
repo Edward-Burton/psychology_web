@@ -339,7 +339,7 @@
 				background-color: #fff;
 				border-radius: 10px;
 				width: 300px;
-				height: 150px;
+				/* height: 150px; */
 				padding: 50px 30px;
 				margin-bottom: 20px;
 			}
@@ -578,8 +578,7 @@
 						<div class="ellipsis">
 							<div class="ellipsis-container">
 								<a class="common-a" target="_blank" href="#">
-									<div class="ellipsis-content">
-										{{answer.question_answer_content}}	
+									<div class="ellipsis-content" v-html="answer.question_answer_content">
 									</div>
 								</a>
 								<div class="ellipsis-ghost">
@@ -663,17 +662,17 @@
 			<!-- 右边 -->
 			<div id="right">
 				<div id="up">
-					<div class="contain">
+					<div class="contain" v-if="curUser!=null">
 						<p class="star">
-							<a href="#">0</a>
+							<a href="#">{{curUser.zanNum}}</a>
 							<span>获赞数</span>
 						</p>
 						<p class="ans">
-							<a href="#">1</a>
+							<a href="#">{{curUser.questionAnswerNum}}</a>
 							<span>回答数</span>
 						</p>
 						<p class="ques">
-							<a href="#">1</a>
+							<a href="#">{{curUser.questionNum}}</a>
 							<span>提问数</span>
 						</p>
 					</div>
@@ -742,12 +741,13 @@
 				  totalno : 0,
 				  answerList : [],
 				  questionList : [],
-				  userid:0
+				  userid:0,
+				  curUser:null
 			    }
 			  },
 			  created() {
 			      this.getAnswer();
-			      this.getuserid();
+			      this.getUser();
 			  },
 			  watch: {
 				      tag:function(){
@@ -785,7 +785,7 @@
 					var action=parseInt($(".content li").eq(index).find(".answer_zan img").attr("data-id"));
 					alert(action);
 					axios({
-						  url: "${APP_PATH}/doLike.do",
+						  url: "${APP_PATH}/user/doLike.do",
 					      method: "GET",
 					      params:{
 					    	  toid:e.currentTarget.dataset.answerid,
@@ -803,13 +803,24 @@
 					    });
 				},
 				  
-				getuserid(){
+				getUser(){
 					axios({
-						  url: "${APP_PATH}/doUserId.do",
+						  url: "${APP_PATH}/user/doUserId.do",
 					      method: "GET",
 					    }).then(res => {
 					    	if(res.data.success){
 					    		this.userid=res.data.data;
+					    		axios({
+					    			url:"${APP_PATH}/user/doUserQa.do",
+					    			method:"GET",
+					    			params:{
+					    				userid:res.data.data
+					    			}
+					    		}).then(res=>{
+					    			if(res.data.success){
+					    				this.curUser=res.data.data;
+					    			}
+					    		})
 					    	}else{
 					    		console.log(res.data.message);
 					    	}

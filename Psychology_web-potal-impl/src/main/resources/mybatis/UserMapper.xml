@@ -28,6 +28,7 @@
 			property="psychouser_createtime" jdbcType="CHAR" />
 	</resultMap>
 	
+	
 	<resultMap type="PsychoArticle" id="BaseArticleMap">
 		<id column="psycho_article_id" property="articleId" />
 		<result column="psycho_article_title" property="articleTitle" />
@@ -109,9 +110,41 @@
 			column="psycho_radio_anchor_id" select="selectanchorbyid" />
 	</resultMap>
 	
+	<resultMap id="BaseQaUser" type="PsychoUser">
+		<id column="psychouser_id" property="psychouser_id"
+			jdbcType="INTEGER" />
+		<result column="psychouser_name" property="psychouser_name"
+			jdbcType="VARCHAR" />
+		<association property="questionNum"
+			javaType="Integer" column="psychouser_id"
+			select="selectQuestionNumbyUserId" />
+		<association property="questionAnswerNum"
+			javaType="Integer" column="psychouser_id"
+			select="selectQaNumUserId" />
+		<association property="zanNum"
+			javaType="Integer" column="psychouser_id"
+			select="selectzanNumByUserId" />
+	</resultMap>
+	
+	<select id="selectQuestionNumbyUserId" resultType="Integer">
+		select count(*) from user_questions where question_master_id=#{psychouser_id}
+	</select>
+	
+	<select id="selectQaNumUserId" resultType="Integer">
+		select count(*) from question_answers where answerer_id=#{psychouser_id}
+	</select>
+	
+	<select id="selectzanNumByUserId" resultType="Integer">
+		select count(*) from user_like where (like_type=1 and like_to_id in(select psycho_article_id from psycho_article where psycho_article_pubuserid=#{psychouser_id})) OR (like_type=2 and like_to_id in(select question_answer_id from question_answers where answerer_id=#{psychouser_id}))
+	</select>
+	
 	<select id="selectanchorbyid" resultType="RadioAnchor">
 		select * from
 		radio_anchor where radio_anchor_id=#{psycho_radio_anchor_id}
+	</select>
+	
+	<select id="queryUserQaById" resultMap="BaseQaUser">
+		select * from psycho_user where psychouser_id=#{userid}
 	</select>
 	
 	<select id="queryanswercountById" resultType="Integer">

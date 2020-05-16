@@ -20,7 +20,7 @@
 					class="video-js vjs-default-skin vjs-big-play-centered" controls
 					preload="auto" width="820" height="400"
 					poster="${APP_PATH}/${course.cover_img}">
-					<source :src="playOptions.source[0].src">
+					<!-- <source :src="playOptions.source[0].src"> -->
 					<!-- <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4"> -->
 					<!-- <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
 					<source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg"> -->
@@ -308,7 +308,7 @@
 				</div>
 				<div class="comment-input">
 					<textarea v-model="commentValue" rows="5" placeholder="请输入内容"
-						style="width: 90%; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
+						style="width: 90%;outline:none;resize: none; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
 					<a class="comment-bnt" @click="addComment"
 						style="background-color: #0b8bff; padding: 10px; color: white; border-radius: 8px;">完成</a>
 				</div>
@@ -357,7 +357,7 @@
 				<div class="question-input">
 					<!-- @focus="isLogin()" -->
 					<textarea v-model="questionValue" rows="5" placeholder="请输入内容"
-						style="width: 90%; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
+						style="width: 90%;outline: none;resize:none; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
 					<a class="sub-bnt" @click="addquestion"
 						style="background-color: #0b8bff; padding: 10px; color: white; border-radius: 8px;">完成</a>
 				</div>
@@ -390,7 +390,7 @@
 						</ul>
 						<div class="reply-input">
 							<textarea v-model="answerValue" rows="4" placeholder="请输入内容"
-								style="padding-top: 20px; width: 90%; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
+								style="padding-top: 20px;outline: none;resize: none; width: 90%; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
 							<a class="addanswer=bnt" @click="addqanswer($event,index)"
 								style="background-color: #0b8bff; padding: 10px; color: white; border-radius: 8px;">完成</a>
 						</div>
@@ -462,6 +462,7 @@
 			      userid:0,
 			      lessionList:[],
 			      catalogList:[],
+			      tryList:[],
 			      mediaUrl:"",
 			      commentValue:"",
 			      questionValue:"",
@@ -477,10 +478,18 @@
 		              /* flash: {
 		                swf: '../../../static/VideoJS.swf'   //如果是本地视频  需要相应的videoJS.swf文件
 		              }, */
-		              source:[{
+		              /* source:[{
 		                type: 'video/mp4',
 		                src:'http://vjs.zencdn.net/v/oceans.mp4'
-		              }],
+		              }], */
+		              /* source:[{
+		                type: 'video/mp4',
+		                src:'/Psychology_web-main/img/coursemedias/test1.mp3'
+		              }], */
+		              /* source:[{
+			                type: 'video/mp4',
+			                src: ''
+			          }], */
 		              poster:'', //播放器 默认图片
 		              controlBar: {                     // 配置控制栏
 		                timeDivider: false, // 时间分割线
@@ -497,6 +506,8 @@
 			  
 			  created() {
 				/* this.$refs.viodeRef = videojs('course-video'); */
+				
+				this.getTryList();
 			    this.getorder();
 			    this.getLessionList();
 			    this.getCommentList();
@@ -504,6 +515,32 @@
 			    this.getquestion();
 			  },
 			  methods: {
+				  
+			/* 	  $(".vjs-big-play-button").click(function(){
+					  alert("!!!!");
+				  }),
+				   */
+				  getTryList(){
+					  axios({
+						  url: "${APP_PATH}/course/doTryList.do",
+					      method: "GET",
+					      params:{
+					    	  courseid:courseid
+					      }
+					    }).then(res => {
+					    	if(res.data.success){
+					    		 this.tryList=res.data.data;
+					    		 /* this.tryList.forEach((item)=>{
+					    			 this.$set(this.playOptions.source,this.playOptions.source.length,{type:"video/mp4",src:"${APP_PATH }/"+item.media_addr});
+					    		 }) */
+					    		 /* this.$set(this.playOptions.source,this.playOptions.source.length,{type:"video/mp4",src:"${APP_PATH }/"+this.tryList[0].media_addr});
+					    		 alert(JSON.stringify(this.playOptions.source)); */
+					    		/*  this.$refs.viodeRef.src="${APP_PATH }/"+this.tryList[0].media_addr; */
+					    	}else{
+					    		alert(res.data.message);
+					    	}
+					    });
+				  },
 				  
 				  deleteComment(index){
 					  let Commentid=parseInt($(".comment-list li").eq(index).find(".like-action").attr("data-comment-id"));
@@ -633,7 +670,7 @@
 							action=0;
 						}
 						axios({
-							  url: "${APP_PATH}/doLike.do",
+							  url: "${APP_PATH}/user/doLike.do",
 						      method: "GET",
 						      params:{
 						    	  toid:toid,
@@ -653,7 +690,7 @@
 				  
 				  getuserid(){
 						axios({
-							  url: "${APP_PATH}/doUserId.do",
+							  url: "${APP_PATH}/user/doUserId.do",
 						      method: "GET",
 						    }).then(res => {
 						    	if(res.data.success){
@@ -665,11 +702,11 @@
 					},
 				  
 				  play(e){
-					  this.mediaUrl=e.currentTarget.dataset.id;
+					  /* this.mediaUrl=e.currentTarget.dataset.id;
 					  alert(this.mediaUrl);
 					  this.playOptions.source[0].src=e.currentTarget.dataset.id;
 					  alert(this.playOptions.source[0].src);
-					  
+					   */
 					  this.$refs.viodeRef.src=e.currentTarget.dataset.id;
 					  this.$refs.viodeRef.load=e.currentTarget.dataset.id;
 					  this.$refs.viodeRef.play();
@@ -737,13 +774,40 @@
 		});
 		var coursePlayer = videojs('course-video');
 		
-		
 			$(function(){
+				getTryList();
 				$('#courseDetail').show();
 				$('#courseSection').hide();
 				$('#comment').hide();
 				$('#courseQA').hide();
 			});
+			
+			function getTryList(){
+				var tryList=[];
+				$.ajax({
+					type : "POST",
+					data : {
+						"courseid":courseid
+					},
+					url : "${APP_PATH}/course/doTryList.do",
+					beforeSend : function() {
+						return true;
+					},
+					success : function(result) {
+						if (result.success) {
+							tryList=result.data;
+				            videojs("course-video").ready(function() {
+				                var myPlayer = this;
+				                myPlayer.src("${APP_PATH}/"+tryList[0].media_addr); /*动态设置video.js播放的地址。*/
+				                myPlayer.autoplay();
+				            });
+						}else{
+							alert(res.message);
+						}
+					}
+				})
+				
+			}
 			
 			//设置中文
 			videojs.addLanguage('zh-CN', {

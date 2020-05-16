@@ -18,6 +18,7 @@ public class PsychoUser {
 	private int articleNum;
 	private int questionAnswerNum;
 	private int zanNum;
+	private int questionNum;
 	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd HH:mm:ss")
 	private Date psychouser_createtime;
 	
@@ -27,10 +28,10 @@ public class PsychoUser {
 	}
 
 
-	public PsychoUser(int psychouser_id, String psychouser_name, String psychouser_password,
-			String psychouser_gender, String psychouser_title, String psychouser_intro, String psychouser_head_portrait,
-			String psychouser_phone_number, String psychouser_mail, String psychouser_acct,
-			Date psychouser_createtime) {
+	public PsychoUser(int psychouser_id, String psychouser_name, String psychouser_password, String psychouser_gender,
+			String psychouser_title, String psychouser_intro, String psychouser_head_portrait,
+			String psychouser_phone_number, String psychouser_mail, String psychouser_acct, int articleNum,
+			int questionAnswerNum, int zanNum, int questionNum, Date psychouser_createtime) {
 		super();
 		this.psychouser_id = psychouser_id;
 		this.psychouser_name = psychouser_name;
@@ -42,10 +43,25 @@ public class PsychoUser {
 		this.psychouser_phone_number = psychouser_phone_number;
 		this.psychouser_mail = psychouser_mail;
 		this.psychouser_acct = psychouser_acct;
+		this.articleNum = articleNum;
+		this.questionAnswerNum = questionAnswerNum;
+		this.zanNum = zanNum;
+		this.questionNum = questionNum;
 		this.psychouser_createtime = psychouser_createtime;
 	}
+
 	
 	
+
+
+	public int getQuestionNum() {
+		return questionNum;
+	}
+
+
+	public void setQuestionNum(int questionNum) {
+		this.questionNum = questionNum;
+	}
 
 
 	public int getArticleNum() {

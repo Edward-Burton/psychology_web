@@ -79,6 +79,23 @@ public class UserController {
 	}
 	
 	@ResponseBody
+	@RequestMapping("/doUserQa")
+	public Object doUserQa(Integer userid) {
+		AjaxResult result = new AjaxResult();
+		try{
+			PsychoUser user = userService.queryUserQaById(userid);
+			result.setData(user);
+			result.setSuccess(true);
+		}catch(Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("未登录，即将进入登录界面");
+		}
+		return result;
+
+	}
+	
+	@ResponseBody
 	@RequestMapping("/doUser")
 	public Object doUser(HttpSession session) {
 		AjaxResult result = new AjaxResult();

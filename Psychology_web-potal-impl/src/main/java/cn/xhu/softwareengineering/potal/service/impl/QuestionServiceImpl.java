@@ -30,7 +30,6 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public List<UserQuestions> getQuestionsByUserId(int userId) {
-		
 		return questionMapper.getQuestionsByUserId(userId);
 	}
 
@@ -79,6 +78,7 @@ public class QuestionServiceImpl implements QuestionService {
 		List<QuestionAnswer> questionAnswer = questionMapper.queryAnswerPage(parammap);
 		page.setData(questionAnswer);
 		Integer totalsize = questionMapper.queryAnswerCount(new HashMap<String,Object>());
+		System.out.println(totalsize);
 		page.setTotalsize(totalsize);
 		return page;
 	}
