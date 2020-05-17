@@ -30,7 +30,7 @@
 				height: 72px;
 				background-color: #fff;
 				position: fixed;
-				z-index: 10;
+				z-index: 15;
 				border-bottom: 1px solid #ddd;
 			}
 			
