@@ -950,7 +950,7 @@ body.tabFixed .tabContent {
 							</div>
 						</div>
 						<div class="list">
-							<ul>
+							<ul v-if="good.goodPicList!=null">
 								<li class v-for="(img,index) in good.goodPicList"
 									:class="{'z-active':tag==index}"
 									@click="showPic(img.sale_pic_addr,index)"><a
@@ -1033,7 +1033,7 @@ body.tabFixed .tabContent {
 						<div class="btns">
 							<a class="btn w-button w-button-xl w-button-ghost"
 								href="javascript:;"> <span>立即购买</span></a> 
-							<a class="btn w-button w-button-xl w-button-primary j-button-addCart" href="javascript:;" @click="addCart()" style="right: 168.5px;"> 
+							<a class="btn w-button w-button-xl w-button-primary j-button-addCart" @click="addCart()" style="right: 168.5px;"> 
 							<span>
 							<i class="w-icon-cart cart-detail"></i> 
 							<span>加入购物车</span>
@@ -1218,7 +1218,6 @@ body.tabFixed .tabContent {
 			    }
 			  },
 			  created() {
-				  alert(goodid);
 				  this.getGood();
 				  this.iscollect();
 			  },

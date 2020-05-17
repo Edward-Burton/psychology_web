@@ -389,4 +389,9 @@
 	    </foreach>
 	</insert>
 	
+	<update id="upDateAddrDefault">
+		update customer_addr set is_default=0 where is_default=1 and customer_addr_id in
+		(select ca.cai from(select (customer_addr_id)cai from customer_addr where customer_user_id=#{customer_user_id} and customer_addr_id!=#{customer_addr_id})ca)
+	</update>
+	
 </mapper>

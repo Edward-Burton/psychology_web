@@ -96,6 +96,11 @@ public class GoodServiceImpl implements GoodService {
 	@Override
 	public int AddCustomerAddr(CustomerAddr addr) {
 		if(goodMapper.AddCustomerAddr(addr)>0) {
+			if(addr.getIs_default()==1) {
+				if(goodMapper.upDateAddrDefault(addr.getCustomer_user_id(),addr.getCustomer_addr_id())>0) {
+					return addr.getCustomer_addr_id();
+				}
+			}
 			return addr.getCustomer_addr_id();
 		}
 		return 0;
@@ -104,6 +109,11 @@ public class GoodServiceImpl implements GoodService {
 	@Override
 	public int updateCustomerAddr(CustomerAddr addr) {
 		if(goodMapper.updateCustomerAddr(addr)>0) {
+			if(addr.getIs_default()==1) {
+				if(goodMapper.upDateAddrDefault(addr.getCustomer_user_id(),addr.getCustomer_addr_id())>0) {
+					return addr.getCustomer_addr_id();
+				}
+			}
 			return addr.getCustomer_addr_id();
 		}
 		return 0;

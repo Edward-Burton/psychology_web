@@ -50,4 +50,6 @@ public interface GoodMapper {
 
 	int addOrder_sku(@Param(value="order_id")int order_id, @Param(value="objList")List<Integer> objList);
 
+	int upDateAddrDefault(@Param(value="customer_user_id")int customer_user_id, @Param(value="customer_addr_id")int customer_addr_id);
+
 }

@@ -32,9 +32,11 @@
 			td,
 			textarea,
 			th,
+			select,
 			ul{
 				margin: 0;
 				padding: 0;
+				outline: none;
 			}
 
 			.main-bg {
@@ -917,7 +919,6 @@
 			  methods: {
 				  
 				  newAddr(){
-					  alert("new!!!");
 					  this.flag=0;
 					  this.selectProvince="0";
 			    	  this.selectCity="0";
@@ -1117,7 +1118,7 @@
 									  city.areaList.forEach(district=>{
 										  if(eval(district.code)==addr.district){
 											  this.$set(this.areaList,this.areaList.length,district.name);
-											  alert(this.areaList);
+											  /* alert(this.areaList); */
 										  }						
 									  })
 								  }						
@@ -1188,17 +1189,39 @@
 							  }
 						  }).then(res=>{
 							  if(res.data.success){
-								  this.getAddr();
+								  let addrid=res.data.data;
+								  /* this.getAddr(); */
+								  axios({
+									  url:"${APP_PATH}/good/doAddr.do",
+									  method:"GET"
+								  }).then(res=>{
+									  if(res.data.success){
+										  this.addrList=res.data.data;
+										  axios({
+											  url:"${APP_PATH}/good/doArea.do",
+											  method:"GET",
+											  params:{
+												  choseList:list
+											  }
+										  }).then(res=>{
+											  if(res.data.success){
+												  this.provinceList=res.data.data;
+												  if(this.addrList.length>1){
+													  this.addrList.forEach(item=>{
+														  if(item.customer_addr_id==addrid){
+															  this.curAddr=this.setCurAddr(item);
+														  }
+													  })
+												  }
+											  }else{
+												  console.log(res.data.message);
+											  }
+										  })
+									  }else{
+										  alert(res.data.message);
+									  }
+								  })
 								  this.flag=1;
-								  if(this.addrList.length>1){
-									  this.addrList.forEach(item=>{
-										  if(item.customer_addr_id==res.data.data){
-											  this.curAddr=this.setCurAddr(item);
-											  alert(JSON.stringify(this.curAddr));
-										  }
-									  })
-								  }
-								  /* alert("success!!!----"+res.data.data); */
 							  }else{
 								  alert(res.data.message);
 							  }
