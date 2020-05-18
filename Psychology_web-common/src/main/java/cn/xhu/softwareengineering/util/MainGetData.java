@@ -13,29 +13,38 @@ import cn.xhu.softwareengineering.bean.City;
 import cn.xhu.softwareengineering.bean.Province;
 
 public class MainGetData {
-	/*
-	 * public static void main(String[] args) { try { //2020年1月中华人民共和国县以上行政区划代码网页
-	 * Document doc = Jsoup.connect(
-	 * "http://www.mca.gov.cn/article/sj/xzqh/2020/2020/202003061536.html").
-	 * maxBodySize(0).get(); Elements elements =
-	 * doc.getElementsByClass("xl7020844"); //省和市 Elements elementsProAndCity =
-	 * doc.getElementsByClass("xl7120844"); List<String> stringListProAndCity =
-	 * elementsProAndCity.eachText(); List<String> stringList = elements.eachText();
-	 * List<String> stringName = new ArrayList<String>(); List<String> stringCode =
-	 * new ArrayList<String>(); stringListProAndCity.addAll(stringList); for (int i
-	 * = 0; i < stringListProAndCity.size(); i++) { if (i % 2 == 0) { //地区代码
-	 * stringCode.add(stringListProAndCity.get(i)); } else { //地区名字
-	 * stringName.add(stringListProAndCity.get(i)); } } //正常情况 两个 list size 应该 一样
-	 * System.out.println("stringName  size= " + stringName.size() +
-	 * "   stringCode   size= " + stringCode.size()); if (stringName.size() !=
-	 * stringCode.size()) { throw new RuntimeException("数据错误"); } List<Province>
-	 * provinceList = processData(stringName, stringCode);
-	 * 
-	 * String path = FileUtils.getProjectDir() + "/2020年1月中华人民共和国县以上行政区划代码" +
-	 * ".json"; JSONFormatUtils.jsonWriter(provinceList, path);
-	 * 
-	 * } catch (IOException e) { e.printStackTrace(); } }
-	 */
+
+	public static void main(String[] args) {
+		try { // 2020年1月中华人民共和国县以上行政区划代码网页
+			Document doc = Jsoup.connect("http://www.mca.gov.cn/article/sj/xzqh/2020/2020/202003061536.html")
+					.maxBodySize(0).get();
+			Elements elements = doc.getElementsByClass("xl7020844"); // 省和市 
+			Elements elementsProAndCity = doc.getElementsByClass("xl7120844");
+			List<String> stringListProAndCity = elementsProAndCity.eachText();
+			List<String> stringList = elements.eachText();
+			List<String> stringName = new ArrayList<String>();
+			List<String> stringCode = new ArrayList<String>();
+			stringListProAndCity.addAll(stringList);
+			for (int i = 0; i < stringListProAndCity.size(); i++) {
+				if (i % 2 == 0) { // 地区代码
+					stringCode.add(stringListProAndCity.get(i));
+				} else { // 地区名字
+					stringName.add(stringListProAndCity.get(i));
+				}
+			} // 正常情况 两个 list size 应该 一样
+			System.out.println("stringName  size= " + stringName.size() + "   stringCode   size= " + stringCode.size());
+			if (stringName.size() != stringCode.size()) {
+				throw new RuntimeException("数据错误");
+			}
+			List<Province> provinceList = processData(stringName, stringCode);
+
+			String path = FileUtils.getProjectDir() + "/2020年1月中华人民共和国县以上行政区划代码" + ".json";
+			JSONFormatUtils.jsonWriter(provinceList, path);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 生成省份列表数据

@@ -1,9 +1,13 @@
 package cn.xhu.softwareengineering.listener;
 
+import java.sql.Connection;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import cn.xhu.softwareengineering.util.AreaBaseUtil;
+import cn.xhu.softwareengineering.util.DBaseUtil;
 import cn.xhu.softwareengineering.util.PropertiesConfig;
 
 public class StartSystemListener implements ServletContextListener {
@@ -16,6 +20,7 @@ public class StartSystemListener implements ServletContextListener {
 		String contextPath = application.getContextPath();
 		application.setAttribute("APP_PATH", contextPath); 
 		PropertiesConfig.init(); 
+		updateAreaDB();
 		System.out.println("APP_PATH...");
 		
 		//2.加载所有许可路径
@@ -37,6 +42,12 @@ public class StartSystemListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		
+	}
+	
+	public void updateAreaDB() {
+		Connection con = DBaseUtil.getConn(AreaBaseUtil.getBaseProperties("classpath:config/jdbc.properties"));
+		DBaseUtil.deleteData(con);
+		DBaseUtil.insertDate(AreaBaseUtil.getProvinceList(), con);
 	}
 
 }
