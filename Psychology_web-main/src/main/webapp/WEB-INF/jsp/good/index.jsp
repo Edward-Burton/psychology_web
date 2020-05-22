@@ -245,6 +245,16 @@ ul li {
 	float: right;
 }
 
+.tocart{
+	display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.tocart a:hover{
+	color: #0b8bff;
+}
+
 .search-tab input {
 	position: absolute;
 	/* float: right; */
@@ -313,6 +323,11 @@ ul li {
 							:command="sub.sale_type_id">{{sub.sale_type_name}}</el-dropdown-item>
 						</el-dropdown-menu> </el-dropdown></li>
 				</ul>
+				
+				<div class="tocart" @click="toCart">
+					<a><span>购物车</span></a>
+				</div>
+				
 				<div class="search-tab">
 					<input type="text" v-model="inputValue"/> <span class="search-bnt" @click="search()">搜索</span>
 				</div>
@@ -472,6 +487,10 @@ ul li {
         		this.$message('click on item ' + command);
         		window.location.href="${APP_PATH}/good/toType.htm?level=1&typeid="+encodeURI(encodeURI(command));
 				 
+      		},
+      		
+      		toCart(){
+      			window.location.href="${APP_PATH}/good/toCart.htm";
       		},
 			  
 			 /*  getTypeList(){

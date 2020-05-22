@@ -1,5 +1,8 @@
 package cn.xhu.softwareengineering.potal.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -25,6 +28,7 @@ public class FileController {
 	@RequestMapping("/img")
 	public Object index(HttpServletRequest request) {
 		logger.debug("获取上传文件...");
+		System.out.println("type:"+request.getAttribute("type"));
 		AjaxResult result = new AjaxResult();
 		try {
 			UploadFile uploadFiles = fileService.saveFile(request, "img");
@@ -78,4 +82,29 @@ public class FileController {
 		}
 		return result;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/deletefiles")
+	public Object deletefiles(HttpServletRequest request,@RequestParam(value =  "imgList" , required = false) String list) {
+		logger.debug("获取上传文件...");
+		List<String> imgList = new ArrayList<String>();
+		for(String imgpath:list.split(",")) {
+			System.out.print(imgpath);
+			imgList.add(imgpath);
+		}
+		AjaxResult result = new AjaxResult();
+		try {
+			if (fileService.deletefiles(request,imgList)) {
+				result.setSuccess(true);
+				result.setMessage("文件删除成功");
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e);
+			result.setSuccess(false);
+			result.setMessage("文件删除失败");
+		}
+		return result;
+	}
+	
 }

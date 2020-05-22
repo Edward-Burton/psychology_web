@@ -695,6 +695,34 @@ body.tabFixed .tabContent {
 	overflow: hidden;
 }
 
+.m-detailComment .comment-img-add-btn{
+	cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    background: #f3f4f5;
+    border-radius: 6px;
+    height: 110px;
+    padding: 0 9px;
+    box-sizing: border-box;
+}
+
+.m-detailComment .comment-img-add-btn:after {
+    transform: rotate(90deg);
+}
+
+.m-detailComment .comment-img-add-btn:after, .m-detailComment .comment-img-add-btn:before {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    top: 50%;
+    left: 50%;
+    margin-top: -1px;
+    margin-left: -7px;
+    background: #ccc;
+}
+
 .m-detailComment .m-commentList .m-sortbarComment .sorts:first-child {
 	border-top: 1px dashed #dedede;
 }
@@ -783,14 +811,38 @@ body.tabFixed .tabContent {
 	word-break: break-word;
 }
 
-.m-detailComment .m-commentItem .picList {
+.m-detailComment .m-commentItem .picList, .commentinput .picList{
 	margin-bottom: 10px;
 }
 
-.m-detailComment .m-commentItem .m-picList .item, .m-detailComment .m-commentItem .m-picList .item .before
-	{
-	width: 140px;
-	height: 140px;
+.commentinput .comment-bnt{
+	position: relative;
+    height: 50px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.commentinput .comment{
+    display: inline-flex;
+    height: 30px;
+    width: 50px;
+    border-radius: 10px;
+    background-color: #0c890994;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+
+.commentinput .cancel{
+	background-color: #5f6e5f94;
+}
+
+.commentinput a{
+    float:right;
+    cursor: pointer;
 }
 
 .m-picList:after, .m-picList:before {
@@ -819,6 +871,13 @@ body.tabFixed .tabContent {
 	width: 60px;
 	height: 60px;
 	border: 1px solid #ddd;
+}
+
+
+.m-picList .item, .m-picList .item .before
+	{
+	width: 140px;
+	height: 140px;
 }
 
 .m-detailComment .m-commentItem .createTime {
@@ -931,7 +990,7 @@ body.tabFixed .tabContent {
 	<div id="main">
 		<div class="g-bd">
 			<div class="m-crumb">
-				<span> <span class="crumb-name ">首页</span> <i
+				<span> <span class="crumb-name"><a href="${APP_PATH}/good/index.htm">首页</a></span> <i
 					class="w-icon-arrow arrow-right-hollow gap" data-reactid=""></i>
 				</span>
 			</div>
@@ -966,8 +1025,9 @@ body.tabFixed .tabContent {
 							<div class="name" style="padding-right: 65px;">
 								<span>{{good.good_name}}</span> <a href="javascript:;">
 									<div class="j-commentEntry comment ">
-										<span> <span class="f-fz20" style="color: #E36844;">99.9%</span><br>
-											<span class="f-fz13">好评率 &gt;</span>
+										<span> 
+										<!-- <span class="f-fz20" style="color: #E36844;">99.9%</span><br>
+											<span class="f-fz13">好评率 &gt;</span> -->
 										</span>
 									</div>
 								</a>
@@ -1074,6 +1134,22 @@ body.tabFixed .tabContent {
 
 						<!-- 评价 -->
 						<div class="m-detailComment tabContent" v-if="show==1">
+							<span v-if="" @click="docomment=1">去评论</span>
+									<div class="commentinput" v-if="docomment==1">
+										<div class="comment-bnt">
+											<a class="comment" @click="comment">提交</a>
+											<a class="comment cancel" @click="cancel">取消</a>
+										</div>
+										
+										<div>
+											<textarea v-model="commentValue" rows="5" placeholder="请输入内容" style="width: 90%;outline: none;resize: none;border: 1px solid rgb(243, 244, 245);box-shadow: rgb(234, 234, 234) 0px 2px 10px 0px;border-radius: 10px;padding: 10px;"></textarea>
+											<div class="comment-img-add-btn" @click="upImage">
+											</div>
+										</div>
+										<input ref="filElem" type="file" class="up-comment" style="display: none;" @change="getFile">
+										<!-- <input ref="filElem" type="file" id="up-comment"> --> <!--  style="visibility: hidden;" -->
+										<ul data-target="${id}" class="j-picList m-picList picList" v-if="commentImgList.length!=0"><li class="item" v-for="(imgPath,index) in commentImgList"><div class="before"></div> <img :src="imgPath"></li></ul>
+									</div>
 									<ul class="m-commentList ">
 										<div class="m-sortbarComment">
 											<div class="sorts"> <span class="name">排序：</span>
@@ -1083,21 +1159,21 @@ body.tabFixed .tabContent {
 												</a>
 											</div>
 										</div>
-										<li class="item f-clearfix">
+										<li class="item f-clearfix" v-for="(comment,index) in commentList">
 											<div class="m-commentUser">
-												<div class="avatarWarp"> <img src="https://yanxuan.nosdn.127.net/ee4283f84f142a12d491cab39e875516" alt="神****鸡">
+												<div class="avatarWarp"> <img :src="'${APP_PATH }/'+comment.comment_user.psychouser_head_portrait" :alt="comment.comment_user.psychouser_name">
 													<div class="mask w-icon-normal icon-normal-mask"></div>
 												</div>
 												<div class="username-withIcon"> <a class="w-icon-member member-comment-vip2" href="/membership/index"></a>
-													<div class="username f-center">神****鸡</div>
+													<div class="username f-center">{{comment.comment_user.psychouser_name}}</div>
 												</div>
 											</div>
 											<div class="m-commentItem f-clearfix ">
-												<div class="skuInfo"> <span class="mr20">颜色:大象灰</span> <span class="mr20">尺码:男L（42-43）</span> </div>
-												<div class="content f-breakall"> 价格实惠，质量非常好，物美价廉，等用完后一定再回购。物流快速，包裹密实可靠，点赞！ </div>
-												<ul class="j-picList m-picList picList" data-target="1588312184089">
-													<li class="item">
-														<div class="before"></div> <img src="https://yanxuan.nosdn.127.net/c91864451bb315fd1965b4bea08ff87c.jpg?type=webp&amp;imageView&amp;quality=95&amp;thumbnail=140x140">
+												<!-- <div class="skuInfo"> <span class="mr20">颜色:大象灰</span> <span class="mr20">尺码:男L（42-43）</span> </div> -->
+												<div class="content f-breakall"> {{comment.comment_content}} </div>
+												<ul class="j-picList m-picList picList" data-target="${id}">
+													<li class="item" v-for="(img,index) in comment.imgList">
+														<div class="before"></div> <img :src="'${APP_PATH }'+img">
 													</li>
 												</ul>
 												<div id="1588312184089" class="lightbox" style="display: none;">
@@ -1196,6 +1272,7 @@ body.tabFixed .tabContent {
 		
 		var goodid=$(".m-detail").attr("data-id");
 		
+		
 		var goodDetail = new Vue({
 			  el: '#main',
 			  data () {
@@ -1214,7 +1291,11 @@ body.tabFixed .tabContent {
 			    	iscollected:0,
 			    	isselectdone:1,
 			    	choosedsku:0,
-			    	DialogVisible:false
+			    	DialogVisible:false,
+			    	commentImgList:[],
+			    	commentValue:"",
+			    	commentList:[],
+			    	docomment:0
 			    }
 			  },
 			  created() {
@@ -1223,9 +1304,88 @@ body.tabFixed .tabContent {
 			  },
 			  methods: {
 				  
+				  cancel(){
+					  alert("cancel");
+					  this.commentValue="";
+					  axios({
+						  url:"${APP_PATH}/file/deletefiles.do",
+						  method:"GET",
+						  params:{
+							  imgList:this.commentImgList.toLocaleString()
+						  }
+					  }).then(res=>{
+						  if(res.data.success){
+							  this.commentImgList=[];
+						  }else{
+							  console.log(res.data.message);
+						  }
+					  })
+				  },
+				  
+				  comment(){
+					  let params={
+							  toid:parseInt(goodid),
+							  content:encodeURI(this.commentValue.trim())
+						}
+					  if(this.commentImgList.length>0){
+						  params.imgList=this.commentImgList.toLocaleString();
+					  }
+					  axios({
+						  url:"${APP_PATH}/good/doAddComment.do",
+						  method:"POST",
+						  params:params
+					  }).then(res=>{
+						  if(res.data.success){
+							  alert("addComment success!!");
+							  this.getComment();
+						  }else{
+							  alert(res.data.message);
+						  }
+					  })
+				  },
+				  
+				  getFile(){
+					  	var that = this;
+						const inputFile = this.$refs.filElem.files[0]
+						var formData = new window.FormData();
+						alert(inputFile);
+						if(inputFile){
+						    if(inputFile.type !== 'image/jpeg' && inputFile.type !== 'image/png' && inputFile.type !== 'image/gif'){
+						        alert('不是有效的图片文件！');
+						        return;
+						    }else{
+						    	formData.append('commentImg', inputFile);
+						    	formData.append('type', 1);
+						    	axios({
+						    		headers:{"Content-Type":"multipart/form-data"},
+									url:"${APP_PATH}/file/img.do",
+									method:"POST",
+									params:{},
+									data:formData,
+							        cache: false,
+									contentType: false,
+									processData: false
+								  }).then(res=>{
+									  if(res.data.success){
+										  alert(res.data.data.saveDirectory);
+										  this.$set(this.commentImgList,this.commentImgList.length,res.data.data.completeSavePath);
+									  }else{
+										  alert(res.data.message);
+									  }
+								  })
+						    }
+						    
+						} else {
+						    return;
+						}
+				  },
+				  
+				  upImage(){
+					  this.$refs.filElem.dispatchEvent(new MouseEvent('click')); 
+				  },
+				  
 				  goCart(){
 					  window.location.href="${APP_PATH}/good/toCart.htm";
-					  //+encodeURI(encodeURI(command));
 				  },
 				  
 				  select(e,attrid){
@@ -1235,14 +1395,9 @@ body.tabFixed .tabContent {
 								if(product.attrid==attrid){
 									product.feature_id=e.currentTarget.dataset.id;
 								}
-								/* this.$set(this.selected,i,product.feature_id); */
 								this.$set(this.selected,i,parseInt(product.feature_id));
 								i++;
 							});
-						   
-						  /* alert(JSON.stringify(this.selectedList));
-						  alert(JSON.stringify(this.selected));
-						  console.log(JSON.stringify(this.selected)); */
 						  axios({
 							  url:"${APP_PATH}/good/doSaleOutfeaList.do",
 							  method:"POST",
@@ -1416,6 +1571,20 @@ body.tabFixed .tabContent {
 				  
 				  getComment(){
 					  this.show=1;
+					  axios({
+						  url:"${APP_PATH}/good/doComment.do",
+						  method:"GET",
+						  params:{
+							  id:parseInt(goodid)
+						  }
+					  }).then(res=>{
+						  if(res.data.success){
+							  this.commentList=res.data.data;
+						  }else{
+							  alert(res.data.message);
+						  }
+					  
+				  	  })
 				  },
 				  
 				  getFQA(){
@@ -1423,6 +1592,7 @@ body.tabFixed .tabContent {
 				  }
 			  }
 		})
+		
 		
 		</script>
 </body>

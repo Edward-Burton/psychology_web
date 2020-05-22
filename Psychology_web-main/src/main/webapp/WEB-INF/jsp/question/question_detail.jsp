@@ -920,15 +920,24 @@
 					},
 				  
 				  addreply(){
+						/* {
+							userid : this.userid,
+							questionId:questionid,
+							content:encodeURI($('#summernote').summernote('code'))
+						} */
 					  alert($('#summernote').summernote('code'));
+					  var  data = new FormData(); 
+					  data.append("userid",this.userid);
+					  data.append("questionId",questionid);
+					  data.append("content",encodeURI($('#summernote').summernote('code')));
 					  axios({
-						  	method: "get",
+						  	headers:{
+							  'Content-type': 'multipart/form-data'
+							  },
+						  	method: "POST",
 							url : "${APP_PATH}/question/doAddAnswer.do",
-							params:{
-								userid : this.userid,
-								questionId:questionid,
-								content:encodeURI($('#summernote').summernote('code'))
-							}
+							params:{},
+							data:data
 					    }).then(res => {
 					    	if(res.data.success){
 					    		this.queryQuestionAnswer();
@@ -1043,9 +1052,8 @@
 		
 		
 		$(function() {
-				// queryQuestionAnswer();
 				$('#summernote').summernote({
-					placeholder: 'Hello Bootstrap 4',
+					placeholder: '请输入',
 					tabsize: 2,
 					height: 200,
 					toolbar: [
@@ -1066,43 +1074,6 @@
 				var text = $(this).find("li").text();
 				alert(text);
 			})
-			
-
-			// 弹出回答框
-			/* $(".comment-reply .reply").click(function(t) {
-				if(this.userid!=0){
-				if (!window.replyStatus) {
-					if ((window.firstTriggerEdit && ( e(""), (window.firstTriggerEdit = !1) ),window.editReply)) {
-						$("#answer-text").hide().css({
-								"margin-top": "0",
-								border: "none",
-								background: "transparent",
-								"border-radius": "0"
-							}).insertAfter($(".comment-reply")),
-							e(""),
-							(window.editReplyId = "0"),
-							(window.editReply = !1);
-					}
-					$("#answer-text").toggle(500)
-						/* window.yxl.stat.send({
-							name: " 问答-详情页「工具栏」点击",
-							properties: {
-								分类: "我来回答"
-							}
-						});
-				}
-				}else{
-					  alert("请登录");
-				}
-
-			}); */
-			
-			// 提交回答按钮
-			/* $(".answer-buttom").click(function() {
-				var questionId = $(this).parent().attr("data-question-id");
-				var content = $("#summernote").val();
-				alert("问题ID："+questionId+"\n"+content);
-			}); */
 			
 			
 			// 评论点赞

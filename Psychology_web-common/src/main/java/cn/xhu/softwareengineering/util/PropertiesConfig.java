@@ -14,7 +14,7 @@ public class PropertiesConfig{
     
     /*获取配置参数值*/
     public static String getKey(String key) {
-        return aliPropertiesMap.get(key);
+    	return aliPropertiesMap.get(key);
     }
     
     /*监听启动完成，执行配置加载到aliPropertiesMap*/

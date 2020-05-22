@@ -1,5 +1,6 @@
 package cn.xhu.softwareengineering.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +15,16 @@ public class SaleComment {
 	private List<Integer> commentlikedList;
 	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd")
 	private Date comment_pultime;
+	private List<String> imgList;
 	
 	public SaleComment() {
 		super();
 	}
 	
 	
+
 	public SaleComment(int comment_id, PsychoUser comment_user, int comment_toid, int comment_type_id,
-			String comment_content, List<Integer> commentlikedList, Date comment_pultime) {
+			String comment_content, List<Integer> commentlikedList, Date comment_pultime, List<String> imgList) {
 		super();
 		this.comment_id = comment_id;
 		this.comment_user = comment_user;
@@ -30,10 +33,26 @@ public class SaleComment {
 		this.comment_content = comment_content;
 		this.commentlikedList = commentlikedList;
 		this.comment_pultime = comment_pultime;
+		this.imgList = imgList;
 	}
 
-	
-	
+
+
+
+	public List<String> getImgList() {
+		List<String> imglist = new ArrayList<String>();
+		for(String img:this.imgList) {
+			img=img.substring(img.indexOf("/img"));
+			imglist.add(img);
+		}
+		return imglist;
+	}
+
+
+	public void setImgList(List<String> imgList) {
+		this.imgList = imgList;
+	}
+
 
 	public List<Integer> getCommentlikedList() {
 		return commentlikedList;

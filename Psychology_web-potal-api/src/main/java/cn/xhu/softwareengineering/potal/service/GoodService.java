@@ -8,6 +8,7 @@ import cn.xhu.softwareengineering.bean.CustomerAddr;
 import cn.xhu.softwareengineering.bean.GoodType;
 import cn.xhu.softwareengineering.bean.Order;
 import cn.xhu.softwareengineering.bean.PsychoGood;
+import cn.xhu.softwareengineering.bean.SaleComment;
 import cn.xhu.softwareengineering.bean.SaleTheme;
 import cn.xhu.softwareengineering.util.Page;
 
@@ -44,5 +45,13 @@ public interface GoodService {
 	int updateCustomerAddr(CustomerAddr addr);
 
 	Order addOrder(Order order);
+
+	String notify(Map<String, String> conversionParams);
+
+	int checkAlipay(String string);
+
+	int addGoodComment(Map<String, Object> paramMap);
+
+	List<SaleComment> queryCommentList(Integer id);
 
 }

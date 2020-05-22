@@ -259,6 +259,7 @@ public class QuestionController {
 	public Object doAddAnswer(@RequestParam(value="answerpid",required=false)Integer parentanswerid,Integer userid, Integer questionId, String content) {
 		AjaxResult result = new AjaxResult();
 		try {
+			System.out.println(content+questionId);
 			Map<String, Object> parammap = new HashMap<String, Object>();
 			parammap.put("userid", userid);
 			parammap.put("questionId", questionId);

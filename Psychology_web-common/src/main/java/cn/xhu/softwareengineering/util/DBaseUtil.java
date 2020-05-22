@@ -49,7 +49,7 @@ public class DBaseUtil {
 	 * @param c
 	 */
 	public static void deleteData(Connection c) {
-		String sql = "delete * from area";
+		String sql = "delete from area_province";
 		PreparedStatement pstmt;
 		try {
 			pstmt = c.prepareStatement(sql);
@@ -59,50 +59,42 @@ public class DBaseUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public static void insertDate(List<Province> provinceList, Connection c) {
 		try {
 			for (int i = 0; i < provinceList.size(); i++) {
-				String sql = "insert into area(area_code,area_name,area_level) values(?,?,?)";
+				System.out.println("provinceList:--->"+provinceList.get(i).getProvince_code()+provinceList.get(i).getProvince_name());
+				String sql = "insert IGNORE into area_province values(?,?)";
 				PreparedStatement pstmt = c.prepareStatement(sql);
-				pstmt.setString(1, provinceList.get(i).getCode());
-				pstmt.setString(2, provinceList.get(i).getName());
-				pstmt.setInt(3, 1);
+				pstmt.setString(1, provinceList.get(i).getProvince_code());
+				pstmt.setString(2, provinceList.get(i).getProvince_name());
 				pstmt.executeLargeUpdate();
-				
-				if(provinceList.get(i).getCityList()!=null&&provinceList.get(i).getCityList().size()!=0) {
+
+				if (provinceList.get(i).getCityList() != null && provinceList.get(i).getCityList().size() != 0) {
 					List<City> cityList = provinceList.get(i).getCityList();
-					for(int j=0;j<cityList.size();j++) {
-						sql ="insert into area(area_code,area_name,area_level,area_parent_code) values(?,?,?,?)";
+					for (int j = 0; j < cityList.size(); j++) {
+						sql = "insert IGNORE into area_city values(?,?,?)";
 						pstmt = c.prepareStatement(sql);
-						pstmt.setString(1, cityList.get(j).getCode());
-						pstmt.setString(2, cityList.get(j).getName());
-						pstmt.setInt(3, 2);
-						pstmt.setString(4, provinceList.get(i).getCode());
+						pstmt.setString(1, cityList.get(j).getCity_code());
+						pstmt.setString(2, cityList.get(j).getCity_name());
+						pstmt.setString(3, provinceList.get(i).getProvince_code());
 						pstmt.executeLargeUpdate();
-						
-						if(cityList.get(j).getAreaList()!=null&&cityList.get(j).getAreaList().size()!=0) {
+
+						if (cityList.get(j).getAreaList() != null && cityList.get(j).getAreaList().size() != 0) {
 							List<Area> areaList = cityList.get(j).getAreaList();
-							for(int k=0;k<areaList.size();k++) {
-								/*
-								 * sql="insert into area(area_code,area_name,area_level,area_parent_code) values(?,?,?,?)"
-								 * ;
-								 * pstmt = c.prepareStatement(sql);
-								 */
-								
-								pstmt.setString(1, areaList.get(k).getCode());
-								pstmt.setString(2, areaList.get(k).getName());
-								pstmt.setInt(3, 3);
-								pstmt.setString(4, cityList.get(j).getCode());
+							for (int k = 0; k < areaList.size(); k++) {
+								sql = "insert IGNORE into area_district values(?,?,?)";
+								pstmt = c.prepareStatement(sql);
+								pstmt.setString(1, areaList.get(k).getDistrict_code());
+								pstmt.setString(2, areaList.get(k).getDistrict_name());
+								pstmt.setString(3, cityList.get(j).getCity_code());
 								pstmt.executeLargeUpdate();
-								
-								
+
 							}
 						}
 					}
 				}
-				
+
 			}
 			System.out.println("成功插入所有数据。");
 		} catch (SQLException e) {

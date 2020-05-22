@@ -3,27 +3,40 @@ package cn.xhu.softwareengineering.bean;
 import java.util.List;
 
 public class City {
-    private String code;
-    private String name;
+    private String city_code;
+    private String city_name;
     private List<Area> areaList;
+    
+    
 
-    public String getCode() {
-        return code;
-    }
+    public City() {
+		super();
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public City(String city_code, String city_name, List<Area> areaList) {
+		super();
+		this.city_code = city_code;
+		this.city_name = city_name;
+		this.areaList = areaList;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getCity_code() {
+		return city_code;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setCity_code(String city_code) {
+		this.city_code = city_code;
+	}
 
-    public List<Area> getAreaList() {
+	public String getCity_name() {
+		return city_name;
+	}
+
+	public void setCity_name(String city_name) {
+		this.city_name = city_name;
+	}
+
+	public List<Area> getAreaList() {
         return areaList;
     }
 

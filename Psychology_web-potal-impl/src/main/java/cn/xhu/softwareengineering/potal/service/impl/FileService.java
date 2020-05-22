@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -158,6 +159,26 @@ public class FileService {
 	        file.delete();  
 	        flag = true;  
 	    }
+	    
+		return flag;
+	}
+	
+	public boolean deletefiles(HttpServletRequest request,List<String> imgList) {
+		boolean flag = false;  
+		System.out.println("已获取的src ："+imgList);
+		for(String imgSrc:imgList) {
+			String realname =  imgSrc.substring(imgSrc.lastIndexOf("articleimages/"));
+			System.out.println("已获取的文件名："+realname);
+		    String sPath = request.getSession().getServletContext()
+					.getRealPath("img" +File.separator+realname);
+		    System.out.print("sPath："+sPath);
+		    File file = new File(sPath);  
+		    // 路径为文件且不为空则进行删除  
+		    if (file.isFile() && file.exists()) {  
+		        file.delete();  
+		        flag = true;  
+		    }
+		}
 	    
 		return flag;
 	}

@@ -1,45 +1,44 @@
 package cn.xhu.softwareengineering.potal.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xhu.softwareengineering.bean.AlipayBean;
-import cn.xhu.softwareengineering.bean.Area;
 import cn.xhu.softwareengineering.bean.CartGood;
-import cn.xhu.softwareengineering.bean.City;
 import cn.xhu.softwareengineering.bean.CustomerAddr;
 import cn.xhu.softwareengineering.bean.GoodType;
 import cn.xhu.softwareengineering.bean.Order;
-import cn.xhu.softwareengineering.bean.Province;
 import cn.xhu.softwareengineering.bean.PsychoGood;
 import cn.xhu.softwareengineering.bean.PsychoUser;
+import cn.xhu.softwareengineering.bean.SaleComment;
 import cn.xhu.softwareengineering.bean.SaleTheme;
-import cn.xhu.softwareengineering.bean.TrasformAddr;
 import cn.xhu.softwareengineering.potal.service.GoodService;
 import cn.xhu.softwareengineering.potal.service.PayService;
 import cn.xhu.softwareengineering.util.AjaxResult;
+import cn.xhu.softwareengineering.util.AreaBaseUtil;
 import cn.xhu.softwareengineering.util.Const;
 import cn.xhu.softwareengineering.util.Page;
-import net.sf.json.JSONObject;
+import lombok.extern.log4j.Log4j;
 
 @Controller
 @RequestMapping("good")
@@ -47,9 +46,11 @@ public class GoodController {
 
 	@Autowired
 	GoodService goodService;
-	
+
 	@Autowired
-    private PayService payService;
+	private PayService payService;
+	
+	Logger logger = Logger.getLogger(Log4j.class);
 
 	@RequestMapping("index")
 	public String index() {
@@ -463,13 +464,13 @@ public class GoodController {
 			System.out.println(confirmList);
 			result.setData(confirmList);
 			result.setSuccess(true);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMessage("获取确认列表失败！！！");
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/doAddr")
 	public Object doAddr(HttpSession session) {
@@ -483,20 +484,20 @@ public class GoodController {
 				System.out.println(addrList);
 				result.setData(addrList);
 				result.setSuccess(true);
-			}catch(Exception e) {
+			} catch (Exception e) {
 				result.setSuccess(false);
 				result.setMessage("获取确认列表失败！！！");
 			}
-		}else {
+		} else {
 			result.setSuccess(false);
 			result.setMessage("未登录，获取确认列表失败！！！");
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/doAddAddr")
-	public Object doAddAddr(HttpSession session,CustomerAddr addr) {
+	public Object doAddAddr(HttpSession session, CustomerAddr addr) {
 		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		AjaxResult result = new AjaxResult();
 		if (user != null) {
@@ -509,22 +510,22 @@ public class GoodController {
 				e1.printStackTrace();
 			}
 			try {
-				int c=goodService.AddCustomerAddr(addr);
-				if(c>0) {
+				int c = goodService.AddCustomerAddr(addr);
+				if (c > 0) {
 					result.setData(c);
 					result.setSuccess(true);
 				}
-			}catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				result.setSuccess(false);
 				result.setMessage("添加地址失败！！！");
 			}
-		}else {
-			
+		} else {
+
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/doEditAddr")
 	public Object doEditAddr(CustomerAddr addr) {
@@ -537,92 +538,167 @@ public class GoodController {
 			e1.printStackTrace();
 		}
 		try {
-			int c=goodService.updateCustomerAddr(addr);
-			if(c>0) {
+			int c = goodService.updateCustomerAddr(addr);
+			if (c > 0) {
 				result.setData(c);
 				result.setSuccess(true);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);
 			result.setMessage("添加地址失败！！！");
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/doArea")
-	public Object doArea() {
+	public Object doArea() throws IOException {
+		AjaxResult result = new AjaxResult();
+		result.setData(AreaBaseUtil.getProvinceList());
+		result.setSuccess(true);
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doComment")
+	public Object doComment(Integer id){
 		AjaxResult result = new AjaxResult();
 		try {
-			File jsonFile = ResourceUtils.getFile("classpath:2020年1月中华人民共和国县以上行政区划代码.json");
-			String json = FileUtils.readFileToString(jsonFile);
-			JSONObject jsonObj = JSONObject.fromObject(json);
-			Map<String, Class> classMap = new HashMap<String, Class>();
-			classMap.put("cityList", City.class);
-            classMap.put("areaList", Area.class);
-            classMap.put("provinceList", Province.class);
-            TrasformAddr provinceList = (TrasformAddr) JSONObject.toBean(jsonObj, TrasformAddr.class, classMap);
-            result.setData(provinceList.getProvinceList());
-            result.setSuccess(true);
-		} catch (FileNotFoundException e) {
-			result.setSuccess(false);
-			result.setMessage("文件查找失败！！！");
+			List<SaleComment>commentList = goodService.queryCommentList(id);
+			result.setSuccess(true);
+			result.setData(commentList);
+		}catch(Exception e) {
 			e.printStackTrace();
-		} catch (IOException e) {
 			result.setSuccess(false);
-			result.setMessage("获取地区失败！！！");
-			e.printStackTrace();
+			result.setMessage("查询评论失败！！！");
 		}
 		return result;
 	}
 	
 	
+	@RequestMapping("/success")
+	public String paySuccess() {
+		return "orderlist";
+	}
+	
+	
+	@RequestMapping(value="/return_url",method=RequestMethod.GET)
+	public String Return_url(String out_trade_no) throws IOException {  
+		System.out.print("==================支付宝同步返回结果处理");
+		 int status = goodService.checkAlipay(out_trade_no);
+		  if(status>=2) {
+			  
+			  return "good/pay_succes";
+		  }
+		return "good/index";
+	}
+	
+	
+    /**
+	 * 支付宝支付成功后.异步请求该接口
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */  
+	@RequestMapping(value="/notify_url",method=RequestMethod.POST)
+	@ResponseBody
+	public String notify(HttpServletRequest request,HttpServletResponse response) throws IOException {  
+			/* logger.info("==================支付宝异步返回支付结果开始"); */
+		System.out.print("==================支付宝异步返回支付结果开始");
+		//1.从支付宝回调的request域中取值	
+		//获取支付宝返回的参数集合
+	    Map<String, String[]> aliParams = request.getParameterMap();  
+	    //用以存放转化后的参数集合
+	    Map<String, String> conversionParams = new HashMap<String, String>();  
+	    for (Iterator<String> iter = aliParams.keySet().iterator(); iter.hasNext();) {  
+	        String key = iter.next();  
+	        String[] values = aliParams.get(key);  
+	        String valueStr = "";  
+	        for (int i = 0; i < values.length; i++) {  
+	            valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";  
+	        }  
+	        // 乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化  
+	        // valueStr = new String(valueStr.getBytes("ISO-8859-1"), "uft-8");  
+	        conversionParams.put(key, valueStr);  
+	    }  	
+	    logger.info("==================返回参数集合："+conversionParams);
+	    System.out.print("==================返回参数集合："+conversionParams);
+	   String status=goodService.notify(conversionParams);
+	   return status;
+	}
+
+	@ResponseBody
 	@RequestMapping("/doOrder")
-	public void doOrder(HttpServletResponse httpResponse,@RequestParam(value = "order_addr")Integer order_addr,@RequestParam(value = "choseList") String choseList,@RequestParam(value = "order_level")Integer order_level,@RequestParam(value = "order_type")Integer order_type,Float order_total_amount,HttpSession session) {
-		List<Integer> list = new ArrayList<Integer>();
-		for (String i : choseList.split(",")) {
-			if (Integer.valueOf(i) != 0) {
-				list.add(Integer.valueOf(i));
-			}
-		}
+	public Object doOrder(HttpServletResponse httpResponse,
+			@RequestBody Order order, HttpSession session) {
+		System.out.println(order.getObjList().get(0));
 		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		AjaxResult result = new AjaxResult();
 		if (user != null) {
-			Order order=new Order();
-			CustomerAddr addr=new CustomerAddr();
-			addr.setCustomer_addr_id(order_addr);
-			order.setAddr(addr);
 			order.setUser(user);
-			order.setOrder_level(order_level);
-			order.setType(order_type);
-			order.setObjList(list);
+			order.setOrder_createtime(new Date());
 			order.setOut_trade_no();
-			order.setOrder_total_amount(order_total_amount);
 			try {
-				Order o=goodService.addOrder(order);
-				if(o.getOrder_id()>0) {
-					result.setData(o);
+				Order o = goodService.addOrder(order);
+				if (o.getOrder_id() > 0) {
+					String form = payService.aliPay(new AlipayBean().setOut_trade_no(o.getOut_trade_no())
+							.setTotal_amount(new StringBuffer().append(o.getOrder_total_amount()))
+							.setSubject("订单编号："+String.valueOf(o.getOrder_id())));
+					result.setData(form);
 					result.setSuccess(true);
-					String form= payService.aliPay(new AlipayBean()
-			                .setOut_trade_no(o.getOut_trade_no())
-			                .setTotal_amount(new StringBuffer().append(o.getOrder_total_amount()))
-			                .setSubject(String.valueOf(o.getOrder_id())));
-					System.out.println(form);
-					httpResponse.setContentType("text/html;charset=utf-8");
-			        httpResponse.getWriter().write(form);
-			        httpResponse.getWriter().flush();
-			        httpResponse.getWriter().close();
+					return result;
 				}
 			} catch (Exception e) {
 				result.setSuccess(false);
 				result.setMessage("生成订单失败！！！");
 				e.printStackTrace();
 			}
-		}else {
+		} else {
 			result.setSuccess(false);
 			result.setMessage("未登录，生成订单失败！！！");
+			return result;
 		}
+		return result;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/doAddComment")
+	public Object doAddComment(@RequestParam("imgList")String imgList,@RequestParam(value = "toid")Integer goodid,@RequestParam(value = "content")String content,HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		List<String> list = new ArrayList<String>();
+		SaleComment comment = new SaleComment();
+		if (user != null) {
+			for(String imgpath:imgList.split(",")) {
+				list.add(imgpath);
+				System.out.print(imgpath);
+			}
+			try {
+				comment.setComment_user(user);
+				comment.setComment_content(URLDecoder.decode(content, "utf-8"));
+				comment.setComment_toid(goodid);
+				comment.setComment_pultime(new Date());
+				comment.setComment_type_id(Byte.valueOf((byte) 2));
+				
+				Map<String, Object> paramMap = new HashMap<String, Object>();
+				paramMap.put("imgList", list);
+				paramMap.put("comment", comment);
+				if(goodService.addGoodComment(paramMap)>0) {
+					result.setSuccess(true);
+				}
+			}catch(Exception e) {
+				result.setSuccess(false);
+				e.printStackTrace();
+				result.setMessage("添加评论失败！！");
+			}
+			return result;
+		}else {
+			result.setSuccess(false);
+			result.setMessage("请登录！！");
+		}
+		return result;
 	}
 
 }

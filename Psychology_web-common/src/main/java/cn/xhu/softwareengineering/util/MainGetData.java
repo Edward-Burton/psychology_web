@@ -37,7 +37,11 @@ public class MainGetData {
 				throw new RuntimeException("数据错误");
 			}
 			List<Province> provinceList = processData(stringName, stringCode);
-
+			
+			for(Province p:provinceList) {
+				System.out.println("provinceList:"+p.getProvince_code()+p.getProvince_name());
+			}
+			
 			String path = FileUtils.getProjectDir() + "/2020年1月中华人民共和国县以上行政区划代码" + ".json";
 			JSONFormatUtils.jsonWriter(provinceList, path);
 
@@ -63,8 +67,9 @@ public class MainGetData {
 			String provinceCode = stringCode.get(i);
 			if (provinceCode.endsWith("0000")) {
 				Province province = new Province();
-				province.setCode(provinceCode);
-				province.setName(provinceName);
+				
+				province.setProvince_code(provinceCode);
+				province.setProvince_name(provinceName);
 				provinceList.add(province);
 				List<City> cities = new ArrayList<City>();
 				province.setCityList(cities);
@@ -73,15 +78,15 @@ public class MainGetData {
 
 		// 获取市
 		for (int i = 0; i < provinceList.size(); i++) {
-			String provinceName = provinceList.get(i).getName();
-			String provinceCode = provinceList.get(i).getCode();
+			String provinceName = provinceList.get(i).getProvince_name();
+			String provinceCode = provinceList.get(i).getProvince_code();
 			// 直辖市 城市和省份名称一样
 			if (provinceName.contains("北京") || provinceName.contains("上海") || provinceName.contains("天津")
 					|| provinceName.contains("重庆")) {
 				City city = new City();
 				List<Area> areas = new ArrayList<Area>();
-				city.setName(provinceName);
-				city.setCode(provinceCode);
+				city.setCity_name(provinceName);
+				city.setCity_code(provinceCode);
 				city.setAreaList(areas);
 				provinceList.get(i).getCityList().add(city);
 			} else {
@@ -93,8 +98,8 @@ public class MainGetData {
 							if (cityCode.endsWith("00")) {
 								City city = new City();
 								List<Area> areas = new ArrayList<Area>();
-								city.setName(cityName);
-								city.setCode(cityCode);
+								city.setCity_name(cityName);
+								city.setCity_code(cityCode);
 								city.setAreaList(areas);
 								provinceList.get(i).getCityList().add(city);
 							}
@@ -109,25 +114,25 @@ public class MainGetData {
 			List<City> cities = province.getCityList();
 			for (City city : cities) {
 				// 遍历获取县区
-				String cityCode = city.getCode();
-				String cityName = city.getName();
+				String cityCode = city.getCity_code();
+				String cityName = city.getCity_name();
 				for (int k = 0; k < stringCode.size(); k++) {
 					String areaName = stringName.get(k);
 					String areaCode = stringCode.get(k);
 					if (cityName.contains("北京") || cityName.contains("上海") || cityName.contains("天津")
 							|| cityName.contains("重庆")) {
-						if (!province.getCode().equals(areaCode)
-								&& areaCode.startsWith(province.getCode().substring(0, 2))) {
+						if (!province.getProvince_code().equals(areaCode)
+								&& areaCode.startsWith(province.getProvince_code().substring(0, 2))) {
 							Area area = new Area();
-							area.setName(areaName);
-							area.setCode(areaCode);
+							area.setDistrict_code(areaCode);
+							area.setDistrict_name(areaName);
 							city.getAreaList().add(area);
 						}
 					} else {
 						if (!areaCode.equals(cityCode) && areaCode.startsWith(cityCode.substring(0, 4))) {
 							Area area = new Area();
-							area.setName(areaName);
-							area.setCode(areaCode);
+							area.setDistrict_name(areaName);
+							area.setDistrict_code(areaCode);
 							city.getAreaList().add(area);
 						}
 					}
@@ -141,16 +146,16 @@ public class MainGetData {
 		List<String> stringNameList = new ArrayList<>(stringName);
 		List<String> stringCodeList = new ArrayList<>(stringCode);
 		for (Province province : provinceList) {
-			stringNameList.remove(province.getName());
-			stringCodeList.remove(province.getCode());
+			stringNameList.remove(province.getProvince_name());
+			stringCodeList.remove(province.getProvince_code());
 			List<City> cities = province.getCityList();
 			for (City city : cities) {
-				stringNameList.remove(city.getName());
-				stringCodeList.remove(city.getCode());
+				stringNameList.remove(city.getCity_name());
+				stringCodeList.remove(city.getCity_code());
 				List<Area> listArea = city.getAreaList();
 				for (Area area : listArea) {
-					stringNameList.remove(area.getName());
-					stringCodeList.remove(area.getCode());
+					stringNameList.remove(area.getDistrict_name());
+					stringCodeList.remove(area.getDistrict_code());
 				}
 			}
 		}
@@ -158,11 +163,11 @@ public class MainGetData {
 		// 处理石河子 特殊 市，City Code 不以00结尾
 		for (Province province : provinceList) {
 			for (int k = 0; k < stringCodeList.size(); k++) {
-				if (stringCodeList.get(k).startsWith(province.getCode().substring(0, 2))) {
+				if (stringCodeList.get(k).startsWith(province.getProvince_code().substring(0, 2))) {
 					City city = new City();
 					List<Area> areas = new ArrayList<Area>();
-					city.setName(stringNameList.get(k));
-					city.setCode(stringCodeList.get(k));
+					city.setCity_name(stringNameList.get(k));
+					city.setCity_code(stringCodeList.get(k));
 					city.setAreaList(areas);
 					province.getCityList().add(city);
 				}

@@ -3,27 +3,38 @@ package cn.xhu.softwareengineering.bean;
 import java.util.List;
 
 public class Province {
-    private String code;
-    private String name;
+    private String province_code;
+    private String province_name;
     private List<City> cityList;
 
-    public String getCode() {
-        return code;
-    }
+    public Province() {
+		super();
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public Province(String province_code, String province_name, List<City> cityList) {
+		super();
+		this.province_code = province_code;
+		this.province_name = province_name;
+		this.cityList = cityList;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getProvince_code() {
+		return province_code;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setProvince_code(String province_code) {
+		this.province_code = province_code;
+	}
 
-    public List<City> getCityList() {
+	public String getProvince_name() {
+		return province_name;
+	}
+
+	public void setProvince_name(String province_name) {
+		this.province_name = province_name;
+	}
+
+	public List<City> getCityList() {
         return cityList;
     }
 

@@ -1,23 +1,35 @@
 package cn.xhu.softwareengineering.bean;
 
 public class Area {
-    private String code;
-    private String name;
+    private String district_code;
+    private String district_name;
 
-    public String getCode() {
-        return code;
-    }
+    
+    
+    public Area() {
+		super();
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public Area(String district_code, String district_name) {
+		super();
+		this.district_code = district_code;
+		this.district_name = district_name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getDistrict_code() {
+		return district_code;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setDistrict_code(String district_code) {
+		this.district_code = district_code;
+	}
+
+	public String getDistrict_name() {
+		return district_name;
+	}
+
+	public void setDistrict_name(String district_name) {
+		this.district_name = district_name;
+	}
 
 }

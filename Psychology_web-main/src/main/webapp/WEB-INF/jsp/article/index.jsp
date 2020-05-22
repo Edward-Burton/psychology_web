@@ -377,45 +377,12 @@ a img, fieldset {
 			<div class="page-wrap">
 				<div class="">
 					<ul class="pagination">
-						<li><span>«</span></li>
-						<li class="active"><span>1</span></li>
-						<!-- <li class=""><a href="https://www.xinli001.com/info/marry?page=2">2</a></li> -->
-						<li class=""><a href="#">2</a></li>
-						<li class=""><a href="#">3</a></li>
-						<li class=""><a
-							href="https://www.xinli001.com/info/marry?page=4">4</a></li>
-						<li class=""><a
-							href="https://www.xinli001.com/info/marry?page=5">5</a></li>
-						<li class=""><a
-							href="https://www.xinli001.com/info/marry?page=6">6</a></li>
-						<li class=""><a
-							href="https://www.xinli001.com/info/marry?page=7">7</a></li>
-						<li class=""><a
-							href="https://www.xinli001.com/info/marry?page=8">8</a></li>
-						<!-- <li class="next"><a href="https://www.xinli001.com/info/marry?page=2">»</a></li> -->
-						<li class="next"><a href="#">»</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<!-- 右侧边栏 -->
 		<div class="main-right-container white-bg">
-
-			<a target="_blank" href="#" class="adver" data-title="悬赏说明"> <img
-				src="C:/Users/Lin/Pictures/test/zhiyu.jpg" alt="活动图片">
-			</a>
-
-			<!-- 活动列表 -->
-			<div class="activity-m">
-				<a target="_blank" href="#" class="item">内向者如何发挥独有的性格优势</a>
-			</div>
-
-			<!-- 贴片主题 -->
-			<div class="qcode">
-				<img src="C:/Users/Lin/Pictures/test/zhiyu.jpg" alt=""
-					class="qcode-img" style="position: static; top: 73px;">
-
-			</div>
 			<!-- 主题列表 -->
 			<div class="theme-list">
 				<a target="_blank" href="#" class="item">

@@ -649,6 +649,12 @@ table {
 	background-color: #ccc;
 }
 
+.w-button-primary {
+    color: #fff;
+    border: 1px solid #b4a078;
+    background-color: #b4a078;
+}
+
 .j-cancel {
 	border-radius: 2px;
 	padding: 0;
@@ -746,7 +752,7 @@ table {
 
 							<p class="line">
 								<label class="label"> <span>收货地址：</span>
-								</label> <span class="text">{{curAddr.allAddress}}</span>
+								</label> <span class="text">{{curAddr.province.province_name+curAddr.city.city_name+curAddr.district.district_name+curAddr.address}}</span>
 							</p>
 						</div>
 						<div class="right">
@@ -773,7 +779,7 @@ table {
 														@change="chooseProvince($event)">
 														<option value="0">请选择</option>
 														<option v-for="(province,index) in provinceList"
-															:value="province.code">{{province.name}}</option>
+															:value="province.province_code">{{province.province_name}}</option>
 													</select>
 													<div class="w-errorMsg j-error" style="display: block;"
 														v-if="selectProvince=='0'">
@@ -786,7 +792,7 @@ table {
 														@change="chooseCity($event)">
 														<option value="0">请选择</option>
 														<option v-for="(city,index) in curCityList"
-															:value="city.code">{{city.name}}</option>
+															:value="city.city_code">{{city.city_name}}</option>
 													</select>
 													<div class="w-errorMsg j-error" style="display: block;"
 														v-if="selectCity=='0'">
@@ -799,7 +805,7 @@ table {
 														@change="chooseDistrict($event)">
 														<option value="0">请选择</option>
 														<option v-for="(district,index) in curDistrictList"
-															:value="district.code">{{district.name}}</option>
+															:value="district.district_code">{{district.district_name}}</option>
 													</select>
 													<div class="w-errorMsg j-error" style="display: block;"
 														v-if="selectDistrict=='0'">
@@ -1003,7 +1009,7 @@ table {
 											<span class="name"> {{curAddr.accept_customer_name}} </span>
 											<span class="number"> {{curAddr.phone_num}} </span>
 										</p>
-										<p>{{curAddr.allAddress}}</p>
+										<p>{{curAddr.province.province_name+curAddr.city.city_name+curAddr.district.district_name+curAddr.address}}</p>
 									</div>
 								</div>
 							</div>
@@ -1025,18 +1031,18 @@ table {
 											<div>
 												<div class="w-tit-addr">选择地址</div>
 												<div class="w-body-addr">
-													<div class="w-addr-warp j-addr active">
+													<div class="w-addr-warp j-addr" v-for="(addr,index) in addrList" @click="choseAddr=addr.customer_addr_id" :class="{active:choseAddr==addr.customer_addr_id}">
 														<div class="m-address">
 															<p class="line">
 																<label class="label"><span class="textLeft">收</span><span>货</span><span
 																	class="textRight">人:&nbsp;&nbsp;</span></label> <span
-																	class="text">丁玲玲</span>
+																	class="text">{{addr.accept_customer_name}}</span>
 															</p>
 															<p class="line">
-																<label class="label">联系方式：</label> <span class="text">182****2172</span>
+																<label class="label">联系方式：</label> <span class="text">{{addr.phone_num}}</span>
 															</p>
 															<p class="line">
-																<label class="label">收货地址：</label> <span class="text">四川省成都市郫都区犀浦镇西华大学</span>
+																<label class="label">收货地址：</label> <span class="text">{{addr.province.province_name+addr.city.city_name+addr.district.district_name+addr.address}}</span>
 															</p>
 														</div>
 													</div>
@@ -1044,7 +1050,7 @@ table {
 												<div style="margin: 31px 0 0 80px; position: relative;">
 													<button type="button"
 														class="w-button w-button-l confire-change"
-														style="margin-left: 45px;">确定</button>
+														style="margin-left: 45px;" @click="confirmChoose" :class="{'w-button-primary':choseAddr!=0}">确定</button>
 													<button type="button" class="w-button w-button-l j-cancel"
 														style="margin-left: 5px;" @click="changeDialog=0">取消</button>
 												</div>
@@ -1077,7 +1083,7 @@ table {
 			    	selectCity:"0",
 			    	selectDistrict:"0",
 			    	confirmList:[],
-			    	choseskuList:[],
+			    	selectedList:[],
 			    	addrList:[],
 			    	curAddr:null,
 			    	flag:1,
@@ -1090,7 +1096,8 @@ table {
 			    	isEdit:0,
 			    	waitAddr:null,
 			    	totalPrice:"0.00",
-			    	changeDialog:0
+			    	changeDialog:0,
+			    	choseAddr:0
 			    }
 			  },
 			  beforeMount:function(){//钩子函数，我这是挂载开始之前就被调用的，看你需要什么时候使用
@@ -1108,14 +1115,18 @@ table {
 					  if(this.isdefaultAddr){
 						  this.defaultAddr=1;
 					  }
-				  }/* ,
+				  },
 				  selectProvince:function(){
-					  this.selectCity="0";
-					  this.selectDistrict="0";
+					  if(this.selectProvince=="0"){
+						  this.selectCity="0";
+						  this.selectDistrict="0";
+					  }
 				  },
 				  selectCity:function(){
-					  this.selectDistrict="0";
-				  } */
+					  if(this.selectCity=="0"){
+						  this.selectDistrict="0"; 
+					  }
+				  }
 			  },
 			  methods: {
 				  
@@ -1140,63 +1151,71 @@ table {
 					  this.isEdit=0;
 				  },
 				  
+				  confirmChoose(){
+					  if(this.choseAddr!="0"){
+						  this.addrList.forEach(item=>{
+							  if(item.customer_addr_id==parseInt(this.choseAddr)){
+								  this.curAddr=item;
+								  this.changeDialog=0;
+							  }
+						  })
+					  }
+					  this.choseAddr="0";
+				  },
+				  
+				  
 				  confirmEdit(){
 					  if(this.selectProvince!="0"&&this.selectCity!="0"&&this.selectDistrict!="0"&&this.detailAddr!=""&&this.acceptCustomer!=""&&this.phoneNum!=""){
-						  if(this.addrList.length==1){
+						  if(this.addrList.length==1||this.curAddr.is_default==1){
 							  this.defaultAddr=1;
 						  }else{
 							  this.defaultAddr=this.isdefaultAddr?1:0;
 						  }
+						  let params={
+							  customer_addr_id:this.curAddr.customer_addr_id,
+							  customer_user_id:this.curAddr.customer_user_id,
+							  address:encodeURI(this.detailAddr),
+							  is_default:this.defaultAddr,
+							  accept_customer_name:encodeURI(this.acceptCustomer),
+							  phone_num:this.phoneNum
+						  }
+						  
+						  if(this.selectDistrict!='0'){
+							  params.district_code=this.selectDistrict;
+						  }
+						  if(this.selectCity!="0"){
+							  params.city_code=this.selectCity;
+						  }
+						  if(this.selectProvince!="0"){
+							  params.province_code=this.selectProvince;
+						  }
+						  
 						  axios({
 							  url:"${APP_PATH}/good/doEditAddr.do",
 							  method:"POST",
-							  params:{
-								  customer_addr_id:this.curAddr.customer_addr_id,
-								  customer_user_id:this.curAddr.customer_user_id,
-								  province:parseInt(this.selectProvince),
-								  city:parseInt(this.selectCity),
-								  district:parseInt(this.selectDistrict),
-								  address:encodeURI(this.detailAddr),
-								  is_default:this.defaultAddr,
-								  accept_customer_name:encodeURI(this.acceptCustomer),
-								  phone_num:this.phoneNum
-							  }
+							  params:params
 						  }).then(res=>{
 							  if(res.data.success){
 								  let customer_addr_id=res.data.data;
-								  alert("this.curAddr.customer_addr_id:"+this.curAddr.customer_addr_id);
 								  axios({
 									  url:"${APP_PATH}/good/doAddr.do",
 									  method:"GET"
 								  }).then(res=>{
 									  if(res.data.success){
 										  this.addrList=res.data.data;
-										  axios({
-											  url:"${APP_PATH}/good/doArea.do",
-											  method:"GET",
-											  params:{
-												  choseList:list
-											  }
-										  }).then(res=>{
-											  if(res.data.success){
-												  this.provinceList=res.data.data;
-												  this.curAddr=null;
-												  this.addrList.forEach(item=>{
-													  if(item.customer_addr_id==customer_addr_id){
-														  this.curAddr=this.setCurAddr(item);
-														  this.flag=1;
-														  this.isEdit=0;
-													  }
-												  })
-											  }else{
-												  console.log(res.data.message);
+										  this.curAddr=null;
+										  this.addrList.forEach(item=>{
+											  if(item.customer_addr_id==customer_addr_id){
+												  this.curAddr=item;
+												  this.flag=1;
+												  this.isEdit=0;
 											  }
 										  })
 										  
 									  }else{
 										  alert(res.data.message);
 									  }
-								  })
+								  }) 
 								  
 							  }else{
 								  alert(res.data.message);
@@ -1208,21 +1227,21 @@ table {
 				  editAddr(){
 					  this.flag=0;
 					  this.isEdit=1;
-					  this.selectProvince=this.curAddr.province;
-					  this.selectCity=this.curAddr.city;
-					  this.selectDistrict=this.curAddr.district;
+					  this.selectProvince=this.curAddr.province.province_code;
+					  this.selectCity=this.curAddr.city.city_code;
+					  this.selectDistrict=this.curAddr.district.district_code;
 					  this.detailAddr=this.curAddr.address;
 					  this.acceptCustomer=this.curAddr.accept_customer_name;
 					  this.phoneNum=this.curAddr.phone_num;
 					  this.isdefaultAddr=this.curAddr.is_default==1?true:false;
 					  this.provinceList.forEach(province=>{
-						  if(province.code==this.selectProvince){
+						  if(province.province_code==this.selectProvince){
 							  this.curCityList=province.cityList;
 							  /* alert("this.curCityList"); */
 						  }
 					  })
 					  this.curCityList.forEach(city=>{
-						  if(city.code==this.selectCity){
+						  if(city.city_code==this.selectCity){
 							  this.curDistrictList=city.areaList;
 							  /* alert("this.curDistrictList"); */
 						  }
@@ -1232,14 +1251,11 @@ table {
 				  getArea(){
 					  axios({
 						  url:"${APP_PATH}/good/doArea.do",
-						  method:"GET",
-						  params:{
-							  choseList:list
-						  }
+						  method:"GET"
 					  }).then(res=>{
 						  if(res.data.success){
 							  this.provinceList=res.data.data;
-							 /*  alert("area--->"+JSON.stringify(this.provinceList)); */
+							  /* alert("area--->"+JSON.stringify(this.provinceList)); */
 						  }else{
 							  /* this.$message(res.data.message); */
 							  console.log(res.data.message);
@@ -1260,10 +1276,11 @@ table {
 							  let total=0;
 							  this.confirmList.forEach(item=>{
 								  total=item.sku.ofGood.good_price*item.cart_good_num+total;
-								  this.$set(this.choseskuList,this.choseskuList.length,item.sku.sku_id)
+								  /* this.$set(this.selectedList,this.selectedList.length,item.sku.sku_id); */
+								  this.$set(this.selectedList,this.selectedList.length,{sku:item.sku,order_sku_num:item.cart_good_num,card_id:item.cart_id})
+								  /* this.$set(this.selectedList,this.selectedList.length,item); */
 							  })
 							  this.totalPrice=parseFloat(total).toLocaleString();
-							  alert("ConfirmList-success!!!");
 						  }else{
 							  /* this.$message(res.data.message); */
 							  console.log(res.data.message);
@@ -1278,30 +1295,17 @@ table {
 					  }).then(res=>{
 						  if(res.data.success){
 							  this.addrList=res.data.data;
-							  axios({
-								  url:"${APP_PATH}/good/doArea.do",
-								  method:"GET",
-								  params:{
-									  choseList:list
-								  }
-							  }).then(res=>{
-								  if(res.data.success){
-									  this.provinceList=res.data.data;
-									  alert("getAddr-success!!!"+this.addrList.length);
-									  if(this.addrList.length==0){
-										  this.flag=0;
-									  }else{
-										  this.addrList.forEach(item=>{
-											  if(item.is_default==1){
-												  this.curAddr=this.setCurAddr(item);
-											  }
-										  })
-										  
+							  /* alert("getAddr-success!!!"+this.addrList.length); */
+							  if(this.addrList.length==0){
+								  this.flag=0;
+							  }else{
+								  this.addrList.forEach(item=>{
+									  if(item.is_default==1){
+										  this.curAddr=item;
 									  }
-								  }else{
-									  console.log(res.data.message);
-								  }
-							  })
+								  })
+								  /* alert(JSON.stringify(this.curAddr)); */
+							  }
 							  
 						  }else{
 							  alert(res.data.message);
@@ -1309,38 +1313,16 @@ table {
 					  })
 				  },
 				  
-				  setCurAddr(addr){
-					  /* alert("provinceList:---->"+JSON.stringify(this.provinceList)); */
-					  this.areaList=[];
-					  this.provinceList.forEach(province=>{
-						  if(parseInt(province.code)==addr.province){
-							  this.$set(this.areaList,this.areaList.length,province.name);	
-							  /* alert(this.areaList); */
-							  province.cityList.forEach(city=>{
-								  if(parseInt(city.code)==addr.city){
-									  this.$set(this.areaList,this.areaList.length,city.name);
-									  /* alert(this.areaList); */
-									  city.areaList.forEach(district=>{
-										  if(eval(district.code)==addr.district){
-											  this.$set(this.areaList,this.areaList.length,district.name);
-											  /* alert(this.areaList); */
-										  }						
-									  })
-								  }						
-							  })
-						  }
-					  })
-					  this.$set(addr,"allAddress","");
-					  this.$set(addr,"allAddress",this.areaList.toLocaleString().replace(/,/g,"")+addr.address)
-					  return addr;
-				  },
-				  
-				  
 				  chooseProvince(e){
 					  let province_code=e.target.value;
 					  this.provinceList.forEach(province=>{
-						  if(province.code==province_code){
+						  if(province.province_code==province_code){
 							  this.curCityList=province.cityList;
+							  if(this.curCityList.length==0){
+								  this.selectDistrict="0";
+							  }
+							  this.selectCity="0";
+							  this.curDistrictList=[];
 						  }
 					  })
 				  },
@@ -1348,8 +1330,9 @@ table {
 				  chooseCity(e){
 					  let city_code=e.target.value;
 					  this.curCityList.forEach(city=>{
-						  if(city.code==city_code){
+						  if(city.city_code==city_code){
 							  this.curDistrictList=city.areaList;
+							  this.selectDistrict="0"
 						  }
 					  })
 				  },
@@ -1359,17 +1342,37 @@ table {
 				  
 				  createOrder(){
 					  axios({
+						headers: {
+					      'Content-Type': 'application/json'
+					    },
+					    transformRequest: [function(data) {
+					      data = JSON.stringify(data)
+					      return data
+					    }],
 						  url:"${APP_PATH}/good/doOrder.do",
 						  method:"POST",
-						  params:{
-							  order_addr:this.curAddr.customer_addr_id,
-							  choseList:this.choseskuList.toLocaleString(),
+	                      params:{},
+	                      data:{
+	                    	  addr_id:this.curAddr.customer_addr_id,
+	                    	  objList:this.selectedList,
 							  order_level:1,
-							  order_type:2,
+							  type:2,
 							  order_total_amount:parseFloat(this.totalPrice)
-						  }
+	                      }
 					  }).then(res=>{
-						  
+						  if(res.data.success){
+							  	let divForm = document.getElementsByTagName('divform');
+							    if (divForm.length) {
+							      document.body.removeChild(divForm[0])
+							    }
+							     const div=document.createElement('divform');
+							     div.innerHTML=res.data.data; // data就是接口返回的form 表单字符串
+							     document.body.appendChild(div);
+							     document.forms[0].setAttribute('target', '_blank') // 新开窗口跳转
+							     document.forms[0].submit();
+						  }else{
+							  alert(res.data.message);
+						  }
 					  })
 				  },
 				  
@@ -1380,53 +1383,50 @@ table {
 						  }else{
 							  this.defaultAddr=this.isdefaultAddr?1:0;
 						  }
+						  let params={
+							  /* province_code:this.selectProvince,
+							  city_code:this.selectCity,
+							  district_code:this.selectDistrict, */
+							  address:encodeURI(this.detailAddr),
+							  is_default:this.defaultAddr,
+							  accept_customer_name:encodeURI(this.acceptCustomer),
+							  phone_num:this.phoneNum
+						  }
+						  
+						  if(this.selectDistrict!='0'){
+							  params.district_code=this.selectDistrict;
+						  }
+						  if(this.selectCity!="0"){
+							  params.city_code=this.selectCity;
+						  }
+						  if(this.selectProvince!="0"){
+							  params.province_code=this.selectProvince;
+						  }
+						  
 						  axios({
 							  url:"${APP_PATH}/good/doAddAddr.do",
 							  method:"POST",
-							  params:{
-								  province:parseInt(this.selectProvince),
-								  city:parseInt(this.selectCity),
-								  district:parseInt(this.selectDistrict),
-								  address:encodeURI(this.detailAddr),
-								  is_default:this.defaultAddr,
-								  accept_customer_name:encodeURI(this.acceptCustomer),
-								  phone_num:this.phoneNum
-							  }
+							  params: params
 						  }).then(res=>{
 							  if(res.data.success){
 								  let addrid=res.data.data;
-								  /* this.getAddr(); */
 								  axios({
 									  url:"${APP_PATH}/good/doAddr.do",
 									  method:"GET"
 								  }).then(res=>{
 									  if(res.data.success){
 										  this.addrList=res.data.data;
-										  axios({
-											  url:"${APP_PATH}/good/doArea.do",
-											  method:"GET",
-											  params:{
-												  choseList:list
-											  }
-										  }).then(res=>{
-											  if(res.data.success){
-												  this.provinceList=res.data.data;
-												  if(this.addrList.length>1){
-													  this.addrList.forEach(item=>{
-														  if(item.customer_addr_id==addrid){
-															  this.curAddr=this.setCurAddr(item);
-														  }
-													  })
-												  }
-											  }else{
-												  console.log(res.data.message);
+										  this.addrList.forEach(item=>{
+											  if(item.customer_addr_id==addrid){
+												  this.curAddr=item;
+												  this.flag=1;
 											  }
 										  })
 									  }else{
 										  alert(res.data.message);
 									  }
 								  })
-								  this.flag=1;
+								  
 							  }else{
 								  alert(res.data.message);
 							  }

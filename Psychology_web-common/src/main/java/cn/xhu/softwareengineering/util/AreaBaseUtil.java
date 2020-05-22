@@ -2,20 +2,22 @@ package cn.xhu.softwareengineering.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import cn.xhu.softwareengineering.bean.Area;
-import cn.xhu.softwareengineering.bean.City;
 import cn.xhu.softwareengineering.bean.Province;
 
 public class AreaBaseUtil {
@@ -57,40 +59,38 @@ public class AreaBaseUtil {
 	}
 	
 	private static List<Province> jsonToBean() {
+		ClassPathResource resource = new ClassPathResource("area/2020年1月中华人民共和国县以上行政区划代码.json");
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		File jsonFile;
+		File jsonFile = new File("area.txt");
 		String json;
 		List<Province> pList=null;
 		try {
-			jsonFile = ResourceUtils.getFile("classpath:area/2020年1月中华人民共和国县以上行政区划代码.json");
+			InputStream inputStream = resource.getInputStream();
+			OutputStream os = null;
+			try {
+				os = new FileOutputStream(jsonFile);
+				int len = 0;
+				byte[] buffer = new byte[8192];
+
+				while ((len = inputStream.read(buffer)) != -1) {
+					os.write(buffer, 0, len);
+				}
+			} finally {
+				os.close();
+				inputStream.close();
+			}
 			json = FileUtils.readFileToString(jsonFile);
 			pList = gson.fromJson(json, new TypeToken<List<Province>>(){}.getType());
- 			System.out.println("-省：");
-			for(Province p:pList) {
-				System.out.println(p.getCode()+p.getName());
-				System.out.println("---市：");
-				for(City c:p.getCityList()) {
-					System.out.println(c.getCode()+c.getName());
-					System.out.println("------地区：");
-					for(Area a:c.getAreaList()) {
-						System.out.println(a.getCode()+a.getName());
-					}
-					System.out.println("------此地区结束：");
-				}
-	        }
-			return pList;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return pList;
-		
 	}
 
 	
 	public static void main(String[]args) {
-		AreaBaseUtil.getProvinceList(); 
+		AreaBaseUtil.getProvinceList();
+		
 	}
 	
 }

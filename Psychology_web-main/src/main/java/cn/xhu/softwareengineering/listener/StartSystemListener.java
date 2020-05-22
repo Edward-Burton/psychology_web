@@ -46,7 +46,6 @@ public class StartSystemListener implements ServletContextListener {
 	
 	public void updateAreaDB() {
 		Connection con = DBaseUtil.getConn(AreaBaseUtil.getBaseProperties("classpath:config/jdbc.properties"));
-		DBaseUtil.deleteData(con);
 		DBaseUtil.insertDate(AreaBaseUtil.getProvinceList(), con);
 	}
 

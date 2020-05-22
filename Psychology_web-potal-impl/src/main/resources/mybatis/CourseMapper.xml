@@ -88,7 +88,7 @@
 	</select>
 	
 	<select id="selectjoincount" resultType="Integer">
-		select count(*) from orderlist where order_obj_id=#{course_id} and order_type=1
+		select count(*) from orderlist where order_obj_id=#{course_id} and type=1
 	</select>
 	
 	<select id="selectinstructor" resultType="CourseTeacher">
@@ -147,7 +147,7 @@
 	</select>
 	
 	<select id="queryOrder" resultType="Order">
-		select * from orderlist where order_obj_id=#{courseid} and order_userid=#{userid} and order_type=1
+		select * from orderlist where order_obj_id=#{courseid} and order_userid=#{userid} and type=1
 	</select>
 	
 	<select id="queryCourseCatalog" resultMap="courseCatalog">
