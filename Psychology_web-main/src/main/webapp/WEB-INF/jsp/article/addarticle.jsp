@@ -660,9 +660,7 @@ input[type=file] {
 					layer.close(loadingIndex);
 					if (result.success) {
 						window.location.href = "${APP_PATH}/main.htm";
-						/* alert("success"); */
 					} else {
-						/* alert("failed"); */
 						layer.msg(result.message, {
 							time : 1000,
 							icon : 5,

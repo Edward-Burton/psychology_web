@@ -281,11 +281,6 @@
 				<h2 class="lecturer-name">${course.instructor.instructor_name}</h2>
 				<p class="lecturer-title">${course.instructor.instructor_glory}
 				</p>
-				<!-- <a href="javascript:void(0)" onclick="doFollow('1');">
-									<span id="followSpan" class="follow-btn">
-									关注+
-									</span>
-									</a> -->
 			</div>
 
 			<div>
@@ -849,50 +844,6 @@
 				);
 			};
 
-			//收藏 
-			function doCollect(courseId, url) {
-				if (url == undefined) {
-					url = '/collections/doCollection.html';
-				}
-				//处理收藏 
-				$.ajax({
-					url: url,
-					type: 'POST',
-					dataType: 'json',
-					data: {
-						"courseId": courseId
-					},
-					success: function(resp) {
-						if (resp.errcode == 1) { //已收藏 
-							$('#collectionSpan').attr('class', 'followed');
-						} else if (resp.errcode == 0) { //未收藏  
-							$('#collectionSpan').attr('class', 'following');
-						}
-					}
-				});
-			}
-
-			//关注 
-			function doFollow(followId, url) {
-				if (url == undefined) {
-					url = '/follow/doFollow.html';
-				}
-				$.ajax({
-					url: url,
-					type: 'POST',
-					dataType: 'json',
-					data: {
-						"followId": followId
-					},
-					success: function(resp) {
-						if (resp.errcode == 1) {
-							$('#followSpan').html('已关注');
-						} else if (resp.errcode == 0) {
-							$('#followSpan').html('+关注');
-						}
-					}
-				});
-			}
 		</script>
 
 </body>

@@ -920,12 +920,6 @@
 					},
 				  
 				  addreply(){
-						/* {
-							userid : this.userid,
-							questionId:questionid,
-							content:encodeURI($('#summernote').summernote('code'))
-						} */
-					  alert($('#summernote').summernote('code'));
 					  var  data = new FormData(); 
 					  data.append("userid",this.userid);
 					  data.append("questionId",questionid);

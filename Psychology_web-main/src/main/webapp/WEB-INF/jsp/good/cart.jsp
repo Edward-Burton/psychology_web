@@ -704,20 +704,6 @@
 				  methods: {
 					  
 					  createOrder(){
-						  /* axios({
-							  url:"${APP_PATH}/good/toConfirm.do",
-							  method:"POST",
-							  params:{
-								  /* choseList:JSON.stringify(this.choseList) */
-								  /* choseList:this.choseList.toLocaleString() 
-								  choseList:JSON.stringify(this.choseList)
-							  }
-						  }).then(res=>{
-							  if(res.data.success){
-							  }else{
-								  alert(res.data.message);
-							  }
-						  }) */
 						  window.location.href="${APP_PATH}/good/toConfirm.htm?choseList="+this.choseList.toLocaleString();
 					  },
 					  

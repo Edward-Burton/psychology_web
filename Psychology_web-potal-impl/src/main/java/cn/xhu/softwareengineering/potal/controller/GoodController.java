@@ -433,16 +433,6 @@ public class GoodController {
 
 	@RequestMapping("/toConfirm")
 	public String toConfirm(@RequestParam(value = "choseList") String choseList, Map<String, Object> paramMap) {
-		/*
-		 * List<Integer> list = new ArrayList<Integer>(); for (String i :
-		 * choseList.split(",")) { if (Integer.valueOf(i) != 0) {
-		 * list.add(Integer.valueOf(i)); } }
-		 */
-		/*
-		 * Map<String, Object> parammap = new HashMap<String, Object>();
-		 * parammap.put("choseList", list); List<CartGood> confirmList =
-		 * goodService.queryCartList(parammap); System.out.println(confirmList);
-		 */
 		paramMap.put("list", choseList);
 		return "good/confirm_order";
 	}
@@ -635,6 +625,7 @@ public class GoodController {
 		System.out.println(order.getObjList().get(0));
 		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		AjaxResult result = new AjaxResult();
+		//请求的控制器
 		if (user != null) {
 			order.setUser(user);
 			order.setOrder_createtime(new Date());
