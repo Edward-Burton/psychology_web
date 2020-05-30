@@ -130,6 +130,25 @@ public class ArticleController {
 		}
 		return result;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/doSubCategory")
+	public Object doSubCategory() {
+		AjaxResult result = new AjaxResult();
+		try {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("sub_category", "all");
+			List<PsychoCategory> subcategoryList = articleService.queryCategory(paramMap);
+			for (PsychoCategory pc : subcategoryList) {
+				System.out.println("分类: " + pc.getPsycho_category_name());
+			}
+			result.setData(subcategoryList);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+		}
+		return result;
+	}
 
 	@ResponseBody
 	@RequestMapping("/doComment")
@@ -276,7 +295,7 @@ public class ArticleController {
 	 */
 
 	@ResponseBody
-	@RequestMapping(value = "/doAddComment", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/doAddComment", method = RequestMethod.POST)
 	public Object doAddComment(Integer articleid, String inputValue,
 			@RequestParam(value = "pcommentid", required = false) Integer pcommentid, HttpSession session) {
 		AjaxResult result = new AjaxResult();
@@ -321,7 +340,9 @@ public class ArticleController {
 			@RequestParam(value = "articleTitle", required = true) String articleTitle,
 			@RequestParam(value = "articleDesc", required = true) String articleDesc,
 			@RequestParam(value = "content", required = true) String content,
-			@RequestParam(value = "articleLabels", required = false) String[] tags, HttpSession session,
+			@RequestParam(value = "articleLabels", required = false) String[] tags,
+			@RequestParam(value = "categoryId", required = false, defaultValue="0") Integer categoryId,
+			HttpSession session,
 			HttpServletRequest request) {
 		for(String tag:tags) {
 			System.out.println(tag);
@@ -373,14 +394,13 @@ public class ArticleController {
 			pa.setDesc(articleDesc);
 			pa.setContent(content);
 			pa.setArticleUser(user);
+			pa.setCategoryId(categoryId);
 			/*
 			 * PsychoUser pu = new PsychoUser(); pu.setPsychouser_id(2);
 			 * pa.setArticleUser(pu);
 			 */
 			pa.setPubTime(new Date());
 			pa.setArticleImg(sqlPath);
-			System.out.println(pa.getArticleImg());
-			System.out.println(pa.getPubTime());
 
 			if (articleService.addArticle(pa) > 0) {
 				result.setSuccess(true);

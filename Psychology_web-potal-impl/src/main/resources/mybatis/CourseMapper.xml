@@ -180,5 +180,12 @@
 	<delete id="deleteCourseQuestion" parameterType="Integer">
 		delete from sales_comment where comment_id=#{Commentid}
 	</delete>
+	
+	<insert id="addOrder" parameterType="Order">
+		insert into orderlist(order_userid,order_level,type,out_trade_no,order_total_amount,order_createtime,order_obj_id)
+		values(#{user.psychouser_id},#{order_level},#{type},#{out_trade_no},#{order_total_amount},#{order_createtime},#{orderobjId})
+		<selectKey keyProperty="order_id" resultType="int"> select
+			@@identity </selectKey>
+	</insert>
 
 </mapper>

@@ -2,9 +2,11 @@ package cn.xhu.softwareengineering.bean;
 
 import java.util.List;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Province {
-    private String province_code;
-    private String province_name;
+	private @SerializedName("code")String province_code;
+    private @SerializedName("name")String province_name;
     private List<City> cityList;
 
     public Province() {

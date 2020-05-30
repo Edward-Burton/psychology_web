@@ -167,6 +167,14 @@ a {
     margin-bottom: 30px;
 }
 
+.article-edit-container .category{
+	width: 200px;
+    height: 30px;
+    font-size: 14px;
+    margin-bottom: 30px;
+    outline: none;
+}
+
 .article-edit-container .article-tags {
 	padding-bottom: 36px;
 }
@@ -356,28 +364,7 @@ input[type=file] {
 <body>
 	<header class="global-head">
 		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
-		<!-- <div class="global-head-left">
-			首页链接
-			<a href="#" class="index-link"> <img src="#" alt="心理logo">
-			</a>
-		</div>
-
-		<div class="global-head-right">
-
-			<div class="user-avatar-img-wrap">
-				<div class="user-avatar-img">
-					用户个人主页
-					<a href="#" class="user-center-link"> 用户头像 <img
-						src="https://ossimg.xinli001.com/20200222/19d1695be26b091c2d752e338f1e9b0c.jpg"
-						alt="" class="user-avatar">
-					</a>
-				</div>
-			</div>
-		</div> -->
 	</header>
-
-
-
 	<main class="article-edit-container" style="display: block;">
 	<div class="article-edit-wrap" style="">
 		<div class="article-cover">
@@ -406,6 +393,13 @@ input[type=file] {
 				class="article-desc-text" autocomplete="off">
 
 		</div>
+		
+		<div>
+			<select name="cityId" class="category" id="category">
+				<option value="0">请选择分类</option>
+			</select>
+		</div>
+		
 		<div class="article-tags">
 			<div class="article-tag-list">
 				<div class="article-tag">
@@ -430,10 +424,6 @@ input[type=file] {
 
 		<div class="col-md-7" id="contextText">
 			<div class="form-group" id="nochecke">
-				<!--  <textarea id="editor" hidden="true" autofocus>
-					     </textarea> -->
-				<!-- <textarea id="editor" placeholder="Balabala" autofocus></textarea> -->
-
 				<textarea id="summernote" name="editordata"></textarea>
 
 				<div class="form-bnt">
@@ -444,7 +434,6 @@ input[type=file] {
 			</div>
 		</div>
 		</div>
-	</form>
 	</main>
 
 	<div class="article-pre" style="display: none;">
@@ -452,7 +441,6 @@ input[type=file] {
 			<div class="top">
 
 				<p class="title">标题很长很长</p>
-
 
 			</div>
 			<div class="article-body-m">
@@ -475,146 +463,172 @@ input[type=file] {
 			</div>
 		</div>
 	</div>
-
+	<script src="${APP_PATH }/js/axios.js"></script>
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
+	<script src="${APP_PATH }/js/vue.js"></script>
     <script src="${APP_PATH }/jquery/layer/layer.js"></script>
 	<script
 		src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
 	<script
 		src="${APP_PATH }/js/summernote.min.js"></script>
-	<!-- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script> -->
-	<script type="text/javascript" src="${APP_PATH}/jquery/layer/layer.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		summernote();
+		getCategory();
+	})
+	
+	function getCategory(){
+		$.ajax({
+			type : "GET",
+			url : "${APP_PATH}/article/doSubCategory.do",
+			success : function(result) { //返回json数据：{"success":true}  或    {"success":false,"message":"登录失败!"}
+				if (result.success) {
+					var data = result.data;
+					$.each(data,function(i, sub){
+						$("#category").append("<option value='"+sub.psycho_category_id+"'>"+sub.psycho_category_name+"</option>");
+					}); 
+				} else {
+					layer.msg(result.message, {
+						time : 1000,
+						icon : 5,
+						shift : 6
+					});
+
+				}
+			}
+		})
+	}
+
+	function summernote(){
 		$('#summernote')
-			.summernote({
-				placeholder: 'Hello stand alone ui',
-				tabsize: 2,
-				height: 400,
-				toolbar: [
-					['style', ['style']],
-					[
-						'font',
-						['bold', 'underline', 'clear']
-					],
-					['color', ['color']],
-					['para', ['ul', 'ol', 'paragraph']],
-					['table', ['table']],
-					['insert',
-						['link', 'picture', 'video']
-					],
-					[
-						'view',
-						['fullscreen', 'codeview',
-							'help'
-						]
-					]
+		.summernote({
+			placeholder: 'Hello stand alone ui',
+			tabsize: 2,
+			height: 400,
+			toolbar: [
+				['style', ['style']],
+				[
+					'font',
+					['bold', 'underline', 'clear']
 				],
-				lang: 'zh-CN',
-				focus: true,
-				dialogsFade: true, // Add fade effect on dialogs
-				dialogsInBody: true, // Dialogs can be placed in body, not in
-				// summernote.
-				disableDragAndDrop: false, // default false You can disable drag
-				// and drop
-				tabDisable: false,
-				callbacks: {
-					onImageUpload: function(files) {
-						$.each(files, function() {
-							var file = this;
-							alert(file);
-							var data = new FormData();
-							data.append("file",
-								file);
-							$.ajax({
-								data: data,
-								type: "POST",
-								url: "${APP_PATH}/file/img.do",
-								cache: false,
-								contentType: false,
-								processData: false,
-								success: function(
-									res) {
-									alert(res.message);
-									alert(res.data.completeSavePath);
-									$('#summernote').summernote(
-										'insertImage',
-										res.data.completeSavePath);
-
-								},
-								error: function() {
-									layer.msg("加载数据失败", {
-										time: 1000,
-										icon: 5,
-										shift: 6
-									});
-								}
-
-							});
-						})
-					},
-					onPaste: function(e) {
-						console.log(e)
-						setTimeout(function() {
-							var str = $('#summernote').summernote('code');
-							//匹配图片（g表示匹配所有结果i表示区分大小写）
-							var imgReg = /<img.*?(?:>|\/>)/gi;
-							//匹配src属性
-							var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
-							if (srcReg!=null) {
-								var arr = str.match(imgReg);
-								alert('所有已成功匹配图片的数组：' + arr);
-								for (var i = 0; i < arr.length; i++) {
-									var src = arr[i].match(srcReg);
-									//alert("src:"+src);
-									//当然你也可以替换src属性
-									if (src) {
-										var imgpath = encodeURI(src[1]);
-										alert(imgpath);
-										$
-											.ajax({
-												url: '${APP_PATH}/file/pathupload.do',
-												type: 'POST',
-												data: {
-													"imgpath": src[1]
-												},
-												async: false,
-												success: function(res) {
-													str = str.replace(src[0], 'src="' + res.data.completeSavePath + '"');
-													if (res.success) {
-														//$("#img").val(data.data);
-													} else {
-														alert("失败");
-													}
-												}
-											});
-									}
-								}
-							}
-							$('#summernote').summernote('code', str);
-						}, 1000);
-					},
-					onMediaDelete: function(target) {
-						alert(target.context.currentSrc);
-						var imgSrc = target.context.currentSrc;
-					    var  data = new FormData();  
-					    data.append("imgSrc",imgSrc);  
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['table', ['table']],
+				['insert',
+					['link', 'picture', 'video']
+				],
+				[
+					'view',
+					['fullscreen', 'codeview',
+						'help'
+					]
+				]
+			],
+			lang: 'zh-CN',
+			focus: true,
+			dialogsFade: true, // Add fade effect on dialogs
+			dialogsInBody: true, // Dialogs can be placed in body, not in
+			// summernote.
+			disableDragAndDrop: false, // default false You can disable drag
+			// and drop
+			tabDisable: false,
+			callbacks: {
+				onImageUpload: function(files) {
+					$.each(files, function() {
+						var file = this;
+						alert(file);
+						var data = new FormData();
+						data.append("file",
+							file);
 						$.ajax({
 							data: data,
 							type: "POST",
-							url: "${APP_PATH}/file/deletefile.do",
+							url: "${APP_PATH}/file/img.do",
 							cache: false,
 							contentType: false,
 							processData: false,
-							success: function(data) {
-								console.log(data);
-							}
-						});
-					}
-				},
-			});
-	})
+							success: function(
+								res) {
+								alert(res.message);
+								alert(res.data.completeSavePath);
+								$('#summernote').summernote(
+									'insertImage',
+									res.data.completeSavePath);
 
+							},
+							error: function() {
+								layer.msg("加载数据失败", {
+									time: 1000,
+									icon: 5,
+									shift: 6
+								});
+							}
+
+						});
+					})
+				},
+				onPaste: function(e) {
+					console.log(e)
+					setTimeout(function() {
+						var str = $('#summernote').summernote('code');
+						//匹配图片（g表示匹配所有结果i表示区分大小写）
+						var imgReg = /<img.*?(?:>|\/>)/gi;
+						//匹配src属性
+						var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+						if (srcReg!=null) {
+							var arr = str.match(imgReg);
+							alert('所有已成功匹配图片的数组：' + arr);
+							for (var i = 0; i < arr.length; i++) {
+								var src = arr[i].match(srcReg);
+								//alert("src:"+src);
+								//当然你也可以替换src属性
+								if (src) {
+									var imgpath = encodeURI(src[1]);
+									alert(imgpath);
+									$
+										.ajax({
+											url: '${APP_PATH}/file/pathupload.do',
+											type: 'POST',
+											data: {
+												"imgpath": src[1]
+											},
+											async: false,
+											success: function(res) {
+												str = str.replace(src[0], 'src="' + res.data.completeSavePath + '"');
+												if (res.success) {
+													//$("#img").val(data.data);
+												} else {
+													alert("失败");
+												}
+											}
+										});
+								}
+							}
+						}
+						$('#summernote').summernote('code', str);
+					}, 1000);
+				},
+				onMediaDelete: function(target) {
+					alert(target.context.currentSrc);
+					var imgSrc = target.context.currentSrc;
+				    var  data = new FormData();  
+				    data.append("imgSrc",imgSrc);  
+					$.ajax({
+						data: data,
+						type: "POST",
+						url: "${APP_PATH}/file/deletefile.do",
+						cache: false,
+						contentType: false,
+						processData: false,
+						success: function(data) {
+							console.log(data);
+						}
+					});
+				}
+			},
+		});
+	}	
+	
 		function doCommit() {
 			var indeximg = $("#articleImg")[0].files[0];
 
@@ -629,6 +643,8 @@ input[type=file] {
 
 			// 获取标签个数
 			var num = $(".article-tag-list div").length;
+			
+			var categoryOption = parseInt($("#category option:selected").val());
 
 			// 获取标签
 			var tags = [];
@@ -642,6 +658,9 @@ input[type=file] {
 		    data.append("articleDesc", desc);
 		    data.append("content", content);
 		    data.append("articleLabels", tags);
+		    if(categoryOption!=0){
+			    data.append("categoryId",categoryOption);
+		    }
 		    
 			$.ajax({
 				type : "POST",
@@ -713,6 +732,11 @@ input[type=file] {
 			return url;
 		}
 
+		$(".confirm").click(function() {
+			var option = $("#category option:selected");
+			alert(option.val());
+		})
+		
 		$(".article-cover-replace-btn").click(function() {
 			$("#articleImg").trigger('click');
 		})

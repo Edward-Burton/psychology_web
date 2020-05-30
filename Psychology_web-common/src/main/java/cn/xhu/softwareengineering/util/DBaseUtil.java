@@ -6,11 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import cn.xhu.softwareengineering.bean.Area;
 import cn.xhu.softwareengineering.bean.City;
+import cn.xhu.softwareengineering.bean.Message;
 import cn.xhu.softwareengineering.bean.Province;
 
 public class DBaseUtil {
@@ -41,13 +43,6 @@ public class DBaseUtil {
 		return conn;
 	}
 
-	/**
-	 * 插入数据库
-	 * 
-	 * @param params
-	 * @param movieList
-	 * @param c
-	 */
 	public static void deleteData(Connection c) {
 		String sql = "delete from area_province";
 		PreparedStatement pstmt;
@@ -59,11 +54,30 @@ public class DBaseUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void insertMessageDate(List<Message> messageList, Connection c) {
+		try {
+			for (int i = 0; i < messageList.size(); i++) {
+				String sql = "insert into private_message(message_from_id,mssage_to_id,create_time,message_content) values(?,?,?,?)";
+				PreparedStatement pstmt = c.prepareStatement(sql);
+				Timestamp date = new Timestamp(messageList.get(i).getDate().getTime());
+				System.out.println("date:"+date);
+				pstmt.setInt(1, messageList.get(i).getFrom());
+				pstmt.setInt(2, messageList.get(i).getTo());
+				pstmt.setTimestamp(3, date);
+				pstmt.setString(4, messageList.get(i).getText());
+				pstmt.executeLargeUpdate();
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public static void insertDate(List<Province> provinceList, Connection c) {
 		try {
 			for (int i = 0; i < provinceList.size(); i++) {
-				System.out.println("provinceList:--->"+provinceList.get(i).getProvince_code()+provinceList.get(i).getProvince_name());
+				//System.out.println("provinceList:--->"+provinceList.get(i).getProvince_code()+provinceList.get(i).getProvince_name());
 				String sql = "insert IGNORE into area_province values(?,?)";
 				PreparedStatement pstmt = c.prepareStatement(sql);
 				pstmt.setString(1, provinceList.get(i).getProvince_code());

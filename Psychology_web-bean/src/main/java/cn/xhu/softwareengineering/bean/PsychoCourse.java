@@ -19,7 +19,6 @@ public class PsychoCourse {
 	
 	public PsychoCourse() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 

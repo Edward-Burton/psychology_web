@@ -1,8 +1,10 @@
 package cn.xhu.softwareengineering.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Area {
-    private String district_code;
-    private String district_name;
+    private @SerializedName("code")String district_code;
+    private @SerializedName("name")String district_name;
 
     
     

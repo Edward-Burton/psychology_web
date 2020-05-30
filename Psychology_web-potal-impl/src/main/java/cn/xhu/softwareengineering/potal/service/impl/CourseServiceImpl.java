@@ -103,6 +103,14 @@ public class CourseServiceImpl implements CourseService{
 		return courseMapper.queryTryList(courseid);
 	}
 
+	@Override
+	public Order addOrder(Order order) {
+		if(courseMapper.addOrder(order)>0) {
+			return order;
+		}
+		return null;
+	}
+
 	
 	
 }

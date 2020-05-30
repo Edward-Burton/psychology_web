@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.xhu.softwareengineering.bean.Message;
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.bean.UserCollection;
@@ -25,6 +26,41 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	
+	@ResponseBody
+	@RequestMapping("/doTalkerList")
+	public Object doTalkerList(@RequestParam(value = "userid", required = true) Integer userid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			List<PsychoUser> talkerList = userService.queryTalkerByUserid(userid);
+			result.setData(talkerList);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("文章查询失败！！！");
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doMessageList")
+	public Object doMessageList(Integer userid,Integer toid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			Map<String,Object> paramMap = new HashMap<String,Object>();
+			paramMap.put("fromid", userid);
+			paramMap.put("toid", toid);
+			List<Message> messageList = userService.queryMessageList(paramMap);
+			result.setData(messageList);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("文章查询失败！！！");
+		}
+		return result;
+	}
 	
 	@ResponseBody
 	@RequestMapping("/doLike")

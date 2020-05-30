@@ -720,10 +720,6 @@
 						</div>
 					</div>
 				</div>
-
-				<a href="#" target="_blank">
-					<img id="pic" src="m.jpg">
-				</a>
 			</div>
 
 		</div>

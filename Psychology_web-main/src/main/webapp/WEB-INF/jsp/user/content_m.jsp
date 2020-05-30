@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -442,6 +446,100 @@
 			    cursor: pointer;
 			}
 			
+			.uc-main {
+			    width: 815px;
+			    float: right;
+			    display: inline;
+			}
+			
+			.uc-curr {
+			    height: 38px;
+			    line-height: 38px;
+			    border: 1px solid #efefef;
+			    border-radius: 5px;
+			    background: #fff;
+			    font-size: 14px;
+			    color: #444;
+			    padding: 0 30px;
+			}
+			
+			.uc-msgdesc {
+			    border: 1px solid #efefef;
+			    background: #fff;
+			    padding: 30px 40px;
+			}
+			.uc-msgdesc, .uc-msgdesc .addpost .bd {
+			    margin-top: 10px;
+			}
+			
+			.up {
+			    height: 300px;
+			    background: #006064;
+			    margin-bottom: 30px;
+			    padding: 15px;
+			    overflow: auto;
+			}
+			
+			.up ul li {
+			    margin-bottom: 10px;
+			    overflow: hidden;
+			}
+			
+			.up span {
+			    background: #f4f4f4;
+			    padding: 3px 5px;
+			    float: left;
+			    max-width: 480px;
+			}
+			
+			.up em {
+			    font-style: normal;
+			    background: #1976D2;
+			    color: #FFFFFF;
+			    padding: 3px 5px;
+			    margin: 0 5px;
+			    float: left;
+			}
+			
+			.up b {
+			    font-weight: normal;
+			    background-color: #333333;
+			    padding: 2px 5px;
+			    color: #f4f4f4;
+			    float: left;
+			}
+			
+			.up .isMe{
+				display:block; float:right;
+			}
+			
+			.down {
+			    background: #ffffff;
+			    padding: 15px;
+			}
+			
+			.down textarea {
+			    width: 99%;
+			    height: 50px;
+			    margin-top: 5px;
+			    resize: none;
+				outline: none;
+			}
+			
+			.down .btn {
+				width: 101px;
+				height: 33px;
+				border: 0;
+				border-radius: 10px;
+				cursor: pointer;
+				margin-left: auto;
+				display: block;
+				margin-top: 10px;
+				background-color: #3ab1e5;
+				color: white;
+				outline: none;
+			}
+			
 		</style>
 	</head>
 	<body>
@@ -459,20 +557,11 @@
 						<li :class="{active:tag==1}">
 							<a href="javacript:" @click="comment($event)">评论回答</a>
 						</li>
-						<li :class="{active:tag==2}">
-							<a href="javacript:">系统通知</a>
-						</li>
 					</ul>
 					<ul>
 						<div class="ul_title">内容管理</div>
 						<li :class="{active:tag==10}">
 							<a href="javacript:" @click="collect($event)">我的收藏</a>
-						</li>
-						<li :class="{active:tag==11}">
-							<a href="javacript:">课程管理</a>
-						</li>
-						<li :class="{active:tag==12}">
-							<a href="javacript:">电台管理</a>
 						</li>
 					</ul>
 
@@ -581,39 +670,25 @@
 
 					</div>
 					<div class="tab_item  privateLetter active" v-if="tag<10">
-						<div class="right_div_content">
+					<!-- 私信列表 -->
+						<div class="right_div_content" v-if="tag==0">
 							<ul>
-								<li>
-									<a href="//www.xinli001.com/user/271509828">
-										<div class="li_item_img" style="background-image: url(https://image.xinli001.com/20151104/130127/177215.png!80)"></div>
+								<li v-for="(talker,index) in talkerList" :data-id="talker.psychouser_id" >
+									<a :href="'${APP_PATH}/user/toUserIndex.htm?userid='+talker.psychouser_id">
+										<div class="li_item_img" :style="'background-image: url(${APP_PATH }/'+talker.psychouser_head_portrait+')'"></div>
 									</a>
-									<div class="li_item_c">
-										<a href="//www.xinli001.com/user/setting/message-chat/271509828">
+									<div class="li_item_c" v-for="(message,index) in talker.messageList">
+										<a href="javascript:;" @click="message_detail($event)" :data-id="talker.psychouser_id">
 											<div class="li_item_c_title">
-												<span class="notice_span"> 林晋毅</span>
-												<span>2020年05月12日 17:54:06</span>
+												<span class="notice_span">{{talker.psychouser_name}}</span>
+												<span>{{message.date}}</span>
 											</div>
-											<div class="li_item_c_text">
+											<div class="li_item_c_text" v-if="message.from==uid">
 												我：
-												谢谢您文章总是难以拒绝别人？三个方法帮你树立界限的指导
+												{{message.text}}
 											</div>
-										</a>
-									</div>
-
-								</li>
-								<li>
-									<a href="//www.xinli001.com/user/1005750138">
-										<div class="li_item_img" style="background-image: url(http://ossimg.xinli001.com/20180904/7d140117ca45904f429b2d44a1a42ba1.jpg!80)"></div>
-									</a>
-									<div class="li_item_c">
-										<a href="//www.xinli001.com/user/setting/message-chat/1005750138">
-											<div class="li_item_c_title">
-												<span class="notice_span"> 思维升级</span>
-												<span>2020年05月12日 09:14:12</span>
-											</div>
-											<div class="li_item_c_text">
-												我：
-												老师，我现在高三，感觉不知道怎么创建待办事项列表的事项维度，后面就关键事情都一件一件往后面堆，
+											<div class="li_item_c_text" v-if="message.to==uid">
+												{{talker.psychouser_name}}：{{message.text}}
 											</div>
 										</a>
 									</div>
@@ -621,27 +696,55 @@
 								</li>
 							</ul>
 						</div>
+						<!-- 私信详情 -->
+						<div class="uc-msgdesc" v-if="tag==4">
+							<div class="up" id="up">
+								<ul id="contentUI">
+									<li v-for="(message,index) in messageList">
+									<span :class="{isMe:message.from==uid}">
+									<em v-if="message.from!=uid">{{message.fromName}}</em>
+									<span>{{message.text}}</span><b>{{message.date}}</b><em v-if="message.from==uid">我</em></span></li>
+								</ul>
+							</div>
+							<div class="down">
+								<textarea class="textInfo" id="msg" title="按ctrl+enter直接发送"></textarea>
+								<button class="btn" id="sendBtn" @click="sendMsg">发送</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="${APP_PATH }/js/vue.js"></script>
 		<script src="${APP_PATH }/js/axios.js"></script>
+		<script src="${APP_PATH }/js/sockjs.min.js"></script>
 		<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
 		<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
 		<script type="text/javascript">
+		var path = '<%=basePath%>';
+		var uu="${sessionScope.loginUser}";
+		var uid = "${sessionScope.loginUser.psychouser_id}";
+		var fromName = "${sessionScope.loginUser.psychouser_name}";
+	  //不同浏览器的WebSocket对象类型不同
+		//alert("ws://" + path + "/ws?uid="+uid);
+		
+	  	
 		var article = new Vue({
 			  el: '.content_wrap',
 			  data () {
 			    return {
+			      uid:"${sessionScope.loginUser.psychouser_id}",
 			      tag : 0,
 			      subtag:2,
 			      questionA:[],
 			      articleList:[],
 			      FMList:[],
 			      readMore:[],
-			      tab:"私信"
-			      
+			      tab:"私信",
+			      talkerList:[],
+			      messageList:[],
+			      curToid:0,
+			      websocket:null
 			    }
 			  },
 			  created() {
@@ -652,9 +755,127 @@
 			  },
 			  methods: {
 				  
+				  
+				  message_detail(e){
+					  let toid=e.currentTarget.dataset.id;
+					  this.curToid=parseInt(toid);
+					  axios({
+						  url: "${APP_PATH}/user/doMessageList.do",
+					      method: "GET",
+					      params:{
+					    	  userid:parseInt(uid),
+					    	  toid:parseInt(toid)
+					      }
+					    }).then(res => {
+					    	this.messageList=res.data.data;
+						    this.tag=4;
+						    this.tab="私信详情";
+						    if ('WebSocket' in window) {
+								this.websocket = new WebSocket("ws://" + path + "ws.do");
+								console.log("=============WebSocket");
+								//火狐
+							} else if ('MozWebSocket' in window) {
+								this.websocket = new MozWebSocket("ws://" + path + "ws.do");
+								console.log("=============MozWebSocket");
+							} else {
+								this.websocket = new SockJS("http://" + path + "ws/sockjs.do");
+								console.log("=============SockJS");
+							}
+							
+							this.websocket.onopen = function(event) { 
+								console.log("WebSocket:已连接");
+							}
+						  	
+						  //div滚动条(scrollbar)保持在最底部
+							/* function scrollToBottom(){
+								//var div = document.getElementById('chatCon');
+								var div = document.getElementById('up');
+								div.scrollTop = div.scrollHeight;
+							}	 */
+						  	
+						  	this.websocket.onmessage = function(event) { 
+								console.log('Client received a message',event);
+								//var data=JSON.parse(event.data);
+								var data=$.parseJSON(event.data);
+								console.log("WebSocket:收到一条消息",data);
+								//===普通消息
+								//处理一下个人信息的显示：
+								if(data.fromName==fromName){
+									data.fromName="我";
+									$("#contentUI").append("<li><span  style='display:block; float:right;'><span>"+data.text+"</span><b>"+data.date+"</b><em>"+data.fromName+"</em></span></li><br/>");
+								}else{
+									$("#contentUI").append("<li><span class=''><em>"+data.fromName+"</em><span>"+data.text+"</span><b>"+data.date+"</b></span></li><br/>");
+								}
+								/* scrollToBottom(); */
+							};
+							
+							// 监听WebSocket的关闭
+							this.websocket.onclose = function(event) { 
+								$("#contentUI").append("<li><b>"+new Date()+"</b><em>系统消息：</em><span>连接已断开！</span></li>");
+								/* scrollToBottom(); */
+								console.log("WebSocket:已关闭：Client notified socket has closed",event); 
+								
+							};
+							
+							//监听异常
+							this.websocket.onerror = function(event) {
+								$("#contentUI").append("<li><b>"+new Date()+"</b><em>系统消息：</em><span>连接异常，建议重新登录</span></li>");
+								/* scrollToBottom(); */
+								console.log("WebSocket:发生错误 ",event);
+							};
+					    })
+				  },
+				  
+				  sendMsg(){
+						//对象为空了
+						if(this.websocket==undefined||this.websocket==null){
+							//alert('WebSocket connection not established, please connect.');
+							alert('您的连接已经丢失，请退出聊天重新进入');
+							return;
+						}
+						//获取用户要发送的消息内容
+						var msg=$("#msg").val();
+						if(msg==""){
+							alert("请输入内容");
+							return;
+						}else{
+							var data={};
+							data["from"]=uid;
+							data["fromName"]=fromName;
+							data["to"]=this.curToid;
+							data["text"]=msg;
+							//发送消息
+							this.websocket.send(JSON.stringify(data));
+							//发送完消息，清空输入框
+							$("#msg").val("");
+						}
+				  },
+				  
+				  
+				  closeWebsocket(){
+						if (this.websocket != null) {
+							this.websocket.close();
+							this.websocket = null;
+						}
+				  },
+				  
 				  message(e){
-					  this.tag=0;
-					  this.tab=e.currentTarget.innerHTML;
+					  if(uu!=null&&uu!=""){
+						  axios({
+							  url: "${APP_PATH}/user/doTalkerList.do",
+						      method: "GET",
+						      params:{
+						    	  userid:parseInt(uid)
+						      }
+						    }).then(res => {
+						    	this.talkerList=res.data.data;
+						    	this.tag=0;
+								this.tab=e.currentTarget.innerHTML;
+						    })
+					  }else{
+						  alert("请登录");
+					  }
+					  
 				  },
 				  
 				  comment(e){

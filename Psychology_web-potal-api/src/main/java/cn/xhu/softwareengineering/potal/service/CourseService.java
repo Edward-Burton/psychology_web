@@ -43,4 +43,6 @@ public interface CourseService {
 
 	List<Lesson> queryTryList(Integer courseid);
 
+	Order addOrder(Order order);
+
 }

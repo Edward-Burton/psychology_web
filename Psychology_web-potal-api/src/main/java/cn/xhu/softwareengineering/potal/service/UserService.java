@@ -3,6 +3,7 @@ package cn.xhu.softwareengineering.potal.service;
 import java.util.List;
 import java.util.Map;
 
+import cn.xhu.softwareengineering.bean.Message;
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.bean.UserCollection;
@@ -32,5 +33,9 @@ public interface UserService {
 	UserCollection queryUserCollect(Map<String, Integer> paramMap);
 
 	PsychoUser queryUserQaById(Integer userid);
+
+	List<PsychoUser> queryTalkerByUserid(Integer userid);
+
+	List<Message> queryMessageList(Map<String, Object> paramMap);
 
 }

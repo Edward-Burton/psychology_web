@@ -2,7 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%
+String path = request.getContextPath();
+String basePath = request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -793,6 +796,11 @@ a {
     left: 0;
     width: 100%;
     z-index: 100;
+    display: none;
+}
+
+.show-box{
+    display: block;
 }
 
 .letter-modal-box .letter-mask {
@@ -1078,9 +1086,9 @@ a {
 					</a>
 					<p class="name">${pa.articleUser.psychouser_name}</p>
 					<p class="desc">${pa.articleUser.psychouser_intro }</p>
-					<div class="tool-m">
+					<div class="tool-m" v-if="uid!=mtoid">
 						<a id="btn-follow" data-userid="${pa.articleUser.psychouser_id }" :class="{selected:isfollow=='已关注'}" href="javascript:;" @click="dofollow($event)">{{isfollow}}ta</a>
-						<a id="btn-message" href="javascript:;" @click="message=1">私信</a>
+						<a id="btn-message" href="javascript:;" @click="openMessage">私信</a>
 					</div>
 				</div>
 				<div class="statistics">
@@ -1121,12 +1129,6 @@ a {
 						</div>
 
 					</div>
-					<!-- 二维码 -->
-				<div class="qcode">
-					<!--<i class="yxlicon icon-guanbi"></i>-->
-					<img src="m.jpg" alt="" class="qcode-img"
-						style="position: static; top: 73px; z-index: 1;">
-				</div>
 
 				<!-- 相关阅读
 					<div class="recommend-reading-m">
@@ -1154,13 +1156,13 @@ a {
 					<p class="author-title">相关作者</p>
 					<div id="authorList">
 						<a target="_blank" href="#" class="author-item"> <!-- <img src="https://image.xinli001.com//20151013/170505/133406.jpg!80" "="" alt=" 加载头像失败"> -->
-							<img src="m.jpg" alt=" 加载头像失败">
+							<img src="" alt=" 加载头像失败">
 							<p>袁麟翥</p>
 						</a> <a target="_blank" href="#" class="author-item"> <img
-							src="m.jpg" alt=" 加载头像失败">
+							src="" alt=" 加载头像失败">
 							<p>溪石Jesher</p>
 						</a> <a target="_blank" href="#" class="author-item"> <img
-							src="m.jpg" alt=" 加载头像失败">
+							src="" alt=" 加载头像失败">
 							<p>卢溪</p>
 						</a>
 					</div>
@@ -1168,7 +1170,7 @@ a {
 			</div>
 		</div>
 
-		<div class="letter-modal-box" v-show="message==1">
+		<div class="letter-modal-box" :class="{'show-box':message==1}">
 		    <div class="letter-mask"></div>
 		    <div class="letter-modal">
 		        <div class="letter-header">
@@ -1177,7 +1179,7 @@ a {
 		        </div>
 		        <div class="box-cont">
 		            <p class="label">给<span class="name">${pa.articleUser.psychouser_name}</span>一条私信</p>
-		            <textarea class="letter-content"></textarea>
+		            <textarea class="letter-content" v-model="messageValue"></textarea>
 		            <div class="opt-btns">
 		                <button class="send-btn" data-id="${pa.articleUser.psychouser_id}" @click="sendMessage">发送</button>
 		                <span class="cancel-btn" @click="message=0">取消</span>
@@ -1192,11 +1194,12 @@ a {
 	<script src="${APP_PATH }/js/vue.js"></script>
 	<script src="${APP_PATH }/js/axios.js"></script> 
 	<script src="${APP_PATH }/js/elementui.js"></script>
-	<!-- <script charset="UTF-8"
-		src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
-	<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
-
 	<script type="text/javascript">
+	var path = '<%=basePath%>';
+	var uu="${sessionScope.loginUser}";
+	var uid = "${sessionScope.loginUser.psychouser_id}";
+	var fromName = "${sessionScope.loginUser.psychouser_name}";
+  	var mtoid = "${pa.articleUser.psychouser_id}";
 	/* 获取本文章的ID */
 	var articleid = $(".title").attr("data-id");
 	
@@ -1212,7 +1215,14 @@ a {
 		      likecomment:[],
 		      curuserid:0,
 		      isfollow:"关注",
-		      message:0
+		      message:0,
+		      messageValue:"",
+		      websocket:null,
+		      path:'<%=basePath%>',
+		      uu:"${sessionScope.loginUser}",
+		      uid:"${sessionScope.loginUser.psychouser_id}",
+		      fromName:"${sessionScope.loginUser.psychouser_name}",
+		      mtoid:"${pa.articleUser.psychouser_id}"
 		    }
 		  },
 		  created() {
@@ -1223,9 +1233,56 @@ a {
 		      this.isFollow();
 		    },
 		    methods: {
+		    	openMessage(){
+		    		if(this.curuserid==0){
+		    			alert("请登录");
+		    			return
+		    		}
+		    		
+		    		this.message=1;
+		    		  //不同浏览器的WebSocket对象类型不同
+	    			//alert("ws://" + path + "/ws?uid="+uid);
+	    			if ('WebSocket' in window) {
+	    				this.websocket = new WebSocket("ws://" + path + "ws.do");
+	    				console.log("=============WebSocket");
+	    				//火狐
+	    			} else if ('MozWebSocket' in window) {
+	    				this.websocket = new MozWebSocket("ws://" + path + "ws.do");
+	    				console.log("=============MozWebSocket");
+	    			} else {
+	    				this.websocket = new SockJS("http://" + path + "ws/sockjs.do");
+	    				console.log("=============SockJS");
+	    			}
+	    			
+	    			this.websocket.onopen = function(event) { 
+	    				console.log("WebSocket:已连接");
+	    			}
+	    			if(this.websocket==undefined||this.websocket==null){
+						//alert('WebSocket connection not established, please connect.');
+						alert('您的连接已经丢失，请退出聊天重新进入');
+						return;
+					}
+		    	},
 		    	
 		    	sendMessage(){
-		    		
+					//获取用户要发送的消息内容
+					let msg = this.messageValue.trim();
+					if(msg==""){
+						alert("请输入内容");
+						return;
+					}else{
+						var data={};
+						data["from"]=this.uid;
+						data["fromName"]=this.fromName;
+						data["to"]=parseInt(this.mtoid);
+						data["text"]=msg;
+						//发送消息
+						this.websocket.send(JSON.stringify(data));
+						//发送完消息，清空输入框
+						this.messageValue="";
+						this.message=0;
+					    this.$message('私信发送成功');
+					}
 		    	},
 		    	
 		    	dofollow(e){
@@ -1266,7 +1323,7 @@ a {
 					    			this.isfollow="已关注";
 					    		}
 					    	}else{
-					    		alert(res.data.message);
+					    		console.log(res.data.message);
 					    	}
 					    });
 				  },
@@ -1352,21 +1409,22 @@ a {
 		    	
 		    	addComment(e){
 		    		 // 非空判断
-		            if (this.inputValue == '') {
+		            if (this.inputValue.trim() == '') {
+		            	this.inputValue="";
 		              // 提示用户
 		              /* this.$message.warning('请输入内容'); */
-		              alert("请输入内容");
+		               alert("请输入内容");
 		            }else{
 			    		var params={
-			    				articleid:articleid,
-						    	inputValue:encodeURI(this.inputValue.trim())
+		    				articleid:articleid,
+					    	inputValue:encodeURI(this.inputValue.trim())
 			    		};
 			    		if(e.target.dataset.pid!=null){
 			    			params.pcommentid=e.target.dataset.pid;
 			    		};
 		            	 axios({
 						      url: "${APP_PATH}/article/doAddComment.do",
-						      method: "post",
+						      method: "POST",
 						      params:params
 						    }).then(res => {
 						    	if(res.data.success){
@@ -1462,7 +1520,7 @@ a {
 			/* 获取当前用户是否点赞该文章 */
 			var state = $("#iszan").attr("data-id");
 			if(state==-1){
-				alert("请登录！！！");
+				console.log("请登录！！！");
 			var action;	
 			/* 用户已点赞当前文章 */
 			}else{

@@ -1355,7 +1355,7 @@ table {
 	                      data:{
 	                    	  addr_id:this.curAddr.customer_addr_id,
 	                    	  objList:this.selectedList,
-							  order_level:1,
+							  order_level:0,
 							  type:2,
 							  order_total_amount:parseFloat(this.totalPrice)
 	                      }

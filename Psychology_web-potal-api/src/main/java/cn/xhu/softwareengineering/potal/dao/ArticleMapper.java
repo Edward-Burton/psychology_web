@@ -39,4 +39,6 @@ public interface ArticleMapper {
 	int updateArticle(Map<String, Object> parammap);
 
 	int addComment(Map<String, Object> paramMap);
+
+	int addArticleCategory(@Param("articleId")Integer articleId, @Param("categoryId")Integer categoryId);
 }

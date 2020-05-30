@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.xhu.softwareengineering.bean.Message;
 import cn.xhu.softwareengineering.bean.PsychoArticle;
 import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.bean.UserCollection;
@@ -116,6 +117,27 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public PsychoUser queryUserQaById(Integer userid) {
 		return userMapper.queryUserQaById(userid);
+	}
+
+	@Override
+	public List<PsychoUser> queryTalkerByUserid(Integer userid) {
+		List<PsychoUser> list = userMapper.queryTalkerByUserid(userid);
+		for(PsychoUser user: list) {
+			List<Message> messageList = user.getMessageList();
+			for(Message m:messageList) {
+				if(m.getFrom()==userid||m.getTo()==userid) {
+					messageList.clear();
+					messageList.add(m);
+					break;
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<Message> queryMessageList(Map<String, Object> paramMap) {
+		return userMapper.queryMessageList(paramMap);
 	}
 
 }

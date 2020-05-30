@@ -81,7 +81,6 @@
         <servlet-name>springmvc</servlet-name>
         <url-pattern>*.htm</url-pattern> <!-- 主要用于进行页面跳转，.htm WEB-INF下的的页面不能直接访问，需要经过控制器跳转到相应页面-->
         <url-pattern>*.do</url-pattern> <!-- 主要用于业务逻辑处理，.do 通过控制器，走service，dao 流程回来之后再跳转页面-->
-        
         <!--精确匹配（/user/save）  /路径匹配(/user/*或/*) / 扩展匹配(*.htm) / 默认匹配（/）-->
         
     </servlet-mapping>

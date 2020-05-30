@@ -302,6 +302,15 @@ where pa.psycho_article_id = #{id} -->
 		<selectKey keyProperty="articleId" resultType="int"> select
 			@@identity </selectKey>
 	</insert>
+	
+	<insert id="addArticleCategory" parameterType="PsychoArticle">
+		insert article_category
+		(article_id,category_id)
+		values (
+		#{articleId},#{categoryId}
+		)
+	</insert>
+	
 	<!-- <insert id="insertUser"> insert into t_user ( name,userpswd,sex,email,loginacct 
 		) values ( #{name},#{userpswd},#{sex},#{email},#{loginacct} ) <selectKey 
 		keyProperty="id" resultType="int"> select @@identity as id </selectKey> </insert> -->

@@ -3,7 +3,7 @@ package main;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,6 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 
 import cn.xhu.softwareengineering.util.AreaBaseUtil;
-import cn.xhu.softwareengineering.util.DBaseUtil;
 import cn.xhu.softwareengineering.util.PropertiesConfig;
 
 public class test {
@@ -60,8 +59,13 @@ public class test {
 	
 	
 	public static void main(String[] args) {
-		Connection con = DBaseUtil.getConn(AreaBaseUtil.getBaseProperties("classpath:config/jdbc.properties"));
-		DBaseUtil.deleteData(con);
-		DBaseUtil.insertDate(AreaBaseUtil.getProvinceList(), con);
+		/*
+		 * Connection con = DBaseUtil.getConn(AreaBaseUtil.getBaseProperties(
+		 * "classpath:config/jdbc.properties")); DBaseUtil.deleteData(con);
+		 * DBaseUtil.insertDate(AreaBaseUtil.getProvinceList(), con);
+		 */
+	    java.util.Date data=new java.util.Date();
+	    Timestamp date = new Timestamp(new java.util.Date().getTime());
+		System.out.println("date:"+date);
 	}
 }

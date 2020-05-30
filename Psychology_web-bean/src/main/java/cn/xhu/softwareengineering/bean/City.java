@@ -2,9 +2,11 @@ package cn.xhu.softwareengineering.bean;
 
 import java.util.List;
 
+import com.google.gson.annotations.SerializedName;
+
 public class City {
-    private String city_code;
-    private String city_name;
+    private @SerializedName("code")String city_code;
+    private @SerializedName("name")String city_name;
     private List<Area> areaList;
     
     

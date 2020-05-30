@@ -12,9 +12,13 @@
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
+	
+	<context:component-scan base-package="cn.xhu.softwareengineering.websocket"/>
 
 	<!-- 启用注解功能 -->
 	<context:annotation-config />
+	
+	<mvc:annotation-driven/>
 
 	<!-- 字符串字符编码转换 -->
 	<bean

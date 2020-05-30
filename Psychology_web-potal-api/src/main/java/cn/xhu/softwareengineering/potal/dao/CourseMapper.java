@@ -46,5 +46,7 @@ public interface CourseMapper {
 
 	List<Lesson> queryTryList(Integer courseid);
 
+	int addOrder(Order order);
+
 
 }

@@ -8,6 +8,8 @@
 <title></title>
 <link href="${APP_PATH }/css/video-js.min.css" rel="stylesheet">
 <link href="${APP_PATH }/css/course.css" rel="stylesheet" />
+<%-- <link href="${APP_PATH }/css/elementui.css" rel="stylesheet" /> --%>
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 <body>
 	<div>
 		<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
@@ -53,7 +55,8 @@
 					</div>
 					<div>
 						<span class="course-pay">${course.course_price }元</span> <a
-							v-if="isorder==0"><span class="pay-btn">购买</span></a> <a
+							v-if="isorder==0">
+							<span class="pay-btn" @click="pay">购买</span></a> <a
 							v-if="isorder==1"><span class="pay-btn">待支付</span></a> <a
 							v-if="isorder==2"><span class="pay-btn">已购买</span></a>
 					</div>
@@ -114,7 +117,6 @@
 										:data-id="'${APP_PATH }/'+lesson.media_addr"
 										@click="play($event)">试听</em>
 									</span> <span class="right-control try" v-if="isorder>1"> <em
-										v-if="lesson.status==0"
 										:data-id="'${APP_PATH }/'+lesson.media_addr"
 										@click="play($event)">播放</em>
 									</span>
@@ -157,10 +159,9 @@
 			<div class="comment" id="comment">
 				<div class="comment-introduce">
 					<a href="javascript:void(0)" v-if="isorder==2"
-						class="go-comment-btn">我要留言</a> <a href="javascript:void(0)"
-						class="go-comment-btn">我要留言</a>
+						class="go-comment-btn" @click="docomment=true">我要留言</a>
 				</div>
-				<div class="comment-input">
+				<div class="comment-input" v-if="docomment">
 					<textarea v-model="commentValue" rows="5" placeholder="请输入内容"
 						style="width: 90%;outline:none;resize: none; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
 					<a class="comment-bnt" @click="addComment"
@@ -205,10 +206,10 @@
 
 			<div id="courseQA" class="courseqa">
 				<div class="courseQA-introduce">
-					<a href="javascript:void(0)" class="go-ask-btn">我要提问</a>
+					<a href="javascript:void(0)" class="go-ask-btn" @click="doask=true">我要提问</a>
 				</div>
 
-				<div class="question-input">
+				<div class="question-input" v-if="doask">
 					<!-- @focus="isLogin()" -->
 					<textarea v-model="questionValue" rows="5" placeholder="请输入内容"
 						style="width: 90%;outline: none;resize:none; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
@@ -229,8 +230,7 @@
 								<!-- 名字 -->
 								<div class="question-user-name">{{question.questionUser.psychouser_name}}</div>
 								<!-- 回复，只有咨询师查看时有回复按钮 -->
-								<div class="reply-action"
-									:data-question-id="question.sales_question_id">
+								<div class="reply-action" :data-question-id="question.sales_question_id">
 									<span>回复</span>
 								</div>
 							</div>
@@ -238,11 +238,11 @@
 							<p class="question-time">{{question.sales_question_pultime}}</p>
 						</div>
 						<ul v-if="question.answers.length>0">
-							<li v-for="(answer,index) in question.answers">{{answer.sales_answer_content}}
+							<li v-for="(answer,index) in question.answers" style="margin-top: 20px;">老师回复:		<span style="margin-left: 20px;">{{answer.sales_answer_content}}</span>
 								<span class="answer-time" style="float: right">{{answer.sales_answer_pultime}}</span>
 							</li>
 						</ul>
-						<div class="reply-input">
+						<div class="reply-input" style="padding-top: 20px;">
 							<textarea v-model="answerValue" rows="4" placeholder="请输入内容"
 								style="padding-top: 20px;outline: none;resize: none; width: 90%; border: 1px solid #f3f4f5; box-shadow: 0 2px 10px 0 #eaeaea; border-radius: 10px;"></textarea>
 							<a class="addanswer=bnt" @click="addqanswer($event,index)"
@@ -297,6 +297,7 @@
 		</div>
 	</div>
 	<script src="${APP_PATH }/js/vue.js"></script>
+	<script src="${APP_PATH }/js/elementui.js"></script>
 	<script src="${APP_PATH }/js/axios.js"></script>
 	<script src="${APP_PATH }/js/video.min.js"></script>
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
@@ -309,6 +310,8 @@
 			    return {
 			      isorder:0,
 			      userid:0,
+			      doask:false,
+			      docomment:false,
 			      lessionList:[],
 			      catalogList:[],
 			      tryList:[],
@@ -369,6 +372,63 @@
 					  alert("!!!!");
 				  }),
 				   */
+				   
+				   createOrder(){
+					   axios({
+							headers: {
+						      'Content-Type': 'application/json'
+						    },
+						    transformRequest: [function(data) {
+						      data = JSON.stringify(data)
+						      return data
+						    }],
+							  url:"${APP_PATH}/course/doOrder.do",
+							  method:"POST",
+		                      params:{},
+		                      data:{
+		                    	  orderobjId:"${course.course_id}",
+								  order_level:0,
+								  type:1,
+								  order_total_amount:parseFloat("${course.course_price}")
+		                      }
+						  }).then(res=>{
+							  if(res.data.success){
+								  	/* this.$message({
+							            type: 'success',
+							            message: '下单成功!'
+							          }); */
+								  	let divForm = document.getElementsByTagName('divform');
+								    if (divForm.length) {
+								      document.body.removeChild(divForm[0])
+								    }
+								     const div=document.createElement('divform');
+								     div.innerHTML=res.data.data; // data就是接口返回的form 表单字符串
+								     document.body.appendChild(div);
+								     document.forms[0].setAttribute('target', '_blank') // 新开窗口跳转
+								     document.forms[0].submit();
+							  }else{
+								  alert(res.data.message);
+							  }
+						  })
+				   },
+				   
+				  pay(){
+					   alert("${course.course_id}");
+					   this.createOrder();
+					 /*  this.$confirm('确认购买吗?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+				        }).then(() => {
+				        	this.createOrder();
+				        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消购买操作'
+				          });          
+				        }); */
+				  },
+				   
 				  getTryList(){
 					  axios({
 						  url: "${APP_PATH}/course/doTryList.do",
@@ -451,13 +511,14 @@
 						      method: "POST",
 						      params:{
 						    	  courseid:courseid,
-						    	  content:this.questionValue,
+						    	  content:encodeURI(this.questionValue),
 						    	  userid:this.userid
 						      }
 						    }).then(res => {
 						    	if(res.data.success){
 						    		 this.getquestion();
 						    		 this.questionValue=="";
+						    		 this.doask=false;
 						    	}else{
 						    		alert(res.data.message);
 						    	}
@@ -474,13 +535,14 @@
 						      method: "POST",
 						      params:{
 						    	  courseid:courseid,
-						    	  content:this.commentValue,
+						    	  content:encodeURI(this.commentValue.trim()),
 						    	  userid:this.userid
 						      }
 						    }).then(res => {
 						    	if(res.data.success){
 						    		this.getCommentList();
 						    		this.commentValue=="";
+						    		this.docomment=false;
 						    	}else{
 						    		alert(res.data.message);
 						    	}

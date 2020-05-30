@@ -1,6 +1,7 @@
 package cn.xhu.softwareengineering.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -21,6 +22,9 @@ public class PsychoUser {
 	private int questionNum;
 	@JsonFormat(locale="zh", timezone="GMT", pattern="yyyy-MM-dd HH:mm:ss")
 	private Date psychouser_createtime;
+	private List<Message> messageList;
+	
+	
 	
 	public PsychoUser() {
 		super();
@@ -52,6 +56,16 @@ public class PsychoUser {
 
 	
 	
+
+
+	public List<Message> getMessageList() {
+		return messageList;
+	}
+
+
+	public void setMessageList(List<Message> messageList) {
+		this.messageList = messageList;
+	}
 
 
 	public int getQuestionNum() {

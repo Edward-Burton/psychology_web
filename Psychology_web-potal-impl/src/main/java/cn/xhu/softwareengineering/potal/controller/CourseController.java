@@ -1,18 +1,22 @@
 package cn.xhu.softwareengineering.potal.controller;
 
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.xhu.softwareengineering.bean.AlipayBean;
 import cn.xhu.softwareengineering.bean.CourseCatalog;
 import cn.xhu.softwareengineering.bean.CourseProfession;
 import cn.xhu.softwareengineering.bean.CourseTeacher;
@@ -23,6 +27,7 @@ import cn.xhu.softwareengineering.bean.PsychoUser;
 import cn.xhu.softwareengineering.bean.SaleComment;
 import cn.xhu.softwareengineering.bean.SalesQuestion;
 import cn.xhu.softwareengineering.potal.service.CourseService;
+import cn.xhu.softwareengineering.potal.service.PayService;
 import cn.xhu.softwareengineering.util.AjaxResult;
 import cn.xhu.softwareengineering.util.Const;
 import cn.xhu.softwareengineering.util.Page;
@@ -33,6 +38,9 @@ public class CourseController {
 
 	@Autowired
 	private CourseService CourseService;
+	
+	@Autowired
+	private PayService payService;
 
 	@RequestMapping("/index")
 	public String toIndex() {
@@ -140,9 +148,6 @@ public class CourseController {
 		AjaxResult result = new AjaxResult();
 		try {
 			List<SaleComment> saleComment = CourseService.queryCourseComment(courseid);
-			for(SaleComment s: saleComment) {
-				System.out.println("--->"+s.getComment_content()+s.getComment_pultime());
-			}
 			result.setData(saleComment);
 			result.setSuccess(true);
 		}catch(Exception e) {
@@ -200,7 +205,7 @@ public class CourseController {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("toid", courseid);
 			paramMap.put("userid", userid);
-			paramMap.put("content", content);
+			paramMap.put("content", URLDecoder.decode(content, "utf-8"));
 			paramMap.put("pultime", new Date());
 			if(CourseService.addCourseComment(paramMap)>0) {
 				result.setSuccess(true);
@@ -238,7 +243,7 @@ public class CourseController {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("salesid", courseid);
 			paramMap.put("userid", userid);
-			paramMap.put("content", content);
+			paramMap.put("content", URLDecoder.decode(content, "utf-8"));
 			paramMap.put("pultime", new Date());
 			if(CourseService.addCourseQuestion(paramMap)>0) {
 				result.setSuccess(true);
@@ -298,6 +303,41 @@ public class CourseController {
 		}else {
 			result.setSuccess(false);
 			result.setMessage("请登录");
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doOrder")
+	public Object doOrder(HttpServletResponse httpResponse,
+			@RequestBody Order order, HttpSession session) {
+		System.out.println("courseid:"+order.getOrderobjId());
+		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
+		AjaxResult result = new AjaxResult();
+		//请求的控制器
+		if (user != null) {
+			order.setUser(user);
+			order.setOrder_createtime(new Date());
+			order.setOut_trade_no();
+			try {
+				Order o = CourseService.addOrder(order);
+				if (o.getOrder_id() > 0) {
+					String form = payService.aliPay(new AlipayBean().setOut_trade_no(o.getOut_trade_no())
+							.setTotal_amount(new StringBuffer().append(o.getOrder_total_amount()))
+							.setSubject("订单编号："+String.valueOf(o.getOrder_id())));
+					result.setData(form);
+					result.setSuccess(true);
+					return result;
+				}
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setMessage("生成订单失败！！！");
+				e.printStackTrace();
+			}
+		} else {
+			result.setSuccess(false);
+			result.setMessage("未登录，生成订单失败！！！");
+			return result;
 		}
 		return result;
 	}

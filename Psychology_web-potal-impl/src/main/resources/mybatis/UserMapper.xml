@@ -126,6 +126,39 @@
 			select="selectzanNumByUserId" />
 	</resultMap>
 	
+	
+	<resultMap type="PsychoUser" id="BaseTalker">
+		<id column="psychouser_id" property="psychouser_id" />
+		<result column="psychouser_name" property="psychouser_name" />
+		<result column="psychouser_head_portrait" property="psychouser_head_portrait"/>
+		<collection property="messageList" column="psychouser_id" ofType="Message" select="selectmessageList"></collection>
+	</resultMap>
+	
+	<resultMap type="Message" id="BaseMessage">
+		<id column="message_id" property="message_id" />
+		<result column="message_from_id" property="from" />
+		<result column="mssage_to_id" property="to"/>
+		<result column="create_time" property="date"/>
+		<result column="message_content" property="text"/>
+	</resultMap>
+	
+	<resultMap type="Message" id="MainMessage">
+		<id column="message_id" property="message_id" />
+		<result column="message_from_id" property="from" />
+		<result column="mssage_to_id" property="to"/>
+		<result column="create_time" property="date"/>
+		<result column="message_content" property="text"/>
+		<association property="fromName" column="message_from_id" javaType="String" select="selectfromName"></association>
+	</resultMap>
+	
+	<select id="selectfromName" resultType="String">
+		select psychouser_name from psycho_user where psychouser_id=#{message_from_id}
+	</select>
+	
+	<select id="selectmessageList" resultMap="BaseMessage">
+		select * from private_message where mssage_to_id=#{psychouser_id} or message_from_id=#{psychouser_id} ORDER BY create_time desc
+	</select>
+	
 	<select id="selectQuestionNumbyUserId" resultType="Integer">
 		select count(*) from user_questions where question_master_id=#{psychouser_id}
 	</select>
@@ -241,6 +274,14 @@
 	select * from psycho_article where psycho_article_pubuserid=#{userid}
 	</select>
 	
+	<select id="queryTalkerByUserid" resultMap="BaseTalker">
+		select * from psycho_user where psychouser_id in (select mssage_to_id from private_message WHERE message_from_id=#{userid} GROUP BY mssage_to_id)
+	</select>
+	
+	<select id="queryMessageList" resultMap="MainMessage">
+		select * from private_message WHERE ((mssage_to_id=#{toid} and message_from_id=#{fromid}) OR (mssage_to_id=#{fromid} and message_from_id=#{toid})) ORDER BY create_time
+	</select>
+	
 	<!-- <insert id="insertUser"> insert into t_user ( name,userpswd,sex,email,loginacct 
 		) values ( #{name},#{userpswd},#{sex},#{email},#{loginacct} ) <selectKey 
 		keyProperty="id" resultType="int"> select @@identity as id </selectKey> </insert> -->
@@ -253,7 +294,6 @@
 	<insert id="addFollow">
 	     insert into user_follow
 	     (cur_user_id,follow_user_id)values(#{curUserId},#{followUserId})
-		
 	</insert>
 	
 	<delete id="cancelFollow">
@@ -287,12 +327,10 @@
 	<insert id="addCollect">
 	     insert into user_collection
 	     (user_collection_type,user_collectioin_to_id,user_collection_from_user_id)values(#{typeid},#{toid},#{userid})
-		
 	</insert>
 	
 	<delete id="cancelCollect">
 	delete from user_collection where user_collection_type=#{typeid} and user_collection_from_user_id=#{userid} and user_collectioin_to_id=#{toid}
 	</delete>
 	
-
 </mapper>

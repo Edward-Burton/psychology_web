@@ -21,6 +21,7 @@ public class PsychoArticle {
 	private int likesNum;
 	private String desc;
 	private String content;
+	private int categoryId;
 	private PsychoCategory psychoCategory;
 	private List<PsychoLabel> articleLabels;
 	private List<ArticleComments> articleComments;
@@ -53,6 +54,19 @@ public class PsychoArticle {
 		this.psychoCategory = psychoCategory;
 		this.articleLabels = articleLabels;
 		this.articleComments = articleComments;
+	}
+
+
+	
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
 	}
 
 

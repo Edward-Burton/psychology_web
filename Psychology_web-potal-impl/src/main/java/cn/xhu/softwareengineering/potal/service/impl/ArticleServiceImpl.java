@@ -129,12 +129,23 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public int addArticle(PsychoArticle psychoArticle) {
-		
 		int n = articleMapper.addArticle(psychoArticle);
 		int id = psychoArticle.getArticleId();
+		int categoryId = psychoArticle.getCategoryId();
+		if(id>0) {
+			if(categoryId!=0) {
+				if(articleMapper.addArticleCategory(id,categoryId) != 0) {
+					return n;
+				}else {
+					return 0;
+				}
+			}else {
+				return n;
+			}
+		}
 		System.out.println("影响行数 : "+n);
 		System.out.println("文章自增ID ： "+id);
-		return n;
+		return 0;
 	}
 
 	@Override

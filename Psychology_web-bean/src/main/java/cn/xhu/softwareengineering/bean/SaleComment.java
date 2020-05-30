@@ -35,17 +35,17 @@ public class SaleComment {
 		this.comment_pultime = comment_pultime;
 		this.imgList = imgList;
 	}
-
-
-
-
+	
 	public List<String> getImgList() {
-		List<String> imglist = new ArrayList<String>();
-		for(String img:this.imgList) {
-			img=img.substring(img.indexOf("/img"));
-			imglist.add(img);
+		if(this.imgList!=null) {
+			List<String> imglist = new ArrayList<String>();
+			for(String img:this.imgList) {
+				img=img.substring(img.indexOf("/img"));
+				imglist.add(img);
+			}
+			return imglist;
 		}
-		return imglist;
+		return null;
 	}
 
 

@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Order {
 	private int order_id;
 	private PsychoUser user;
-	private Object orderobj;
+	/* private PsychoCourse orderobj; */
+	private int orderobjId;
 	private List<Order_Good> objList;
 	private int order_level;
 	private int type;
@@ -26,12 +27,11 @@ public class Order {
 
 	
 
-	public Order(int order_id, PsychoUser user, Object orderobj, List<Order_Good> objList, int order_level, int type,
+	public Order(int order_id, PsychoUser user, List<Order_Good> objList, int order_level, int type,
 			CustomerAddr addr, int addr_id, String out_trade_no, float order_total_amount, Date order_createtime) {
 		super();
 		this.order_id = order_id;
 		this.user = user;
-		this.orderobj = orderobj;
 		this.objList = objList;
 		this.order_level = order_level;
 		this.type = type;
@@ -42,16 +42,18 @@ public class Order {
 		this.order_createtime = order_createtime;
 	}
 
+	
+	
 
 
-	public Object getOrderobj() {
-		return orderobj;
+	public int getOrderobjId() {
+		return orderobjId;
 	}
 
 
 
-	public void setOrderobj(Object orderobj) {
-		this.orderobj = orderobj;
+	public void setOrderobjId(int orderobjId) {
+		this.orderobjId = orderobjId;
 	}
 
 
