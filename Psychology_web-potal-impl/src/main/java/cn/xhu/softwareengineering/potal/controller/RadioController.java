@@ -1,5 +1,7 @@
 package cn.xhu.softwareengineering.potal.controller;
 
+import java.net.URLDecoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +86,48 @@ public class RadioController{
         System.out.println("controller");
         return result;
     }
+    
+    @ResponseBody
+	@RequestMapping("/doAddComment")
+	public Object doAddComment(@RequestParam(value = "radioId")Integer radioId,@RequestParam(value = "userId")Integer userId,@RequestParam(value = "content")String content) {
+		AjaxResult result = new AjaxResult();
+		try {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("radioId", radioId);
+			paramMap.put("userId", userId);
+			paramMap.put("content", URLDecoder.decode(content,"utf-8"));
+			paramMap.put("pultime", new Date());
+			if(radioService.addComment(paramMap)>0) {
+				result.setSuccess(true);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("查询收藏失败！！！");
+		}
+		return result;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doRadio")
+	public Object doRadio(@RequestParam(value = "radioId")Integer radioId) {
+		AjaxResult result = new AjaxResult();
+		try {
+			Map<String, Integer> paramMap = new HashMap<String, Integer>();
+			paramMap.put("radioId", radioId);
+			PsychoRadio radio = radioService.queryRadioById(paramMap);
+			result.setData(radio);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("查询收藏失败！！！");
+		}
+		return result;
+
+	}
+
     
     @RequestMapping ( value = "/doLastest",method = RequestMethod.GET)
     @ResponseBody

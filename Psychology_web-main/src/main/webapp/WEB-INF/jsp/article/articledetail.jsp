@@ -1,23 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getServerName() + ":" + request.getServerPort() + path + "/";
+	String path = request.getContextPath();
+	String basePath = request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<link href="${APP_PATH }/css/elementui.css" rel="stylesheet"/>
+<link href="${APP_PATH }/css/elementui.css" rel="stylesheet" />
 <title></title>
 <style>
 body {
-    color: #111;
-    background: #fff;
-    font-size: 12px;
+	color: #111;
+	background: #fff;
+	font-size: 12px;
 }
+
 a {
 	text-decoration: none;
 }
@@ -158,7 +159,7 @@ a {
 	background-color: #ccc;
 }
 
-.article-content .article-body-m #zanCon .active{
+.article-content .article-body-m #zanCon .active {
 	background-color: #0066ff00;
 }
 
@@ -397,8 +398,6 @@ a {
 	line-height: 1.4;
 }
 
-
-
 .article-comment #commentList .comment-item .item-content .content-right .right-top .top-left .comment-text
 	{
 	font-family: PingFangSC-Medium;
@@ -436,9 +435,12 @@ a {
 	background-size: 14px 14px;
 }
 
-.article-comment #commentList .comment-item .item-content .content-right .right-top .comment-statistics .like-btn-selected {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAARBJREFUOBGlUjFuwkAQnHWOiIQ00KPwgaTJA0LNB3hFGgQFb0CBOhVPoUukRJHooKRAhMJREJKFMMWya2NimTNYcJJ1e7Mz493bI6SsSp/z7i8+mfEglKnXorKN6thAxUTc3IlBwDqNZzUovXJZxO29iPCzjxOB1cBndIR3G+NmN7jr8rP8vR4TazhnZtIvgYOqAzaTCYwmVi6uPOCdgcck8eBMaHhN6pmvbyzAKBwQTgDE2CjFicQyJqrdh5Wc0AZpdjAKDbKwLZyb6wsMiLB0X2h2dgVyyeOoKOs7iJJH9qD/sytwOOxfDYL5a/D0xrmP6f9ZsdS1m4DmjTytP+mpOF7CTxXEE4S1MRjGoYviLXapSwsVU2LBAAAAAElFTkSuQmCC) no-repeat 0;
-    background-size: 14px 14px;
+.article-comment #commentList .comment-item .item-content .content-right .right-top .comment-statistics .like-btn-selected
+	{
+	background:
+		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAARBJREFUOBGlUjFuwkAQnHWOiIQ00KPwgaTJA0LNB3hFGgQFb0CBOhVPoUukRJHooKRAhMJREJKFMMWya2NimTNYcJJ1e7Mz493bI6SsSp/z7i8+mfEglKnXorKN6thAxUTc3IlBwDqNZzUovXJZxO29iPCzjxOB1cBndIR3G+NmN7jr8rP8vR4TazhnZtIvgYOqAzaTCYwmVi6uPOCdgcck8eBMaHhN6pmvbyzAKBwQTgDE2CjFicQyJqrdh5Wc0AZpdjAKDbKwLZyb6wsMiLB0X2h2dgVyyeOoKOs7iJJH9qD/sytwOOxfDYL5a/D0xrmP6f9ZsdS1m4DmjTytP+mpOF7CTxXEE4S1MRjGoYviLXapSwsVU2LBAAAAAElFTkSuQmCC)
+		no-repeat 0;
+	background-size: 14px 14px;
 }
 
 .article-comment #commentList .comment-item .item-content .content-right .right-bottom
@@ -468,7 +470,7 @@ a {
 	word-break: break-all;
 }
 
-.article-comment #commentList .comment-item .orinal-comment .active{
+.article-comment #commentList .comment-item .orinal-comment .active {
 	color: #66b1ff;
 }
 
@@ -489,7 +491,7 @@ a {
 	display: none;
 }
 
-.article-comment #commentList .comment-item .expand{
+.article-comment #commentList .comment-item .expand {
 	display: flex;
 }
 
@@ -612,8 +614,8 @@ a {
 }
 
 .main-right-container .base-info-m .tool-m .selected {
-    color: #ccc!important;
-    background-color: #f3f4f5!important;
+	color: #ccc !important;
+	background-color: #f3f4f5 !important;
 }
 
 .main-right-container .base-info-m .tool-m a+a {
@@ -791,123 +793,123 @@ a {
 }
 
 .letter-modal-box {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 100;
+	display: none;
 }
 
-.show-box{
-    display: block;
+.show-box {
+	display: block;
 }
 
 .letter-modal-box .letter-mask {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,.4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .4);
 }
 
 .letter-modal-box .letter-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 600px;
-    background-color: #fff;
-    border-radius: 4px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 600px;
+	background-color: #fff;
+	border-radius: 4px;
 }
 
 .letter-modal-box .letter-modal .letter-header {
-    position: relative;
-    height: 70px;
-    line-height: 70px;
-    border-bottom: 1px solid #ccc;
+	position: relative;
+	height: 70px;
+	line-height: 70px;
+	border-bottom: 1px solid #ccc;
 }
 
 .letter-modal-box .letter-modal .letter-header .header-txt {
-    font-size: 22px;
-    color: #333;
-    font-weight: 700;
-    padding-left: 30px;
+	font-size: 22px;
+	color: #333;
+	font-weight: 700;
+	padding-left: 30px;
 }
 
 .letter-modal-box .letter-modal .letter-header .icon-add {
-    position: absolute;
-    top: 0;
-    right: 30px;
-    color: #999;
-    transform: rotate(45deg);
-    cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 30px;
+	color: #999;
+	transform: rotate(45deg);
+	cursor: pointer;
 }
 
 .letter-modal-box .letter-modal .box-cont {
-    padding: 40px 30px;
+	padding: 40px 30px;
 }
 
 .letter-modal-box .letter-modal .box-cont .label {
-    margin-bottom: 20px;
-    font-size: 18px;
-    color: #999;
-    font-weight: 700;
+	margin-bottom: 20px;
+	font-size: 18px;
+	color: #999;
+	font-weight: 700;
 }
 
 .letter-modal-box .letter-modal .box-cont .label .name {
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
-    color: #0b8bff;
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #0b8bff;
 }
 
 .letter-modal-box .letter-modal .box-cont .letter-content {
-    box-sizing: border-box;
-    width: 540px;
-    height: 170px;
-    padding: 16px;
-    background-color: #ffffff;
-    border-radius: 4px;
-    resize: none;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    color: #333;
-    outline: none;
+	box-sizing: border-box;
+	width: 540px;
+	height: 170px;
+	padding: 16px;
+	background-color: #ffffff;
+	border-radius: 4px;
+	resize: none;
+	border: 1px solid #ccc;
+	font-size: 16px;
+	color: #333;
+	outline: none;
 }
 
 .letter-modal-box .letter-modal .box-cont .opt-btns {
-    margin-top: 20px;
-    clear: both;
-    overflow: hidden;
+	margin-top: 20px;
+	clear: both;
+	overflow: hidden;
 }
 
 .letter-modal-box .letter-modal .box-cont .opt-btns .send-btn:hover {
-    opacity: .8;
-    filter: Alpha(opacity=80);
+	opacity: .8;
+	filter: Alpha(opacity = 80);
 }
 
 .letter-modal-box .letter-modal .box-cont .opt-btns .send-btn {
-    float: right;
-    width: 120px;
-    height: 40px;
-    margin-left: 44px;
-    border-radius: 100px;
-    background-color: #0b8bff;
-    font-size: 16px;
-    color: #fff;
-    cursor: pointer;
+	float: right;
+	width: 120px;
+	height: 40px;
+	margin-left: 44px;
+	border-radius: 100px;
+	background-color: #0b8bff;
+	font-size: 16px;
+	color: #fff;
+	cursor: pointer;
 	border: none;
 	outline: none;
 }
 
 .letter-modal-box .letter-modal .box-cont .opt-btns .cancel-btn {
-    float: right;
-    font-size: 16px;
-    color: #666;
-    line-height: 40px;
-    cursor: pointer;
+	float: right;
+	font-size: 16px;
+	color: #666;
+	line-height: 40px;
+	cursor: pointer;
 }
 </style>
 </head>
@@ -935,25 +937,23 @@ a {
 					<!-- 文章分类 -->
 					<div class="first-tag-m">
 						<c:if test="${pa.psychoCategory.psycho_category_name != null}">
-						<a data-tag="${pa.psychoCategory.psycho_category_id}" href="#">
-							${pa.psychoCategory.psycho_category_name} </a>
+							<a data-tag="${pa.psychoCategory.psycho_category_id}" href="#">
+								${pa.psychoCategory.psycho_category_name} </a>
 						</c:if>
 					</div>
 
 					<div class="info">
-						<span>发布时间：
-						<fmt:formatDate value="${pa.pubTime}" pattern="yyyy-MM-dd"/>
-						</span> <span class="like">${likecount}赞</span>
-						<span class="comment">${pa.commentsNum}评论</span> <span
-							class="read">{{commentnum}}阅读</span>
+						<span>发布时间： <fmt:formatDate value="${pa.pubTime}"
+								pattern="yyyy-MM-dd" />
+						</span> <span class="like">${likecount}赞</span> <span class="comment">${pa.commentsNum}评论</span>
+						<span class="read">{{commentnum}}阅读</span>
 					</div>
 				</div>
 
 				<!-- 文章主体 -->
 				<div class="article-body-m">
 					<div class="cover-con">
-						<img class="article-cover"
-							src="${APP_PATH}/${pa.articleImg}"
+						<img class="article-cover" src="${APP_PATH}/${pa.articleImg}"
 							alt="文章封面">
 						<%-- ${pa.articleImg } --%>
 					</div>
@@ -964,17 +964,17 @@ a {
 
 					</div>
 					<!-- 文章结尾 -->
-					
+
 					<div id="zanCon">
-							<span class="zan-icon"></span>
-							<span id="zanNum">${likecount}</span>
-							<span id="iszan" data-id="${islike}" style="disply:none"></span>
+						<span class="zan-icon"></span> <span id="zanNum">${likecount}</span>
+						<span id="iszan" data-id="${islike}" style="disply: none"></span>
 					</div>
-					
+
 					<div class="article-b">
 						<!-- 已打赏或已收藏添加 active -->
 
-						<button class="collect" :class="{active:iscollect==1}" @click="doClickCollect()">收藏</button>
+						<button class="collect" :class="{active:iscollect==1}"
+							@click="doClickCollect()">收藏</button>
 					</div>
 				</div>
 
@@ -982,9 +982,10 @@ a {
 				<div class="article-comment">
 					<div class="reply-area">
 						<div class="author-info">
-						<!-- pa.articleUser.psychouser_head_portrait -->
-							<img src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }" alt="作者头像" 
-								class="author-avatar">
+							<!-- pa.articleUser.psychouser_head_portrait -->
+							<img
+								src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }"
+								alt="作者头像" class="author-avatar">
 							<p class="author-name" data-id="${pa.articleUser.psychouser_id }">${pa.articleUser.psychouser_name}</p>
 						</div>
 
@@ -994,7 +995,8 @@ a {
 							data-method="post" data-object_id="100458798"
 							data-reply_object_id="0">
 							<div class="textarea-con">
-								<textarea name="replyInput" id="replyInput" maxlength="200" v-model="inputValue"></textarea>
+								<textarea name="replyInput" id="replyInput" maxlength="200"
+									v-model="inputValue"></textarea>
 								<div id="inputPlaceHolder" style="display: block;">
 									<p>TA在等你的回复～</p>
 									<p>（不超过200字）</p>
@@ -1006,35 +1008,47 @@ a {
 
 					<div id="commentList">
 
-						<div class="comment-item" v-for="(comment, index) in comments" :key="index">
+						<div class="comment-item" v-for="(comment, index) in comments"
+							:key="index">
 							<div class="item-content">
 
 								<!-- 头像 -->
-								<a target="_blank" href="#" class="content-left"> 
-								<img v-bind:src="'${APP_PATH }/'+comment.comment_user.psychouser_head_portrait" />
+								<a target="_blank" href="#" class="content-left"> <img
+									v-bind:src="'${APP_PATH }/'+comment.comment_user.psychouser_head_portrait" />
 								</a>
 
 
 								<div class="content-right">
 									<div class="right-top">
 										<div class="top-left">
-											<span class="nickname" :data-id="comment.comment_user.psychouser_id" v-if="curuserid!=comment.comment_user.psychouser_id">{{comment.comment_user.psychouser_name}}
-												：</span>
-											<span class="nickname active" :data-id="comment.comment_user.psychouser_id" v-if="curuserid==comment.comment_user.psychouser_id">{{comment.comment_user.psychouser_name}}
-												：</span>	
-											<span class="comment-text">{{comment.article_comment_pulcontent}}</span>
+											<span class="nickname"
+												:data-id="comment.comment_user.psychouser_id"
+												v-if="curuserid!=comment.comment_user.psychouser_id">{{comment.comment_user.psychouser_name}}
+												：</span> <span class="nickname active"
+												:data-id="comment.comment_user.psychouser_id"
+												v-if="curuserid==comment.comment_user.psychouser_id">{{comment.comment_user.psychouser_name}}
+												：</span> <span class="comment-text">{{comment.article_comment_pulcontent}}</span>
 										</div>
 
-										<div class="comment-statistics" :data-pk="comment.article_comment_id">
-											<a href="javascript:void(0)" class="like-btn like-btn-selected" v-if="likecomment.indexOf(comment.article_comment_id) >= 0" @click="doCommentlike($event)" :data-id="comment.article_comment_id"><span>{{comment.article_comment_likes_num}}</span>赞</a> 
-											<a href="javascript:void(0)" class="like-btn" v-if="likecomment.indexOf(comment.article_comment_id) < 0" @click="doCommentlike($event)" :data-id="comment.article_comment_id"><span>{{comment.article_comment_likes_num}}</span>赞</a> 
-											<a href="javascript:void(0)" class="comment-btn" @click="tag=index+1">评论</a>
-											<a href="javascript:void(0)" v-if="tag==index+1" class="hide-btn" @click="tag=0">收起</a>
+										<div class="comment-statistics"
+											:data-pk="comment.article_comment_id">
+											<a href="javascript:void(0)"
+												class="like-btn like-btn-selected"
+												v-if="likecomment.indexOf(comment.article_comment_id) >= 0"
+												@click="doCommentlike($event)"
+												:data-id="comment.article_comment_id"><span>{{comment.article_comment_likes_num}}</span>赞</a>
+											<a href="javascript:void(0)" class="like-btn"
+												v-if="likecomment.indexOf(comment.article_comment_id) < 0"
+												@click="doCommentlike($event)"
+												:data-id="comment.article_comment_id"><span>{{comment.article_comment_likes_num}}</span>赞</a>
+											<a href="javascript:void(0)" class="comment-btn"
+												@click="tag=index+1">评论</a> <a href="javascript:void(0)"
+												v-if="tag==index+1" class="hide-btn" @click="tag=0">收起</a>
 										</div>
 									</div>
 
 									<div class="right-bottom">
-										<span>{{comment.article_comment_pultime}}</span> 
+										<span>{{comment.article_comment_pultime}}</span>
 										<!-- <a href="#" class="ico-jubao" data-pk="3568501">举报</a> -->
 									</div>
 								</div>
@@ -1042,12 +1056,13 @@ a {
 							</div>
 
 							<!-- 这条评论的原评论 -->
-							<div class="orinal-comment" v-if="comment.article_p_comment!=null">
-								<span>回复</span> 
-								<a target="_blank" href="#" :data-id="comment.article_p_comment.comment_user.psychouser_id">
-								@<span :class="{active:curuserid==comment.article_p_comment.comment_user.psychouser_id}">{{comment.article_p_comment.comment_user.psychouser_name}}：</span>
-								</a> 
-								<span>{{comment.article_p_comment.article_comment_pulcontent}}</span>
+							<div class="orinal-comment"
+								v-if="comment.article_p_comment!=null">
+								<span>回复</span> <a target="_blank" href="#"
+									:data-id="comment.article_p_comment.comment_user.psychouser_id">
+									@<span
+									:class="{active:curuserid==comment.article_p_comment.comment_user.psychouser_id}">{{comment.article_p_comment.comment_user.psychouser_name}}：</span>
+								</a> <span>{{comment.article_p_comment.article_comment_pulcontent}}</span>
 							</div>
 
 							<!-- 针对评论的评论框 -->
@@ -1061,7 +1076,9 @@ a {
 										<p>（不超过200字）</p>
 									</div>
 								</div>
-								<button class="reply-comment-btn active-btn" @click="addComment($event)" :data-pid="comment.article_comment_id">回复</button>
+								<button class="reply-comment-btn active-btn"
+									@click="addComment($event)"
+									:data-pid="comment.article_comment_id">回复</button>
 							</div>
 
 						</div>
@@ -1081,118 +1098,58 @@ a {
 			<!-- 作者基本信息 -->
 			<div class="base-info-m white-bg">
 				<div class="top">
-					<a target="_blank" href="${APP_PATH}/user/toUserIndex.htm?userid=${pa.articleUser.psychouser_id}" @click="" class="avatar-con"> 
-					<img class="avatar" src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }" alt="个人头像">
+					<a target="_blank"
+						href="${APP_PATH}/user/toUserIndex.htm?userid=${pa.articleUser.psychouser_id}"
+						@click="" class="avatar-con"> <img class="avatar"
+						src="${APP_PATH }/${pa.articleUser.psychouser_head_portrait }"
+						alt="个人头像">
 					</a>
 					<p class="name">${pa.articleUser.psychouser_name}</p>
 					<p class="desc">${pa.articleUser.psychouser_intro }</p>
 					<div class="tool-m" v-if="uid!=mtoid">
-						<a id="btn-follow" data-userid="${pa.articleUser.psychouser_id }" :class="{selected:isfollow=='已关注'}" href="javascript:;" @click="dofollow($event)">{{isfollow}}ta</a>
-						<a id="btn-message" href="javascript:;" @click="openMessage">私信</a>
+						<a id="btn-follow" data-userid="${pa.articleUser.psychouser_id }"
+							:class="{selected:isfollow=='已关注'}" href="javascript:;"
+							@click="dofollow($event)">{{isfollow}}ta</a> <a id="btn-message"
+							href="javascript:;" @click="openMessage">私信</a>
 					</div>
 				</div>
 				<div class="statistics">
-					<a target="_blank" href="#wz">文章 ${pa.articleUser.articleNum}</a> <a target="_blank"
-						href="#hd2">问答 ${pa.articleUser.questionAnswerNum}</a> <a target="_blank" href="#">获赞 ${pa.articleUser.zanNum}</a>
+					<a target="_blank" href="#wz">文章 ${pa.articleUser.articleNum}</a> <a
+						target="_blank" href="#hd2">问答
+						${pa.articleUser.questionAnswerNum}</a> <a target="_blank" href="#">获赞
+						${pa.articleUser.zanNum}</a>
 				</div>
 			</div>
 
 
-			<!-- 咨询师信息 -->
-
-			<!-- 推荐主题、相关阅读、相关作者 -->
-			<div class="recommend-theme-read-author white-bg">
-
-				<!-- 推荐主题 -->
-				<!-- <div class="recommend-theme-m">
-						<div class="title-con">
-							<span class="title">推荐主题</span>
-							<a target="_blank" href="//m.xinli001.com/article/theme/list" class="count">241个精选主题</a>
-						</div>
-						<div class="theme-item">
-							<div class="theme-bg">
-								<a target="_blank" href="https://m.xinli001.com/article/theme/detail?id=11">
-									<img src="https://ossimg.xinli001.com/20180207/15f8cd745b767e89ca0ff33118725767.jpg!80" alt="主题背景">
-									<p> #朋友，室友</p>
-								</a>
-							</div>
-
-							<div class="desc-con">
-								<a target="_blank" href="https://m.xinli001.com/article/theme/detail?id=11">
-									<p>朋友，室友，让我欢喜让我忧</p>
-								</a>
-
-								<button id="attentionBtn" data-theme_id="11" data-is_follow="0">
-									关注 </button>
-
-							</div>
-						</div>
-
-					</div>
-
-				<!-- 相关阅读
-					<div class="recommend-reading-m">
-						<div class="read-title-con">
-							<span class="title">相关阅读</span>
-
-							<a target="_blank" href="https://www.xinli001.com/info/tag_2206">人际社交</a>
-						</div>
-						<ul id="readList">
-							<li><a target="_blank" href="//www.xinli001.com/info/100458798">为什么说服一个人那么难？</a>
-							</li>
-							<li><a target="_blank" href="//www.xinli001.com/info/100458734">高质量的亲密关系，靠面对面谈恋爱</a>
-							</li>
-							<li><a target="_blank" href="//www.xinli001.com/info/100458680">想提高你的沟通能力和技巧，这是我的建议</a>
-							</li>
-							<li><a target="_blank" href="//www.xinli001.com/info/100458630">有没有一个人，可以分享你的“负面情绪”？</a>
-							</li>
-							<li><a target="_blank" href="//www.xinli001.com/info/100458520">人际关系中的“博弈论”</a>
-							</li>
-						</ul>
-					</div>
-
-					<!-- 相关作者 -->
-				<div class="recommend-author-m">
-					<p class="author-title">相关作者</p>
-					<div id="authorList">
-						<a target="_blank" href="#" class="author-item"> <!-- <img src="https://image.xinli001.com//20151013/170505/133406.jpg!80" "="" alt=" 加载头像失败"> -->
-							<img src="" alt=" 加载头像失败">
-							<p>袁麟翥</p>
-						</a> <a target="_blank" href="#" class="author-item"> <img
-							src="" alt=" 加载头像失败">
-							<p>溪石Jesher</p>
-						</a> <a target="_blank" href="#" class="author-item"> <img
-							src="" alt=" 加载头像失败">
-							<p>卢溪</p>
-						</a>
-					</div>
-				</div>
-			</div>
 		</div>
-
-		<div class="letter-modal-box" :class="{'show-box':message==1}">
-		    <div class="letter-mask"></div>
-		    <div class="letter-modal">
-		        <div class="letter-header">
-		            <h4 class="header-txt">私信</h4>
-		            <i class="iconfont icon-add" id="letter-close-btn"></i>
-		        </div>
-		        <div class="box-cont">
-		            <p class="label">给<span class="name">${pa.articleUser.psychouser_name}</span>一条私信</p>
-		            <textarea class="letter-content" v-model="messageValue"></textarea>
-		            <div class="opt-btns">
-		                <button class="send-btn" data-id="${pa.articleUser.psychouser_id}" @click="sendMessage">发送</button>
-		                <span class="cancel-btn" @click="message=0">取消</span>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-
 	</div>
+
+	<div class="letter-modal-box" :class="{'show-box':message==1}">
+		<div class="letter-mask"></div>
+		<div class="letter-modal">
+			<div class="letter-header">
+				<h4 class="header-txt">私信</h4>
+				<i class="iconfont icon-add" id="letter-close-btn"></i>
+			</div>
+			<div class="box-cont">
+				<p class="label">
+					给<span class="name">${pa.articleUser.psychouser_name}</span>一条私信
+				</p>
+				<textarea class="letter-content" v-model="messageValue"></textarea>
+				<div class="opt-btns">
+					<button class="send-btn" data-id="${pa.articleUser.psychouser_id}"
+						@click="sendMessage">发送</button>
+					<span class="cancel-btn" @click="message=0">取消</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<script src="${APP_PATH }/jquery/jquery-2.1.1.min.js"></script>
 	<script src="${APP_PATH }/js/vue.js"></script>
-	<script src="${APP_PATH }/js/axios.js"></script> 
+	<script src="${APP_PATH }/js/axios.js"></script>
 	<script src="${APP_PATH }/js/elementui.js"></script>
 	<script type="text/javascript">
 	var path = '<%=basePath%>';

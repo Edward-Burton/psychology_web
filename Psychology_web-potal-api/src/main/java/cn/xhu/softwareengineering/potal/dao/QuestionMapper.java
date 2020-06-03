@@ -27,4 +27,7 @@ public interface QuestionMapper {
 	List<PsychoLabel> querySubTags();
 	List<PsychoLabel> queryTags();
 	int addQuestionLabel(Map<String, Object> parammap);
+	int updateHugNum(Integer questionid);
+	int queryHugNum(Integer questionid);
+	List<PsychoLabel> queryCategoryList();
 }

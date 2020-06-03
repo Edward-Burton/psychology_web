@@ -34,6 +34,7 @@
 		<result column="user_question_pultime" property="user_question_pultime" />
 		<result column="user_question_views" property="user_question_views" />
 		<result column="user_anonym" property="user_anonym" />
+		<result column="question_hug_num" property="question_hug_num" />
 		<association column="user_question_id" property="answer_count" javaType="Integer" select="queryanswercountById" />
 		<association column="question_master_id" property="question_master" javaType="PsychoUser" select="queryUserById" />
 		<association column="user_question_id" property="question_answerlike_count" javaType="Integer" select="query_answerlike_count" />
@@ -46,6 +47,16 @@
 		<result column="psychouser_name" property="psychouser_name" />
 		<result column="psychouser_head_portrait" property="psychouser_head_portrait" />
 	</resultMap>
+	
+	<resultMap type="PsychoLabel" id="BaseLabel">
+		<id column="psycho_label_id" property="psycho_label_id" />
+		<result column="psycho_label_name" property="psycho_label_name" />
+		<collection property="objList" column="psycho_label_id" ofType="UserQuestions" select="selectquestionList"/>
+	</resultMap>
+	
+	<select id="selectquestionList" resultMap="BaseQuestion">
+		SELECT * FROM user_questions WHERE user_question_id in(select user_questionid from user_question_labels where question_labelid=#{psycho_label_id})
+	</select>
 	
 	<select id="queryanswercomment" resultMap="questionAnswerBase">
 		SELECT * FROM question_answers WHERE answer_parent_id=#{question_answer_id}
@@ -64,7 +75,7 @@
 	</select>
 	
 	<select id="query_masteranswer_count" resultType="Integer">
-		SELECT COUNT(*) FROM question_answers WHERE answerer_id=#{question_master_id} AND (question_id=#{user_question_id} OR answer_parent_id in (SELECT question_answer_id FROM question_answers WHERE question_id=#{user_question_id}))
+		SELECT COUNT(*) FROM question_answers WHERE answerer_id=#{question_master_id} AND question_id=#{user_question_id} AND answer_parent_id IS NOT NULL
 	</select>
 	
 	<select id="query_answerlike_count" resultType="Integer">
@@ -117,7 +128,24 @@
 	</select>
 	
 	<select id="queryQuestionPage" resultMap="BaseQuestion">
-	select * from user_questions order by user_question_pultime desc limit #{startIndex},#{pagesize}
+	select * from user_questions
+	<if test="labelId!=null">
+		<where>
+			user_question_id in (select user_questionid from user_question_labels where question_labelid=#{labelId})
+		</where>
+	</if>
+	<choose>
+		<when test="orderType==0">
+			<where>
+				user_question_id IN (select t.question_id from (select question_id,any_value(question_answer_pultime)AS pultime from question_answers group by question_id ORDER BY pultime DESC)as t) ORDER BY 
+user_question_pultime DESC
+			</where>
+		</when>
+		<otherwise>
+			order by user_question_pultime desc
+		</otherwise>
+	</choose>
+		limit #{startIndex},#{pagesize}
 	</select>
 	
 	<select id="queryAnswerPage" resultMap="AnswerBase">
@@ -171,5 +199,17 @@
 		</otherwise>
 		</choose>
 	</insert>
+	
+	<update id="updateHugNum">
+		UPDATE user_questions SET question_hug_num = question_hug_num + 1 WHERE user_question_id=#{questionid}
+	</update>
+	
+	<select id="queryHugNum" resultType="Integer">
+		select question_hug_num from user_questions WHERE user_question_id=#{questionid}
+	</select>
+	
+	<select id="queryCategoryList" resultType="PsychoLabel">
+		select * from psycho_label WHERE psycho_label_id in (select t.* from (select question_labelid from user_question_labels group by question_labelid order by count(user_questionid) desc limit 0,5)as t)
+	</select>
 
 </mapper>

@@ -77,7 +77,7 @@
 
 	<select id="queryRadioComment" resultMap="BaseComment">
 		select * from
-		radio_comment where radio_id=#{radioid}
+		radio_comment where radio_id=#{radioid} order by radio_comment_pultime desc
 	</select>
 
 	<select id="queryLastestPlayList" resultMap="BaseRadio">
@@ -101,5 +101,14 @@
 		select * from
 		radio_anchor
 	</select>
-
+	
+	<select id="queryRadioById" resultMap="BaseRadio">
+		select * from psycho_radio where psycho_radio_id=#{radioId}
+	</select>
+	
+	<insert id="addComment" >
+		insert into radio_comment(radio_comment_userid,radio_id,radio_comment_content,radio_comment_pultime)
+		value(#{userId},#{radioId},#{content},#{pultime})
+	</insert>
+	
 </mapper>

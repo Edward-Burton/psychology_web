@@ -1,11 +1,14 @@
 package cn.xhu.softwareengineering.bean;
 
+import java.util.List;
+
 public class PsychoLabel {
 	private int psycho_label_id;
 	private String psycho_label_name;
 	private int psycho_label_parentid;
 	private String psycho_label_description;
 	private String psycho_label_alias;
+	private List<Object> objList;
 	
 	public PsychoLabel() {
 		super();
@@ -19,6 +22,16 @@ public class PsychoLabel {
 		this.psycho_label_parentid = psycho_label_parentid;
 		this.psycho_label_description = psycho_label_description;
 		this.psycho_label_alias = psycho_label_alias;
+	}
+	
+	
+
+	public List<Object> getObjList() {
+		return objList;
+	}
+
+	public void setObjList(List<Object> objList) {
+		this.objList = objList;
 	}
 
 	public int getPsycho_label_id() {

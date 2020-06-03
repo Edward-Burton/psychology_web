@@ -140,4 +140,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.queryMessageList(paramMap);
 	}
 
+	@Override
+	public int queryUserCollectCount(Map<String, Integer> paramMap) {
+		return userMapper.queryUserCollectCount(paramMap);
+	}
+
+
 }

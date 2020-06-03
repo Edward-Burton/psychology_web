@@ -22,5 +22,9 @@ public interface RadioService {
 
 	List<RadioAnchor> querydoAnchorList();
 
+	PsychoRadio queryRadioById(Map<String, Integer> paramMap);
+
+	int addComment(Map<String, Object> paramMap);
+
 	
 }

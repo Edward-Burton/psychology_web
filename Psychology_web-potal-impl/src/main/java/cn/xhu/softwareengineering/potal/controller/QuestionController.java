@@ -38,19 +38,25 @@ public class QuestionController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/doIndex")
-	public Object doIndex(@RequestParam(value = "pageno", required = false, defaultValue = "1") Integer pageno,
-			@RequestParam(value = "pagesize", required = false, defaultValue = "10") Integer pagesize) {
+	@RequestMapping("/doQuestion")
+	public Object doQuestion(@RequestParam(value = "pageno", required = false, defaultValue = "1") Integer pageno,
+			@RequestParam(value = "pagesize", required = false, defaultValue = "10") Integer pagesize,
+			@RequestParam(value = "labelId", required = false) Integer labelId,
+			@RequestParam(value = "orderType", required = false,defaultValue = "0") Integer orderType) {
 		AjaxResult result = new AjaxResult();
 		try {
 			Map<String, Object> parammap = new HashMap<String, Object>();
 			parammap.put("pageno", pageno);
 			parammap.put("pagesize", pagesize);
+			parammap.put("orderType", orderType);
+			if(labelId!=null) {
+				parammap.put("labelId", labelId);
+			}
 			Page<UserQuestions> userQuestionsPage = questionService.queryQuestionPage(parammap);
 			List<UserQuestions> list = (List<UserQuestions>) (userQuestionsPage.getData());
 
 			for (UserQuestions q : list) {
-				System.out.println(q.getUser_question_title());
+				System.out.println("answerCount:"+q.getMaster_answercount()+"masterId:"+q.getQuestion_master_id()+"title:"+q.getUser_question_title());
 			}
 
 			System.out.println(userQuestionsPage.getTotalsize());
@@ -81,6 +87,43 @@ public class QuestionController {
 			result.setMessage("添加失败！！！");
 		}
 		result.setSuccess(true);
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/doCategory")
+	public Object doCategory() {
+		AjaxResult result = new AjaxResult();
+		try {
+			List<PsychoLabel> labelList = questionService.queryCategoryList();
+			result.setSuccess(true);
+			result.setData(labelList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("查找分类失败！！！");
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/updateHugNum")
+	public Object updateHugNum(@RequestParam Integer questionId) {
+		AjaxResult result = new AjaxResult();
+		try {
+			int num = questionService.updateHugNum(questionId);
+			if (num>0) {
+				result.setSuccess(true);
+				result.setData(num);
+			} else {
+				result.setSuccess(false);
+				result.setMessage("添加失败！！！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("添加失败！！！");
+		}
 		return result;
 	}
 	

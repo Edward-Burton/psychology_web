@@ -48,5 +48,15 @@ public class RadioServiceImpl implements RadioService{
 	public List<RadioAnchor> querydoAnchorList() {
 		return radioMapper.querydoAnchorList();
 	}
+
+	@Override
+	public PsychoRadio queryRadioById(Map<String, Integer> paramMap) {
+		return radioMapper.queryRadioById(paramMap);
+	}
+
+	@Override
+	public int addComment(Map<String, Object> paramMap) {
+		return radioMapper.addComment(paramMap);
+	}
 	
 }

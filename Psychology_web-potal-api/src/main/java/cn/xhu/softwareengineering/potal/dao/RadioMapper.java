@@ -22,4 +22,8 @@ public interface RadioMapper {
 
 	public List<RadioAnchor> querydoAnchorList();
 
+	public PsychoRadio queryRadioById(Map<String, Integer> paramMap);
+
+	public int addComment(Map<String, Object> paramMap);
+
 }

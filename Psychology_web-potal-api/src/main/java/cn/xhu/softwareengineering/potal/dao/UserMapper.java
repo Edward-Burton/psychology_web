@@ -50,4 +50,6 @@ public interface UserMapper {
 
 	List<Message> queryMessageList(Map<String, Object> paramMap);
 
+	int queryUserCollectCount(Map<String, Integer> paramMap);
+
 }

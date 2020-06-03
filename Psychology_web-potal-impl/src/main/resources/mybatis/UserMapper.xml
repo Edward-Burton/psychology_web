@@ -269,6 +269,11 @@
 		select count(*) from user_collection where user_collectioin_to_id=#{toid} and user_collection_from_user_id=#{userid} and user_collection_type=#{typeid}
 	</select>
 	
+	<select id="queryUserCollectCount" parameterType="map"
+		resultType="Integer">
+		select count(*) from user_collection where user_collectioin_to_id=#{toid} and user_collection_type=#{typeid}
+	</select>
+	
 	<select id="queryArticleByUserId" parameterType="Integer"
 		resultMap="BaseArticleMap">
 	select * from psycho_article where psycho_article_pubuserid=#{userid}

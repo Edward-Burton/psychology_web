@@ -20,12 +20,11 @@ public class UserQuestions {
 	private int user_anonym;
 	private int question_answerlike_count; 
 	private int master_answercount;
+	private int question_hug_num;
 
 	public UserQuestions() {
 		super();
 	}
-
-	
 	
 
 	public UserQuestions(int user_question_id, String user_question_title, String user_question_content,
@@ -46,6 +45,18 @@ public class UserQuestions {
 		this.user_anonym = user_anonym;
 		this.question_answerlike_count = question_answerlike_count;
 		this.master_answercount = master_answercount;
+	}
+
+
+	public int getQuestion_hug_num() {
+		return question_hug_num;
+	}
+
+
+
+
+	public void setQuestion_hug_num(int question_hug_num) {
+		this.question_hug_num = question_hug_num;
 	}
 
 

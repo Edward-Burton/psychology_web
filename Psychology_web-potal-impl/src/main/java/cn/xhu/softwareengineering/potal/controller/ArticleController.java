@@ -350,11 +350,6 @@ public class ArticleController {
 		AjaxResult result = new AjaxResult();
 		PsychoUser user = (PsychoUser) session.getAttribute(Const.LOGIN_USER);
 		if (user != null) {
-			/*
-			 * MultipartHttpServletRequest mreq = (MultipartHttpServletRequest) request;
-			 * 
-			 * MultipartFile attach = mreq.getFile(articleImg);// 临时目录下的文件
-			 */
 			String sqlPath = null;
 			String path = request.getSession().getServletContext()
 					.getRealPath("img" + File.separator + "articleimages");

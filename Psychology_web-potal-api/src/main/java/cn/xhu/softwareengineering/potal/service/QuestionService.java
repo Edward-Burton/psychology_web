@@ -24,4 +24,6 @@ public interface QuestionService {
 	List<Integer> queryCollectusers(Integer questionid);
 	List<PsychoLabel> querySubTags();
 	List<PsychoLabel> queryTags();
+	int updateHugNum(Integer questionid);
+	List<PsychoLabel> queryCategoryList();
 }

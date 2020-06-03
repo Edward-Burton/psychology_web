@@ -114,4 +114,17 @@ public class QuestionServiceImpl implements QuestionService {
 		return questionMapper.queryTags();
 	}
 
+	@Override
+	public int updateHugNum(Integer questionid) {
+		if(questionMapper.updateHugNum(questionid)>0) {
+			return questionMapper.queryHugNum(questionid);
+		}
+		return 0;
+	}
+
+	@Override
+	public List<PsychoLabel> queryCategoryList() {
+		return questionMapper.queryCategoryList();
+	}
+
 }

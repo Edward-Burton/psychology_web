@@ -5,8 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<link rel="stylesheet" href="https://unpkg.com/element-ui@1.4/lib/theme-default/index.css">
-		
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@1.4/lib/theme-default/index.css">	
 		<style>
 			body,
 			h1,
@@ -469,6 +468,7 @@
 			.ans-emo .visit {
 			    color: #0b8bff;
 			    margin-right: 50px;
+			    font-size: 18px;
 			}
 			
 			.ans-emo span {
@@ -490,25 +490,23 @@
 		</div>
 	
 		<div id="main" style="padding: 0px;">
-
-
 			<div id="left">
-
 				<!-- 分类 -->
-				<div class="emo">
-					<span>分类列表：社交那么难</span>
-					<a href="#">即时倾诉，倾听你的故事 &gt;
-					</a>
+				<div class="emo" v-if="mtag==1">
+					<span>分类列表：{{curCategory}}</span>
+					<a href="#" @click="ToIndex">返回 &gt;</a>
 				</div>
 
-				<div class="ans-emo">
+				<div class="ans-emo" v-if="mtag==1">
 					<p class="visit" style="padding-left: 30px;">最新优先</p>
 					<!-- <p>只看精华</p> -->
-					<span> 5000个问题</span>
+					<span> {{questionList.length}}个问题</span>
 				</div>
 				
+				
+				
 				<!-- 导航 -->
-				<div class="ans-bar">
+				<div class="ans-bar" v-if="mtag==0">
 					<div class="ans-barl">
 						<p attr-id="answer">
 							<a class="common-a" href="#">
@@ -528,13 +526,7 @@
 							<a class="common-a" href="#">
 								<span class="yxl-icon yxl-font-icon-new-question icon-default"></span>
 
-								<span :class="{select: tag==2}" @click="tag = 2">最新问题</span>
-							</a>
-						</p>
-						<p attr-id="essence">
-							<a class="common-a" href="#">
-								<span class="yxl-icon yxl-font-icon-threeity icon-default"></span>
-								<span :class="{select: tag==3}" @click="tag = 3">30天精华</span>
+								<span :class="{select: tag==2}" @click="getNewestQuestion">最新问题</span>
 							</a>
 						</p>
 					</div>
@@ -568,7 +560,6 @@
 							<a class="common-a" target="_blank" :href="'${APP_PATH}/question/toQuestion.htm?id='+answer.question.user_question_id">
 								<span>
 									{{answer.question.user_question_title}} 
-									<!-- <span class="reward-icon">悬赏</span> -->
 								</span>
 							</a>
 
@@ -612,9 +603,9 @@
 					</li>
 				</ul>
 				
-				<ul class="content" v-if="tag==1">
+				<ul class="content" v-if="tag>=1">
 					<!-- 问题样式 -->
-					<li class="question" v-for="(question,index) in questionList" :key="index">
+					<li class="question" v-for="(question,index) in questionList" :key="index" :data-id="question.user_question_id">
 						<p class="title">
   							 <a v-if="question.user_anonym==1" target="_blank" class="common-a" href="javascript:void(0);">
 								<img src="https://lapp.xinli001.com/images/yiapp/v4.8/incognito.png">
@@ -622,11 +613,10 @@
 						
   							<a v-if="question.user_anonym!=1" target="_blank" class="common-a" :href="'${APP_PATH}/user/toUserIndex.htm?userid='+question.question_master.psychouser_id">
 								<img :src="'${APP_PATH }/'+question.question_master.psychouser_head_portrait">
-								
 							</a>
 							<a class="common-a" target="_blank" :href="'${APP_PATH}/question/toQuestion.htm?id='+question.user_question_id">
 								<span>
-									{{question.user_question_title}} <span class="reward-icon">悬赏</span>
+									{{question.user_question_title}}
 								</span>
 							</a>
 							<a target="_blank" :href="'${APP_PATH}/question/toQuestion.htm?id='+question.user_question_id">
@@ -687,36 +677,12 @@
 					</div>
 				</div>
 
-				<!-- 活动 -->
-				<div id="question">
-					<ul>
-						<li><a class="common-a" target="_blank" href="#">『大咖』听语音短课，掌握写作核心技能</a></li>
-						<li><a class="common-a" target="_blank" href="#">『攻略』玩转答疑馆分馆，领取各样补贴！</a></li>
-					</ul>
-				</div>
-
 				<div id="category">
 					<p>精选分类</p>
 
 					<div class="category">
 						<div class="category">
-							<a class="common-a store" href="#">社交那么难</a>
-							<a class="common-a store" href="#">职场的压力</a>
-							<!-- <a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=social&amp;from=shouye-dh">社交那么难</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=career&amp;from=shouye-dh">职场的压力</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=confused&amp;from=shouye-dh">青春的迷茫</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=myself&amp;from=shouye-dh">不喜欢自己</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=emotion&amp;from=shouye-dh">情绪如潮水</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=love&amp;from=shouye-dh">啊，是爱情</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=marriage&amp;from=shouye-dh">婚姻故事</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=pass&amp;from=shouye-dh">忘不掉的过去</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=zixun&amp;from=shouye-dh">咨询过程</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=popular&amp;from=shouye-dh">心理科普</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=force&amp;from=shouye-dh">强迫</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=depressed&amp;from=shouye-dh">抑郁</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=sex&amp;from=shouye-dh">性这件事</a>
-							<a class="common-a store" href="https://www.xinli001.com/qa?type=store&amp;object_name=crisis&amp;from=shouye-dh">危机</a> -->
-
+							<a class="common-a store" href="#" v-for="(cate,index) in categoryList" :data-id="cate.psycho_label_id" @click="getCateQuestion($event)">{{cate.psycho_label_name}}</a>
 						</div>
 					</div>
 				</div>
@@ -732,18 +698,23 @@
 			  el: '#main',
 			  data () {
 			    return {
+			      mtag : 0,
 			      tag : 0,
 			      pageno : 1,
 				  totalno : 0,
 				  answerList : [],
 				  questionList : [],
 				  userid:0,
-				  curUser:null
+				  curUser:null,
+				  categoryList:[],
+				  curCategory:null,
+				  labelId:0
 			    }
 			  },
 			  created() {
 			      this.getAnswer();
 			      this.getUser();
+			      this.getCategory();
 			  },
 			  watch: {
 				      tag:function(){
@@ -753,6 +724,71 @@
 				      immediate: true
 			  },
 			  methods: {
+				  
+			   getNewestQuestion(){
+				   axios({
+						  url: "${APP_PATH}/question/doQuestion.do",
+					      method: "GET",
+					      params:{
+					    	  pageno : this.pageno,
+							  pagesize : 10,
+							  orderType:1
+					      }
+					    }).then(res => {
+					    	if(res.data.success){
+					    		this.questionList=res.data.page.data;
+					    		this.totalno=res.data.page.totalsize;
+					    		this.tag=2;
+					    	}else{
+					    		alert(res.data.message);
+					    	}
+					    });
+			   },
+				  
+			   ToIndex(){
+				   this.mtag=0;
+				   this.getQuestion();
+			   },
+				  
+			   getCateQuestion(e){
+				   if(this.labelId==0||this.labelId != parseInt(e.currentTarget.dataset.id)){
+					   this.labelId = parseInt(e.currentTarget.dataset.id);
+				   }
+				   axios({
+						  url: "${APP_PATH}/question/doQuestion.do",
+					      method: "GET",
+					      params:{
+					    	  labelId: this.labelId,
+					    	  pageno : this.pageno,
+							  pagesize : 10,
+							  orderType:1
+					      }
+					    }).then(res => {
+					    	if(res.data.success){
+					    		this.curCategory=e.target.innerText;
+					    		this.questionList=res.data.page.data;
+					    		this.totalno=res.data.page.totalsize;
+					    		this.tag=1;
+					    		this.mtag=1;
+					    	}else{
+					    		alert(res.data.message);
+					    	}
+					    });
+			   },
+				 
+			   getCategory(){
+				   axios({
+						  url: "${APP_PATH}/question/doCategory.do",
+					      method: "GET"
+					    }).then(res => {
+					    	if(res.data.success){
+					    		this.categoryList=res.data.data;
+					    	}else{
+					    		alert(res.data.message);
+					    	}
+					   });
+			   },
+				  
 				dofollow(e,index){
 					  let action=0;
 					  alert(e.currentTarget.dataset.userid);
@@ -844,7 +880,7 @@
 				
 				getQuestion(){
 					axios({
-						  url: "${APP_PATH}/question/doIndex.do",
+						  url: "${APP_PATH}/question/doQuestion.do",
 					      method: "GET",
 					      params:{
 					    	  pageno : this.pageno,
@@ -868,8 +904,10 @@
 				      // 重新获取数据
 				      if(this.tag==0){
 				    	  this.getAnswer();
-				      }else if(this.tag==1){
+				      }else if(this.tag==1&&this.mtag==0){
 				    	  this.getQuestion();
+				      }else if(this.tag==1&&this.mtag==1){
+				    	  this.getCateQuestion(e);
 				      }
 				    }
 				
@@ -901,13 +939,15 @@
 			}) */
 			
 			// 右侧推荐分类
-			$(".category a").click(function(){
+			/* $(".category a").click(function(){
 				var content = $(this).text();
 				$(".ans-bar").hide();
 				$(".emo span").html("分类列表："+content)
 				$(".emo").show();
 				$(".ans-emo").show();
-			})
+			}) */
+			
+			
 			
 			// 回答点赞
 			// 关注
@@ -936,11 +976,11 @@
 				
 				
 			})
-			
+			/* 
 			// 回答问题按钮
 			$(".answers").click(function(){
 				alert("问题id");
-			})
+			}) */
 			
 			
 			

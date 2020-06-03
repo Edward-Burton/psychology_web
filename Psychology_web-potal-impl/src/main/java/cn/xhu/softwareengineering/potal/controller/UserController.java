@@ -239,6 +239,26 @@ public class UserController {
 		return result;
 
 	}
+	
+	@ResponseBody
+	@RequestMapping("/doCollectCount")
+	public Object doCollectCount(HttpSession session, @RequestParam(value = "toid")Integer toid, @RequestParam(value = "typeid")Integer typeid) {
+		AjaxResult result = new AjaxResult();
+		try {
+			Map<String, Integer> paramMap = new HashMap<String, Integer>();
+			paramMap.put("toid", toid);
+			paramMap.put("typeid", typeid);
+			int collectcount = userService.queryUserCollectCount(paramMap);
+			result.setData(collectcount);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMessage("查询收藏失败！！！");
+		}
+		return result;
+
+	}
 
 
 	@RequestMapping("/toUserIndex")

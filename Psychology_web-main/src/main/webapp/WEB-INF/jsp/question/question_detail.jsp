@@ -541,23 +541,6 @@
 			<jsp:include page="/WEB-INF/jsp/common/header.jsp"></jsp:include>
 		</div>
 		<!-- 公共头部 -->
-		<!-- <div style="clear:both;overflow: hidden;padding-bottom: 72px;"></div> -->
-		<!-- <script>
-			$(function() {
-				$('.search .search_a').on('click', function() {
-					$(this).parent().submit();
-				})
-			})
-
-			function SearchSubmit(obj) {
-				var _keyword = $('input[name="keyword"]').val();
-				var _form = $('#searchForm');
-				window.open(_form.attr('action') + '?keyword=' + _keyword, '_blank');
-				return false;
-			}
-		</script>
-
- -->
 		<!-- 主体内容 -->
 		<div id="main">
 
@@ -611,12 +594,13 @@
 
 				<!-- 互动 -->
 				<div class="comment-reply" id="comment-reply">
-					<div class="hug" data-object-id="100597924">
-						<img src="//lapp.xinli001.com/images/website-www/v5/unhug.png">
+					<div class="hug" data-objectid="${question.user_question_id}" @click="addHug($event)">
+						<img v-if="!ishug" src="//lapp.xinli001.com/images/website-www/v5/unhug.png">
+						<img src="${APP_PATH}/img/hug.png" v-if="ishug"/>
 						<p>
 							<span>给TA抱抱</span>
 							<a>
-								<font>6</font> 个抱抱
+								<font>{{hugNum}}</font> 个抱抱
 							</a>
 						</p>
 					</div>
@@ -672,7 +656,6 @@
 						</div>
 						<div class="text" v-html="reply.question_answer_content">
 						</div>
-						<div class="praise-number">赏金截止时获赞8个</div>
 						<div id="label">
 							<span v-if="reply.user_follows.indexOf(userid)<0"  class="follow" >
 								<img src="//lapp.xinli001.com/images/website-www/v5/unfollow.png" data-tag="0" @click="dofollow($event)" :data-userid="reply.answerUser.psychouser_id">
@@ -681,10 +664,6 @@
 							<span v-if="reply.user_follows.indexOf(userid)>=0" >
 								<img src="https://lapp.xinli001.com/images/website-www/v5/follow.png" data-tag="1" @click="dofollow($event)" class="follow" :data-userid="reply.answerUser.psychouser_id">
 								<a>已关注</a>
-							</span>
-							<span style="color: #FFB214;font-size: 14px" data-userid="1001625281" data-objectid="5717981" data-objectname="qa.reward">
-								<img class="rewardBtn" src="data:image/png;base64,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"
-								 alt="打赏图标">
 							</span>
 
 							<span class="answer_zan" :data-answer-id="reply.question_answer_id">
@@ -701,9 +680,6 @@
 							</span>
 
 							<p class="created_time">{{reply.question_answer_pultime}}</p>
-
-
-							<p class="report_reply" :data-answer-id="reply.question_answer_id">举报</p>
 
 						</div>
 						
@@ -757,20 +733,6 @@
 
 					</div>
 				</div>
-
-				<div id="question">
-					<ul>
-						<li>
-							<a class="common-a" target="_blank" href="#">『大咖』听语音短课，掌握写作核心技能</a>
-						</li>
-					</ul>
-				</div>
-
-				<div id="category">
-					<div class="category">
-						<a class="common-a store" href="#">社交那么难</a>
-					</div>
-				</div>
 			</div>
 
 		</div>
@@ -796,7 +758,9 @@
 				  totalno : 0,
 				  replyList: [],
 				  tag:0,
-				  inputValue:""
+				  inputValue:"",
+				  hugNum:"${question.question_hug_num}",
+				  ishug:false
 			    }
 			  },
 			  created() {
@@ -807,10 +771,32 @@
 				  this.queryQuestionAnswer();
 			  },
 			  methods: {
+				  
+				  
+				  
+				  addHug(e){
+					  if(this.userid!=0){
+						  axios({
+							  	method: "GET",
+								url : "${APP_PATH}/question/updateHugNum.do",
+								params:{
+									questionId:parseInt(questionid)
+								}
+						    }).then(res => {
+						    	if(res.data.success){
+						    		this.ishug=true;
+						    		this.hugNum=res.data.data;
+						    	}else{
+						    		alert(res.data.message);
+						    	}
+						    });
+					  }else{
+						  alert("请登录");
+					  }
+				  },
+				  
 				  addcomment(index){
-					  alert($(".content-ans li").eq(index).find(".import").attr("data-answer-id"));
 					  let answerpid = parseInt($(".content-ans li").eq(index).find(".import").attr("data-answer-id"));
-					  /* alert(answerpid); */
 					  if(this.userid!=0){
 					  if (this.inputValue == '') {
 			              // 提示用户

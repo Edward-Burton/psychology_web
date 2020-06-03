@@ -9,12 +9,6 @@
 	rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css"
 	rel="stylesheet" />
-<%-- <link href="${APP_PATH }/css/summernote.min.css"
-	rel="stylesheet" /> --%>
-
-<%-- <link
-	href="${APP_PATH }/css/summernote.min.css"
-	rel="stylesheet"> --%>
 <style>
 a {
 	text-decoration: none;
@@ -399,28 +393,6 @@ input[type=file] {
 				<option value="0">请选择分类</option>
 			</select>
 		</div>
-		
-		<div class="article-tags">
-			<div class="article-tag-list">
-				<div class="article-tag">
-					<input type="text" class="article-tag-input" value=""
-						placeholder="编辑标签">
-					<div class="article-tag-del-btn yxl-iconfont"></div>
-				</div>
-				<div class="article-tag">
-					<input type="text" class="article-tag-input" value=""
-						placeholder="编辑标签">
-					<div class="article-tag-del-btn yxl-iconfont"></div>
-				</div>
-				<div class="article-tag">
-					<input type="text" class="article-tag-input" value=""
-						placeholder="编辑标签">
-					<div class="article-tag-del-btn yxl-iconfont"></div>
-				</div>
-			</div>
-
-			<div class="article-tag article-tag-add-btn"></div>
-		</div>
 
 		<div class="col-md-7" id="contextText">
 			<div class="form-group" id="nochecke">
@@ -648,9 +620,6 @@ input[type=file] {
 
 			// 获取标签
 			var tags = [];
-			for (i = 0; i < num; i++) {
-				tags[i] = $(".article-tag").eq(i).find(".article-tag-input").val();
-			}
 			
 		    var  data = new FormData();  
 		    data.append("articleImg", indeximg); 
